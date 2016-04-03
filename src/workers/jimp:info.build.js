@@ -1,0 +1,1 @@
+console.error("Error: Cannot find module '../build/Release/canvas' from '/home/user/work/lifebook/app/node_modules/canvas/lib'");

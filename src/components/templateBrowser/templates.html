@@ -1,0 +1,25 @@
+<h3>Templates</h3>
+<div  class="collapsingArea">
+	
+	<div class="filter">
+		<% _.each(["design", "layout"], function(type){ %>
+			<button name="<%= type %>">  <%= type %>  </button>
+		<% }) %>
+
+		<select name="pageType">
+			<% _.each(["cover", "group", "student", "greetings"], function(_type){ %>
+				<option <% if(_type === pageType){print('selected="selected"')}%> value="<%= _type %>"><%= _type %></option>
+			<% }) %>
+		</select>
+		<select name="category">
+			<% _.each(_.uniq(App.templates.pluck("category")), function(_category){ %>
+				<option <% if(_category === category){print('selected="selected"')}%> value="<%= _category %>"><%= _category %></option>
+			<% }) %>
+		</select>
+	</div>	
+	<div class="content"></div>
+	<div class="controls">
+		<button class="nextPage">  Next  </button>
+		<button class="prevPage">  Prev  </button>
+	</div>
+</div>

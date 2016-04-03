@@ -1,0 +1,66 @@
+<style>
+#bookPreview{
+	background :black;
+	    min-height: 110px;
+	    color:white;
+}
+
+.bookPreview .left{
+	    position: absolute;
+    width: 7%;
+    text-align: center;
+    left: 0px;
+}
+
+.bookPreview .right{
+	width: 87%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    
+}
+.bookPreview .content{
+    height: 2em;
+    width: 90%;
+    margin: 0 auto;
+justify-content: center;
+}
+
+.bookPreview .prev,
+.bookPreview .next{
+	    height: 100%;
+	    min-height: 2em;
+    width: 5%;
+    display: inline-block;
+    position:absolute;
+        font-size: 2em;
+    font-weight: bold;
+    transform: scaleY(2.2) translateY(44%) rotateY(180deg);
+}
+.bookPreview .prev{
+	    left: 0px;
+    top: 0px;
+}
+.bookPreview .next{
+	right:0px;
+}
+.bookPreview .delete,
+.bookPreview .new{
+	min-width: 2em;
+    background: red;
+    display: inline;
+    padding:1em;
+    margin-bottom:.1em;
+    display:inline-block;
+}
+</style>
+<span class="right">
+	<span class="next">></span>
+	<span class="content"></span>
+
+	<span class="prev"><</span>
+</span>
+<span class="left">
+	<span class="new">new</span><br>
+	<span class="delete">del</span>
+</span>

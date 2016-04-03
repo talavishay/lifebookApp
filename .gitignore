@@ -1,0 +1,14 @@
+*
+/*
+!gulp*
+!/gulp*/**
+!/src
+!/src/**
+/src/background
+/src/svg
+!.gitignore
+!package.json         
+!README.md
+!index.html
+!npm-shrinkwrap.json  
+

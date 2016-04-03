@@ -1,0 +1,39 @@
+
+//~ var _w = 'self.addEventListener("message", function(e) {  self.postMessage(e.data);}, false);';
+
+//~ App.worker = new Worker(window.URL.createObjectURL(new Blob([_w])));
+//~ 
+//~ var work = require('webworkify');
+//~ var Jimp = require("jimp");
+var blobUtil = require("blob-util");
+
+//~ App.worker = work(require('./worker.js'));
+App.worker = new Worker('/src/components/jimp/worker.js');
+
+App.worker.onmessage = function(e){
+	//~ App.fabricToolsChannel.trigger("add:image", e.data.data);
+	//~ App.fabricToolsChannel.trigger("add:image", e.data.data);
+	console.log(e);
+};
+App.worker.onerror = function(e){
+	console.log(e);
+};
+
+App.fabricToolsChannel.on( "worker:input", function(url){
+	blobUtil.imgSrcToBlob(url).then(function (blob) {
+		//~ console.log(URL.createObjectURL(blob));
+			
+		fr = new FileReader();
+
+		fr.addEventListener("load",function(){
+			console.log(this);
+			App.worker.postMessage(this.result);
+		});
+		fr.readAsArrayBuffer(blob);
+	});
+		  
+	 //~ Jimp.read(url).then(function(image){
+			//~ console.log(image);
+		//~ App.worker.postMessage(url);
+	//~ });
+});

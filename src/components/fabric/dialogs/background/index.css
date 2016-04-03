@@ -1,0 +1,18 @@
+.fileBrowser #content{
+display:flex;
+flex-wrap:wrap;
+justify-content:space-between;
+}
+.fileBrowser #content .item{
+	width:20%
+}
+.fileBrowser #content .item img{
+	max-width: 100%;
+}
+
+
+/* MASK CRAP*/
+
+.clip-wrap {
+  text-align: center;  
+}

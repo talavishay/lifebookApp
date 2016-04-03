@@ -1,0 +1,58 @@
+@import '../background/index.css';
+@import '../mask/index.css';
+@import '../svg/index.css';
+#sidebarFirst h3{
+	margin: unset;
+	padding: 0 30px;
+	line-height: 2em;
+	font-size: .9em;
+	background-repeat:no-repeat;
+	background-position:left+.2em center;
+	cursor : pointer;
+}
+
+#sidebarFirst{
+	background-color: #5A98CB;
+	top		: 0px;
+    z-index	: 0;
+}
+#sidebarFirst h4,
+#sidebarFirst h3{
+	margin: 0.3em 0px 0.4em;
+/*
+	padding: 0.3em 0;
+*/
+}
+
+#sidebarFirst .collapsingArea{
+	padding-bottom:3px;
+	border-bottom:3px solid #4F90C8;
+}
+.collapsed.collapsingArea,
+.collapsed .collapsingArea{
+/*
+.collapsed .fileBrowser > span,
+*/
+/*
+.collapsed .fileBrowser .content{
+*/
+height: 0px;
+overflow: hidden;
+display: block;
+display:none;
+}
+
+
+#sidebarFirst #mask .loader:after,
+#sidebarFirst #mask .loader span {
+	display: none;
+}
+
+#sidebarFirst {
+	direction:ltr;
+	background: white;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	max-width: 21%;
+}

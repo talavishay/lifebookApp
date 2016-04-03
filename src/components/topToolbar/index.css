@@ -1,0 +1,25 @@
+div#topToolbar{
+background-color: #fff;
+    direction: ltr;
+    position: absolute;
+    z-index: 1;
+    top: 0px;	
+    white-space: nowrap;
+    width:100%;
+    text-align:center;
+
+}
+div#topToolbar * {
+    vertical-align: middle;
+}
+div#topToolbar span {
+	opacity : .4;
+}
+div#topToolbar .warning ,
+div#topToolbar .error {
+	display : none;
+}
+div#topToolbar .fullscreen ,
+div#topToolbar .Full {
+	opacity : 1;
+}

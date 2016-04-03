@@ -1,0 +1,54 @@
+<style>
+.bookPreview img[data-active="true"] {
+    box-shadow: 0px 3px 8px yellow;
+}
+.bookPreview img {
+	background-color : white;
+    box-shadow: 0px 1px 2px #444;
+    cursor : pointer;
+    max-height:50px;
+}
+
+.bookPreview .page {
+    text-align: center;
+   }
+.bookPreview .moveUp,
+.bookPreview .moveDown{
+	font-weight:bold;
+	padding: 0 0.5em;
+	cursor : pointer;
+}
+</style>
+<%
+//~ _.each(arguments[0] ,function(arg){
+if(typeof meta[0] === "object"){
+	var preview =  JSON.parse(meta[0].value).preview;
+} 
+if(typeof meta === "string"){
+	var preview =  JSON.parse(meta).preview;
+} 
+
+//~ if(typeof preview === "undefined"){
+	//~ var preview = "#";
+//~ };
+if(typeof active === "object"){
+	active = active[0].value;
+}
+if(typeof active === "undefined"){
+	var active = false;
+} 
+if(typeof pageNumber === "object"){
+	pageNumber = pageNumber[0].value;
+};
+if(typeof pageNumber === "undefined"){
+	var pageNumber = 0;
+};
+
+//~ });
+%>
+<img data-active="<%=active %>" src="<%=preview %>"/>
+<div>
+	<span class="moveUp"><</span>
+	<span>page <span class="pageNumber"><%=pageNumber%></span></span>
+	<span class="moveDown">></span>
+</div>

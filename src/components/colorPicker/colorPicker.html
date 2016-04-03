@@ -1,0 +1,19 @@
+<div class="color" data-gradMode="<%=gradMode%>" style="direction:ltr">
+		<div id="colorPickers"  >
+			<input type='text' class="first" value="<%= colorStops["0"]%>"/>
+			<span class="arrow">
+				<input type='text' class="last" value="<%= colorStops["1"]%>"/>
+			</span>
+			<span class="toggleGradMode"> set gradient color</span>
+		</div>
+		<div id="dirPickers">
+			<span data-dir="topToBottom" data-type="linear" class="grad linear "></span>
+			<span data-dir="BottomToTop" data-type="linear" class="grad linear invert"></span>
+			<span data-dir="leftToRight" data-type="linear" class="grad linear right "></span>
+			<span data-dir="RightToleft" data-type="linear" class="grad linear right invert"></span>
+			<span data-dir="BottomRightTotopLeft" data-type="linear" class="grad linear diagonal"></span>
+			<span data-dir="topLeftToBottomRight" data-type="linear" class="grad linear diagonal invert"></span>
+			<span data-dir="topToBottom" data-type="radial" class="grad radial"></span>
+			<span data-dir="BottomToTop" data-type="radial" class="grad radial invert"></span>
+		</div>
+	</div>

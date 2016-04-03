@@ -1,0 +1,23 @@
+
+h3,
+button{
+	background-color: #d3dce3;
+	color: #4c79a2;
+	border-color: #4c79a2;
+}
+button.active{
+	background-color: #b4d7f3;
+	color:#0159a1;
+}
+.backgroundBrowser h4{
+	background-color: #C6E2FA;
+	color: #4c79a2;
+}
+#sidebarFirst h3{
+	background-color: #4F90C8;
+	color: white;
+}
+#sidebarFirst .collapsed h3{
+	background-color: #E5F1FD;
+	color : #5A98CB;
+}

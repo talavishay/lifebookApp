@@ -1,0 +1,47 @@
+#dialogs > .dialogs {
+	z-index:99;
+	right : 20px ;
+	top : 50px;
+	position: absolute;
+	width	: 234px;
+	overflow-x: hidden;
+	display: block;
+	background-color: #c6e2fa;
+}
+
+.dialogs .closeDialog {
+       position: absolute;
+    font-weight: 700;
+    background-color: rgba(116,168,211,.2);
+    display: inline-block;
+    border-radius: 50%;
+    box-shadow: -1px 0 11px -1px #4f90c8;
+    color: gray;
+    margin: 5px 8px;
+}
+.dialogs #toolContent{
+	background-color: white;
+	border: 1px solid #4f90c8;
+	border-bottom-width: 0px;
+	padding: .3em 0;
+}
+.dialogs #nav{
+	display:flex;
+	background-color: #c6e2fa;
+}
+.dialogs #nav button {
+	overflow: hidden;
+}
+#dialogs #title{
+border: 1px solid #4f90c8;
+border-bottom-width: 0px;
+text-align : center;
+padding: .3em 0;
+}
+td.image{
+	max-width: 30px;
+}
+td.image img{
+	width:100%;
+	height:auto;
+}

@@ -1,0 +1,33 @@
+{
+"debug":true,
+  "sourcePath": "src",
+  "destPath": "dist",
+  "destVendorPath": "vendorDist",
+  "assetsPath": "assets",
+  "entryCss": "index.css",
+  "entryJs": "index.js",
+  "entryVendorJs": "index.vendor.js",
+  "vendors" :  ["jquery",
+					"backbone",
+					"backbone.localstorage",
+					"backbone.radio", 
+					"backbone.syphon", 
+					"backbone.marionette",
+					"pouchdb",
+					"object-hash",
+					"screenfull",
+					"underscore",
+					"spectrum-colorpicker",
+					"jquery-mousewheel",
+					"drag-drop",
+					"fabric"  ],
+  "watchify": true,
+  "browsersync": {
+    "port": 3000,
+    "notify": true
+  },
+  "notify" : {
+    "onError": false,
+    "onUpdated": false
+  }
+}

@@ -1,0 +1,17 @@
+<h3>Clipart</h3>
+<div  class="collapsingArea">
+	<div class="controls">
+		<select>
+			<option  value="<%=root%>"> / </option>
+			<% _.each(dirs, function(item){%>
+				<option value="<%=item%>"><%=item%></option>
+			<%})%>
+		</select>
+		<button class="home">home</button>
+		<button class="nextPage">  Next  </button>
+		<button class="prevPage">  Prev  </button>
+	</div>
+	<div class="content"></div>
+	
+
+</div>

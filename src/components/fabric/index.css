@@ -1,0 +1,48 @@
+@import './tools/index.css';
+@import './dialogs/index.css';
+
+#stage > div {
+	margin: 4px auto 0;
+	transform-origin: top;
+	position : relative;
+}
+
+canvas{
+	box-shadow: 1px 1px 1px 1px black;
+}
+.fabricTools{
+	box-shadow: 0px 0px 4px 1px #000;
+	position: absolute;
+	cursor: pointer;
+	direction : ltr;
+	text-align: right;
+	background-color: white;
+	transform: scale(1.5);
+    transform-origin: top;
+}
+.fabricTools .toolbox > div{
+    padding: 3px;
+}
+.fabricTools > span {    
+}
+.toolbox span:hover{    
+	box-shadow: 0px 0px 8px 2px yellow;
+}
+#fonInit{
+font-size:50px;
+}
+.canvas-container {
+	background-color: white;
+}
+/*
+.canvas-container textarea{
+    opacity : 1 !important;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+ 
+    width: 100% !important;
+    height: 100px !important;
+    z-index: 999;
+}
+*/

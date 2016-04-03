@@ -1,0 +1,13 @@
+<select class="type">
+<% _.each(types, function(type){ %>
+	<option value="<%= type %>"><%= type %></option>
+<% }) %>
+</select>
+
+<select class="pageType">
+<% _.each(pageType, function(type){ %>
+	<option value="<%= type %>"><%= type %></option>
+<% }) %>
+</select>
+<input class="category" type="text"/>
+<button class="save">save</button>

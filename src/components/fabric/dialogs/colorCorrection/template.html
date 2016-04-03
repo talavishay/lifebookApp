@@ -1,0 +1,26 @@
+<div>
+	<span>Sharpness</span>
+	<input name="sharpen"  type="range" min="0" max="100" step="1" value="<%= sharpen %>"  />
+</div>
+<div>
+	<span>Brightness</span>
+	<input name="brightness" type="range" min="-30" max="30" step="2" value="<%= brightness %>" />
+</div>
+<div>
+	<span>Contrast</span>
+	<input name="contrast"  type="range" min="-30" max="30" step="2" value="<%= contrast %>" />
+</div>
+<div>
+	<span>saturation</span>
+	<input type="range" name="saturation" min="0" max="100" step="1" value="<%= saturation %>"  >
+</div>
+<div>
+	<span>hue</span>
+	<input type="range"  name="hue" min="0" max="100" step="1" value="<%= hue %>"  >
+</div>
+<div>
+	<span>Tint</span>
+	<span id="tintColor" style="background-color:<%=tintcolor%>">  tint  </span>
+	<input name="colorize" type="range" min="0" max="100" step="1" value="<%= colorize %>"/>
+</div>
+<div class="restore">restore</div>
