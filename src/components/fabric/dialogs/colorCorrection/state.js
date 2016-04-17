@@ -24,7 +24,10 @@ initialize:function(){
 	}, this );
 
 	this.on({
-		"change":(ev)=>{App.fabricToolsChannel.trigger(	"caman:doit", this.attributes)},
+		"change":(ev)=>{
+			this._setup();
+			App.fabricToolsChannel.trigger(	"caman:doit", this.attributes)
+		},
 	});
 },
 	_revert : function(){
@@ -36,8 +39,10 @@ initialize:function(){
 	_setup 		: function(){
 		var active = App.fabricToolsChannel.request('getActiveObject');
 		if(active !== null && active.type === "image"){
-			this.save("src", active.getSrc(), {silent: true});
-			this.save("result", false,{silent: true});
+			this.save({
+				"src"	: active.getSrc(), 
+				"result": false
+			},{silent: true});
 		}
 	},
 });

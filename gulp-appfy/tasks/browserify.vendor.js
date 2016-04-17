@@ -1,20 +1,17 @@
 var gulp = require( 'gulp' ),
     browserify = require( 'browserify' ),
-    watchify = require( 'watchify' ),
     browserSync = require( 'browser-sync' ),
-    uglify = require( 'gulp-uglify' ),
     streamify = require( 'gulp-streamify' ),
     source = require( 'vinyl-source-stream' ),
     path = require( 'path' ),
-    notify = require( 'gulp-notify' ),
     util = require('gulp-util'),
     collapse = require('bundle-collapser/plugin'),
-    sourcemaps = require('gulp-sourcemaps'),
     buffer = require('vinyl-buffer'),
 	bowerResolve = require('bower-resolve'),
      _ = require('underscore'),
-     nodeResolve = require('resolve'),
-    p = require('partialify/custom');
+    sourcemaps = require('gulp-sourcemaps'),
+    nodeResolve = require('resolve');
+    //~ p = require('partialify/custom');
 
 /**
  * Gulp task to run browserify over config.entryJs
@@ -80,26 +77,6 @@ module.exports = function ( config ) {
         bundler.require(bowerResolve.fastReadSync('Jcrop'), { expose: 'Jcrop' });
         //~ bundler.external('jquery');
         //~ bundler.external('backbone');
-        //~ bundler.external('backbone.radio');
-        //~ bundler.external('backbone.marionette');
-		//~ bundler.transform("workerify");
-		//~ bundler.transform("debowerify");
-		//~ bundler.transform("partialify");
-
-		//~ bundler.transform(p.alsoAllow('html'));
-
-        //~ if ( config.watchify ) {
-            //~ bundler = watchify( bundler );
-//~ 
-            //~ bundler.on( 'update', function () {
-//~ 
-                //~ browserifyBundle( bundler )
-                    //~ .pipe( browserSync.reload( {
-                        //~ stream: true
-                    //~ } ) );
-//~ 
-            //~ } );
-        //~ }
 
         return browserifyBundle( bundler );
     };

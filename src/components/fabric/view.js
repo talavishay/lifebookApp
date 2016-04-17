@@ -15,6 +15,8 @@ var obj = {
 		require('./worker');
 		require('../clipboard');
 		require('../fabricHistory');
+//TODO: App.replace = true;
+		App.replace = true;
 	},
 	_Events 	: function(){
 		/* RADIO +*/
@@ -24,6 +26,10 @@ var obj = {
 			//~ 'getActiveGroup' 	: this.getActiveGroup
 		}, this);
 		this.listenTo(this.canvas, {
+			 'object' : (ev)=>{
+				 console.log(ev);
+				 console.log("ev");
+			 },
 			 'object:modified object:selected': this.showTools,
 			 'selection:cleared' : this.hideTools,
 			 'object:rotating object:moving' :  App._.debounce(this.hideTools, 500, true),
@@ -43,7 +49,14 @@ var obj = {
 			"set:backgroundGrad"		:this.setBackgroundGradient ,
 			"rebuildCanvas" 			:this.rebuildCanvas,
 			"renderall"					:this.canvas.renderAll,
+			"print"						:this.print,
 		}, this);
+	},
+	print : function(multiplier) {
+		window.open(window.App.canvas.toDataURL({
+			  format: 'png',
+			  multiplier: 4
+		}), "_blank");
 	},
 	getActiveObject : function() {
 		//~ var	_o = this.canvas.getActiveObject();
@@ -82,75 +95,89 @@ var obj = {
 		return currentScale;
 	},
 	objectDelete : function(){
-		this.canvas.remove(this.canvas.getActiveObject());
+		var activeObject = this.canvas.getActiveObject(),
+			activeGroup = this.canvas.getActiveGroup();
+		if (activeObject) {
+            this.canvas.remove(activeObject);
+		} else if (activeGroup) {
+            var objectsInGroup = activeGroup.getObjects();
+            this.canvas.discardActiveGroup();
+			App._.each(objectsInGroup, function(object) {
+				this.canvas.remove(object);
+            }, this);
+		};
 	},
 	objectOpacity 	: function(int){
 		App.fabricToolsChannel.request('getActiveObject').setOpacity(int);
 		App.fabricToolsChannel.trigger('renderall');
 	},
 	objectMove 	: function(ev){
-	if(ev){
-		var obj = App.fabricToolsChannel.request('getActiveObject'),
+		if(ev){
+			var obj = App.fabricToolsChannel.request('getActiveObject'),
 			//animation options for the movment
 			options = {
 				duration: 10,
 				easing :  fabric.util.ease["easeOut"],
 				onChange: this.canvas.renderAll.bind(this.canvas),
 			},
-			//TODO: steps to move -- pixels ?
 			step = 20;
-		//~ var t = 'type:' + 		obj.type 						//~ +'\nleft:' + 	parseInt(obj.left)	+' | top:' + Math.round(obj.top)						//~ +'\nscaleX:' 	+ obj.scaleX +' | scaleY:' + obj.scaleY						//~ +'\nwidth:' 	+ obj.width	+' | height:' + obj.height;
-		switch (ev){
-
-			case  "left":
-				obj.animate('left', '-=' + step  , options);
-			break;
-			case "right":
-				obj.animate('left', '+=' + step  , options);
-			break;
-			case "down":
-				obj.animate('top', '+=' +  step  , options);
-			break;
-			case "up":
-				obj.animate('top', '-=' + step  , options);
-			break;
+				
+			switch (ev){
+				case "left"	:obj.animate('left', '-=' + step  , options);break;
+				case "right":obj.animate('left', '+=' + step  , options);break;
+				case "down"	:obj.animate('top' , '+=' + step  , options);break;
+				case "up"	:obj.animate('top' , '-=' + step  , options);break;
+			};
 		}
-	}
 	},
-	addImage 	: function(src, options){
-		var canvas = this.canvas,
-			img = new Image();
-
-		img.onload = function() {
-			var obj 		= App.canvas.getActiveObject(),
-				fabricImage = new fabric.Image(img),
-				msg = "Replace current Active Object?";
-
-			if(obj && window.confirm(msg)){
-				//replace current obj image
-				obj.setElement( img );
-				// scale new image to obj dimensions
-				if( obj && img.width > obj.width){
-					obj.scale( obj.width / img.width );
-				};
-			} else {
-				//add image
-				App.canvas.add(fabricImage).setActiveObject(fabricImage);
-				fabricImage.center();
+	promptReplaceImage : function(img){
+		var	obj	= App.canvas.getActiveObject(),
+			msg = "Replace current Active Object?";
+//TODO: remove hardcoded msg .. msg = "Replace current Active Object?";
+		if(obj && ( App.replace  || window.confirm(msg) ) ) {
+			obj.setElement( img );
+			// scale new image to obj dimensions
+			if( obj && img.width > obj.width){
+				obj.scale( obj.width / img.width );
 			};
 			App.canvas.renderAll();
-	//TODO: fabric.js bug fix -- object are sometimes unselectable..
-			//
-			//even after renderAll..
-			//~ App.fabricToolsChannel.trigger('renderall');
-			// this is the hack/fix/remedy but moving is also undesired..
-			// need to track the orig bug.. and render as usall..
-			// maybe skip rendering ?? calcofffset or some other fabric crap...
+			return true;
+		} else {
+			return false;
+		}
+	},
+	_addImageElement 	: function(img){
+		var img = (img instanceof Image) ? img : img.target;
+		if( !this.promptReplaceImage(img)){
+			var fabricImage = new fabric.Image(img);
+			App.canvas
+				.add(fabricImage)
+				.setActiveObject(fabricImage);
+			
+			//~ fabricImage.center();
+			App.canvas.renderAll();
+//TODO: fabric.js bug fix -- object are sometimes unselectable..
+//
+//even after renderAll..
+//~ App.fabricToolsChannel.trigger('renderall');
+// this is the hack/fix/remedy but moving is also undesired..
+// need to track the orig bug.. and render as usall..
+// maybe skip rendering ?? calcofffset or some other fabric crap...
 			App.Backbone.Radio.trigger('fabricTools', "object:move", "up");
 			App.Backbone.Radio.trigger('fabricTools', "image:add:done", "up");
-
 		};
-		img.src = src;
+	},
+	addImage 	: function(src, options){
+		App._.bindAll(this, "_addImageElement");	
+		this.loadImage(src).then(this._addImageElement);
+	},
+	loadImage 	: function(src){
+		return new Promise( function(resolve, reject) {
+			var img = new Image();
+			img.onload = resolve;
+			img.onerror = reject;
+			img.src = src;
+		});
 	},
 	_rand_positioning 	: function(obj){
 		var randH = Math.round(150*Math.random()) * (Math.random() < 0.5 ? -1 : 1),
@@ -174,7 +201,6 @@ var obj = {
 				originY : 'top',
 				textAlign : 'center'
 			}),
-			w = this.canvas.width + text.width,
 			h = this.canvas.height + text.height;
 
 		text.set({
@@ -233,19 +259,19 @@ var obj = {
 	},
 	clipSvg	:	function(src,yscale,xscale){
 		this.loadSvg(src)
-			.then(function(loadedObject){
+			.then(function(svg){
 				var active = App.canvas.getActiveObject();
-				loadedObject.set({
-					left: 0,
-					top	: 0,
+				svg.set({
+					left	: 0,
+					top		: 0,
 					originX : 'center',
 					originY : 'center',
-					scaleY: (active.height / loadedObject.height) * yscale,
-					scaleX: (active.width / loadedObject.width) * xscale,
+					scaleY	: (active.height / svg.height) * yscale,
+					scaleX	: (active.width	/ svg.width) * xscale,
 				});
 				active.set({
 					clipTo: function(ctx) {
-						loadedObject.render(ctx);
+						svg.render(ctx);
 					}
 				});
 				App.canvas.renderAll();

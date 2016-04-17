@@ -20,7 +20,14 @@ module.exports = App.Marionette.LayoutView.extend({
 	initialize : function(){
 		_.bindAll(this, '_scrolldAction');
 		App.$("#fonInit").hide(1000);
-
+		//~ this.listenTo(this,{
+			//~ "all" : function(eventName,m,d){
+					//~ console.log(eventName)
+				//~ if(d && d.el && d.el){
+					//~ console.log(d.el);
+				//~ };
+			//~ }
+		//~ });
 		this.listenTo(App.fabricToolsChannel, {
 			"zoom:in" : this.zoomIn,
 			"zoom:out" : this.zoomOut
@@ -33,20 +40,35 @@ module.exports = App.Marionette.LayoutView.extend({
 	},
 	onAttach :function(){
 		this.$el.mousewheel( this._scrolldAction);
-		App.dragDrop(this.el, this._handleDrop);
+		//~ App.dragDrop(this.el, this._handleDrop,	this.log, this.log);
+		var that = this;
+//TODO: load jQuery.event.drag proprely..
+		jQuery(document).ready(function(){
+			jQuery(that.el)
+			.drop("end",function(ev,dd){
+				var src = App.files.getSrcId(dd.drag.dataset.id);
+				if(src){
+					App.fabricToolsChannel.trigger("image:add" , src);
+				};
+			});
+		});
 	},
+	_log: function(c){
+		console.log(c)	;
+	},
+	//~ _handleDragLeave: console.log.bind(console),
 	_scrolldAction : function(ev){
 		if(ev.deltaY & !ev.shiftKey){
 			var _c = (ev.altKey) ? "left" : "top",
-				_step = this.model.get(_c)  + ev.deltaY*30;
+				_step = this.model.get(_c)  - ev.deltaY*30;
 
 			this.model.save(_c, _step);
 			App.$("#stage > div ").css(	_c , _step);
-		}
+		};
 		if(ev.deltaX && ev.shiftKey){
 			var dir = (ev.deltaX < 0) ? "zoom:in" : "zoom:out";
 			App.fabricToolsChannel.trigger(dir, .1 );
-		}
+		};
 	},
 	zoomAction : function(){
 		var _s = this.model.get("scale");

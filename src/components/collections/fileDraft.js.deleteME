@@ -1,0 +1,56 @@
+var file = {	
+	sync: App.BackbonePouch.sync({
+		db: App.PouchDB('files')
+	}),
+	//~ initialize : function(file){
+		//~ this.on({
+			//~ "change:_rev" : (ev)=>{
+			//~ "all" : (ev)=>{
+				//~ console.log(ev);
+				//~ this.set("state" ,"local");
+			//~ }
+		//~ },this);
+	//~ },
+	//~ model.attach(file, file.name, file.type, this.attachCallback);
+	parse : function(data){
+		if(!data.id){
+			if(data instanceof File){
+				return {
+					file		: data,
+					name		: data.name,
+					extension	: data.name.split('.')[1]
+					src			: URL.createObjectURL(data),
+					_id			: App.objectHash({
+						name 			: data.name,
+						lastModified	: data.lastModified,
+						size			: data.size,
+					})
+				};
+			} else {
+				if( this.get("state") === "draft" && this.get("file")){
+					this._toLocal(data);
+				};
+			};
+		} else{
+			this.set("id", data.id);
+			//~ this.fetch();
+		}
+	},
+	_toLocal	 : function(data){
+		var file = this.get("file");
+		// set pouch db id & rev
+		// attach file to DB doc..
+		this.attach(file, file.name, file.type, App._.bind(function(err, status){
+			err ? console.log(err)://TODO: 		err ? console.log(err:;
+			this.set({state : "local"});// update model status
+		},this));
+	},
+	defaults : {
+		file : null,
+		state : "draft",
+		name : "name",
+		url : "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE4LjEuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTI1LjE1MyA1MjUuMTUzIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MjUuMTUzIDUyNS4xNTM7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0wLDI2Mi41NzZjMCw2NC41MDYsMjYuNTg2LDEyMi41NTcsNjguODE3LDE2NC41N0wwLDQ5NS45NjNoMTc1LjAwN1YzMjAuOTU2bC02NS4yOTQsNjUuMjk0DQoJCWMtMzEuNTk3LTMxLjc5NC01MS4zMzQtNzUuMjk0LTUxLjMzNC0xMjMuNjczYzAtNzYuMDgxLDQ4LjczLTE0MC45MzgsMTE2LjYyOC0xNjQuNzg4VjM2LjgwNEM3NC4zNzUsNjIuNjksMCwxNTMuNzYsMCwyNjIuNTc2eg0KCQkgTTIzMy4zODcsNDA4LjM5NGg1OC4zNzl2LTU4LjI0OGgtNTguMzc5VjQwOC4zOTR6IE01MjUuMTUzLDI5LjE5SDM1MC4xNDV2MTc1LjAwN2w2NS4yOTQtNjUuMjk0DQoJCWMzMS41OTcsMzEuNzk0LDUxLjMzNCw3NS4yOTQsNTEuMzM0LDEyMy42NzNjMCw3Ni4wODEtNDguNzMsMTQwLjkzOC0xMTYuNjI4LDE2NC43ODh2NjAuOTgzDQoJCWMxMDAuNjMyLTI1Ljg4NiwxNzUuMDA3LTExNi45NTYsMTc1LjAwNy0yMjUuNzcyYzAtNjQuNTA2LTI2LjU4Ni0xMjIuNTU3LTY4LjgxNy0xNjQuNTdMNTI1LjE1MywyOS4xOXogTTIzMy4zODcsMjkxLjc2Nmg1OC4zNzkNCgkJVjExNi43NTloLTU4LjM3OVYyOTEuNzY2eiIvPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" ,
+	},
+};
+var imageModel = App.Backbone.Model.extend(file);
+module.exports =  imageModel.extend(App.BackbonePouch.attachments());

@@ -25,9 +25,15 @@ module.exports = App.Marionette.CompositeView.extend({
 				{ behaviorClass: require('../behaviors/pager.js')}],
 	initialize : function(){
 		//~ this.model.set({"type" : "design"});
-		this.listenTo(App.templates, "sync", function(x){
-			this._filter(this.model.get("type"));
-		});
+		this.listenTo(App.templates, {
+			"sync destroy" : function(){
+				this._filter(this.model.get("type"));
+			},
+			//~ "all" : function(ev){
+				//~ console.log(ev);
+			//~ }
+		},this);
+		
 		//~ this.listenTo(App.fabricToolsChannel, "dialog:templates", this.$el.find('h3').click());
 	},
 	ui : {

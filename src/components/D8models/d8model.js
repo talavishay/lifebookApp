@@ -1,31 +1,9 @@
 module.exports = function(App){
-return App.Backbone.Model.extend({
-	defaults : {
-		name : "new",
+var _model = {
+	parse		: function(resp, options) {
+		return this._fromExtendedJSON(resp);
 	},
-	idAttribute : "id",
-	parse : function(resp, options) {
-		resp = this.fromExtendedJSON(resp);
-		//~ var location = options.xhr.getResponseHeader("location");
-		//~ if(location){
-			// Drupal 8.0 doesnt return the entity in the body (rest defaults)
-			// instead a location link header is providing a url ...
-			// location = http://blabla.com/bla/bla/{new entity id}
-			//~ extract entity id and set it
-			//~ var s = location.split('/');
-			//~ this.set({"id" : s[s.length-1]}, {silent : true});
-
-			//~ resp.id = resp.id[0].value;// drupal 8.2.dev
-		//~ } else {
-			//~ this.set({"id" : resp.id[0].value}, {silent : true});
-			if(resp && typeof resp.id[0] === "object"){
-				resp.id = resp.id[0].value;
-			};
-		//~ };
-		//~ return this.fromExtendedJSON(resp);
-		return resp;
-	},
-	fromExtendedJSON: function(resp) {
+	_fromExtendedJSON: function(resp) {
 		var id = this.idAttribute;
 		if (!_.isNull(resp) && !_.isUndefined(resp) ) {
 			_.each(resp, function(value, key) {
@@ -41,7 +19,7 @@ return App.Backbone.Model.extend({
 		}
 		return resp;
 	},
-	toExtendedJSON: function() {
+	_toExtendedJSON: function() {
 		var attrs = this.attributes ,id = this.idAttribute;
 		_.each(attrs, function(value, key) {
 		  if (_.isString(key) && key.charAt(0) != '_') {
@@ -50,78 +28,34 @@ return App.Backbone.Model.extend({
 		});
 		return attrs;
 	},
-	sync : function(method, model, options)  {
+	sync		: function(method, model, options)  {
 		options.beforeSend = function (xhr) {
+//TODO: is this required? whats the default ?
 			xhr.setRequestHeader('Content-type', 'application/json');
 			xhr.setRequestHeader('Accept', 'application/json');
+//TODO: this is not always needed.. filter by method and apply
 			xhr.setRequestHeader('X-CSRF-Token', App.csrfToken);
 		};
-		var id = model.id,
+		var id = model.id,		//~ var id = model.get("id"),
 			format = '?_format=json',
-			_url =  isNaN(parseInt(id)) ? '/entity/'+this._type + format : '/lifebook/'+this._type+'/'+ id + format;
+			_url =  isNaN(parseInt(id)) ? 
+//~ drupal REST does an excellnt job for GET.. id is valid so lets get it. got it ? 
+				'/entity/'+this._type + format :
+//~ custom REST resource for our custom entities
+				'/'+this._root+'/'+this._type+'/'+ id + format;
 
 		options.url = _url;
+//~ switch update method from default the PUT..adapt to Drupal..
 		if (method === 'update') options.type = 'PATCH';
-
-
-		//~ // Substute toJSON method when performing synchronization.
-		//~ // adapt to Drupal nested value style..
+//~Substute toJSON method . adapt to Drupal nested value style..
 		var toJSON = this.toJSON;
-		this.toJSON = this.toExtendedJSON;
-
+		this.toJSON = this._toExtendedJSON;
 		var ret = App.Backbone.sync.apply(this, arguments);
-		//~ // back to the App.Backbone..
-		//~TODO: remove ??? is this required?
+//~TODO: remove ??? is this required? //~back to the App.Backbone..
 		this.toJSON = toJSON;
 		return ret;
 	},
-	//~ sync:function(method, model, options)  {
-		//~ options.beforeSend = function (xhr) {
-			//~ xhr.setRequestHeader('Content-type', 'application/json');
-			//~ xhr.setRequestHeader('Accept', 'application/json');
-			//~ xhr.setRequestHeader('X-CSRF-Token', App.csrfToken);
-		//~ };
-		//~ var id = model.id,
-			//~ format = '?_format=json',
-			//~ _url =  isNaN(parseInt(id)) ? '/entity/composition' + format : '/lifebook/composition/'+ id + format;
-		//~
-		//~ options.url = _url;
-		//~ // Substute toJSON method when performing synchronization.
-		//~ // adapt to Drupal nested value style..
-		//~ //var toJSON = this.toJSON;
-		//~ //this.toJSON = this.toExtendedJSON;
-		//~ // Drupal uses PATCH instead of PUT (App.Backbone default)
-		//~ if (method === 'update') options.type = 'PATCH';
-		//~ var ret = App.Backbone.sync.apply(this, arguments);
-		//~ // back to the App.Backbone..
-		//~ //TODO: remove ??? is this required?
-		//~ //this.toJSON = toJSON;
-		//~ return ret;
-	//~ },
-    save: function(attrs, options) {
-        options || (options = {});
-        attrs || (attrs = _.clone(this.attributes));
-
-        // Filter the drupal/cms data
-        delete attrs.created;
-        delete attrs.changed;
-        delete attrs.uuid;
-        //~ delete attrs.id;
-        delete attrs.user_id;
-
-        delete attrs.active;
-        delete attrs.pageNumber;
-        delete attrs.preview;
-
-
-        options.data = JSON.stringify(attrs);
-
-        // Proxy the call to the original save function
-        return App.Backbone.Model.prototype.save.call(this, attrs, options);
-    },
-    _updateDb : _.debounce(function(ev){
-		this.save();
-		console.log("saved @ name => " + this.get("name"));
-	},2000),
-});
+   
+};
+return App.Backbone.Model.extend(_model);
 };

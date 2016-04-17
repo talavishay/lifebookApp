@@ -4,18 +4,24 @@ module.exports = {
 	model : new _m,
 	initialize :function(){
 		App._.extend(this, Backbone.Events);
-
+		//TODO: cleanup
 		this.listenTo(App.fabricToolsChannel, {
 			"caman:doit" : (data)=>{
+				App.nprogress.start();
 				if(  this._cache( data.src , data ) ){
 
-					this.model.save({
+					this.model.save(App._.extend({
 						"actions"	:	this._parseActions(data),
-						"src" 	: 	data.src
-					});
-
-				}
+						"src" 		:	data.src,
+						"tintcolor" : 	data.tintcolor
+					}, App.resolver.extractUrl(data.src)));
+				};
 			},
+			"caman:status" : (status)=>{
+				status === "done"	? App.nprogress.done(): null;
+				status === "start"	? App.nprogress.inc():null
+				console.log(status);
+			}
 		}, this);
 		this.listenTo(this.model, {
 			"change:actions" :this._init
@@ -28,26 +34,52 @@ module.exports = {
 		var objectUrl = this.model.get("src");
 
 		//~ App.caman._currentActions =  this.model.get("actions");
-		Caman( App.$('<canvas id="_caman"/>')[0], objectUrl, this._doit);
+		var c = Caman( App.$('<canvas id="_caman"/>')[0], objectUrl, this._doit);
+// Listen to a single instance only
 
+		Caman.Event.listen(c, "processComplete", function (job, x) {
+		  console.log("Finished:", job);
+		  //~ console.log(this);
+		});
 	},
 	_doit : function(){
-		var actions = App._caman.model.get("actions");
-		App._.each(actions, function(item){
+		App._.each(App.caman.model.get("actions"), function(item){
 			for(var key in item){
 				var key = key,
 					val = item[key];
 
-				this[key](parseInt(val));
+				App.nprogress.inc();
+				if(key !== "colorize"){
+					this[key](parseInt(val));
+				} else {
+					var color = App.caman.model.get("tintcolor");
+					this[key](color, parseInt(val));
+				};
+				App.nprogress.inc();
 			}
 		}, this);
-		this.render(App._caman._done);
+		this.render(App.caman._done);
 	},
 	_done : function() {
-		var url = URL.createObjectURL(App.dataURItoBlob(this.toBase64()))
-		App.fabricToolsChannel.trigger("caman:done", url);
-		App.caman.model.set("result", url);
-		App.Backbone.Radio.trigger('fabricTools', "caman:status", "end");
+		App.nprogress.inc();
+		//TODO: dataURItoBlob ??  why not use blob-util ?
+		var blob = App.dataURItoBlob(this.toBase64()),
+			//~ name = App._.last(this.image.currentSrc.split('/')),
+			mime = App.files.get(App.caman.model.get("id")).get("filemime"),
+			name = App.files.get(App.caman.model.get("id")).get("filename"),
+			_file= new File(
+				[blob], 
+				name, 
+				{type:  mime });
+		//~ var file = App.files.create(_file,{parse : true});
+		var src = App.files.create(_file,{parse : true}).refreshSrc();
+		//~ var src = file.refreshSrc();
+		App.fabricToolsChannel.trigger("caman:done", src);
+		App.caman.model.set("result", src);
+		
+		
+		App.Backbone.Radio.trigger('fabricTools', "caman:status", "done");
+		
 	},
 	_parseActions	: function(data){
 		var actions = [];
@@ -75,6 +107,7 @@ module.exports = {
 		return this.cacheHash != this.currentHash ;
 	}
 };
+
 
 
 

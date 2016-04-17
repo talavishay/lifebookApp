@@ -14,7 +14,7 @@ module.exports = function ( config ) {
 
 	var customOpts = {
 	  entries: ['./src/index.js'],
-	  debug: true
+	  debug: true,
 	};
 	var opts = assign({}, watchify.args, customOpts);
 	var b = watchify(browserify(opts)); 

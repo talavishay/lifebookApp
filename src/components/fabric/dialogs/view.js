@@ -5,9 +5,9 @@ var dialogs = {
 	image 			: require("./image"),
 	backgroundEdit 	: require("../../backgroundEdit"),
 	crop 			: require("../../crop"),
+	fileBrowser		: require("../../fileBrowser")(App),
 	dropShadow 		: require("./dropShadow"),
 };
-
 module.exports =  App.Marionette.LayoutView.extend({
 	tagName	: 'span',
 	className : 'dialogs',
@@ -39,7 +39,7 @@ module.exports =  App.Marionette.LayoutView.extend({
 					dialogName = _split[1];
 				if( dialog ) {
 					this.$el.find("#title").text(dialogName);
-					var obj = App.fabricToolsChannel.request('getActiveObject');
+					//~ var obj = App.fabricToolsChannel.request('getActiveObject');
 					this.toolContent.show(new dialogs[dialogName](dialogName) );
 				}
 				//~ console.log(_split);

@@ -20,6 +20,8 @@
 					"spectrum-colorpicker",
 					"jquery-mousewheel",
 					"drag-drop",
+					"request-progress",
+					"request",
 					"fabric"  ],
   "watchify": true,
   "browsersync": {

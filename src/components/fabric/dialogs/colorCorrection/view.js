@@ -7,12 +7,12 @@ module.exports = App.Marionette.ItemView.extend({
 	model :	new _s,
 	ui 		: {
 		restore :".restore",
-		setTintColor : ".setTintColor"
+		setTintColor : "#tintColor"
 	},
 	events		: {
 		"click @ui.restore" : "_revert",
-		"click @ui.tintColor" : "getTintColor",
-		"input" : "handleInput",
+		"click @ui.setTintColor" : "getTintColor",
+		"input" : "_input"
 	},
 	_revert : function(){
 		this.model._revert();
@@ -29,9 +29,14 @@ module.exports = App.Marionette.ItemView.extend({
 		console.log("caman status  : " + data );
 		this.$el.toggleClass("working");
 	},
+	_input : function(){
+		//start progress at first hit --- true = now
+		App.nprogress.start();
+		this.handleInput();
+	},
 	handleInput : App._.debounce(	function(ev){
 		this.model.save(App.Backbone.Syphon.serialize(this));
-	}, 200),
+	}, 500),
 
 	getTintColor 	: function(ev){
 		//~ var self = this,
@@ -45,7 +50,8 @@ module.exports = App.Marionette.ItemView.extend({
 		//~ };
 		//~ this._spectrum(null, _func);
 		this._spectrum(null, (color)=>{
-			this.model.set({"tintcolor" : color.toRgbString()});
+			this.model.set({"tintcolor" : color.toHexString()});
+			this.render();
 		});
 	},
 	_spectrum 		: function(obj, _func){

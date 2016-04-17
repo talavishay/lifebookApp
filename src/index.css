@@ -1,3 +1,4 @@
+@import '../node_modules/pace-progress/themes/blue/pace-theme-minimal.css';
 @import '../bower_components/Jcrop/css/Jcrop.min.css';
 @import '../node_modules/spectrum-colorpicker/spectrum.css';
 @import './css/range.css';
@@ -94,6 +95,15 @@ padding: 0px 2.5%;
 	text-align : center;
 	margin-bottom : .5em;
 }
+.fileBrowser .item.draft{
+    box-shadow: 0px 0px 2px 2px red;
+}
+.fileBrowser .item.local{
+    box-shadow: 0px 0px 2px 2px orange;
+}
+.fileBrowser .item.remote{
+    box-shadow: 0px 0px 2px 2px green;
+}
 /*
 TODO:  convert VW to component scale
 */
@@ -126,6 +136,9 @@ display:block;
   0%    { transform: rotate(0deg); }
   100%  { transform: rotate(360deg); }
 }
+/*
+App.log
+*/
 .logText{
     font-size: 1em;
 	font-weight: bold;
@@ -135,4 +148,16 @@ display:block;
 	background-color: rgba(0, 0, 0, 0.34902);
 	white-space: nowrap;
 
+}
+
+
+/*nprogress*/
+#nprogress{
+	position:fixed;
+	top:0px;
+	width:100%;
+}
+.bar {
+    height: 2px;
+    background: red;
 }

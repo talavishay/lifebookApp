@@ -10,8 +10,8 @@ module.exports = Marionette.LayoutView.extend({
 		"templates" : "#templates",
 	},
 	onShow : function(){
-		var view = require('../background');
-		this.background.show(new view);
+		//~ var view = require('../background');
+		//~ this.background.show(new view);
 		
 		var view = require('../mask');
 		this.mask.show(new view);
