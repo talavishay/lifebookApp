@@ -19,6 +19,8 @@ module.exports = App.Marionette.ItemView.extend({
 		//~ "click .moveDown" :"_prev",
 		'click [data-active="false"]'	: "goToPage",
 		'click [data-active="true"]'	: "_save",
+		
+		
 	},
 	movePageUp: function(){
 		App.pages.moveUp(this.model);
@@ -27,16 +29,20 @@ module.exports = App.Marionette.ItemView.extend({
 		App.pages.moveDown(this.model);
 		
 	},
-	goToPage: function(){
-		App.fabricToolsChannel.trigger("object:background:remove");
-		//~ App.canvas.clear();
-		var data = this.model.get("data");
-		if(typeof data === "object"){
-			data = data[0].value;
+	goToPage: function(ev){
+		if(ev.ctrlKey){
+			this.model.destroy();
+		} else {
+			
+			App.fabricToolsChannel.trigger("object:background:remove");
+			var data = this.model.get("data");
+			if(typeof data === "object"){
+				data = data[0].value;
+			}
+			App.canvas.loadFromJSON(data, App.canvas.renderAll.bind(App.canvas));
+			this.model.collection.invoke('set', {"active": false});		
+			this.model.set({"active": true});		
 		}
-		App.canvas.loadFromJSON(data, App.canvas.renderAll.bind(App.canvas));
-		this.model.collection.invoke('set', {"active": false});		
-		this.model.set({"active": true});		
 	},
 	_save : function(){
 		//~ console.log(JSON.parse(this.model.get("data")).objects);

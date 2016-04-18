@@ -41,10 +41,10 @@ App.pages.removePage = function(){
 		next =	App.pages.at(App.pages.indexOf(active) + 1);
 	
 	active.destroy();
-	next.set({"active" : true});
 	if(typeof next === "undefined"){
 		App.pages.loadLastPage();
 	} else {
+		next.set({"active" : true});
 		App.canvas.loadFromJSON(next.get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
 		
 	}
