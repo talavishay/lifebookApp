@@ -1,39 +1,25 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html>
 <head>
 	<meta charset="UTF-8">
-
 	<link rel="stylesheet" type="text/css" href="dist/index.css">
-	<link rel="stylesheet" type="text/css" href="src/css/fonts/nootregular/stylesheet.css">
-	<link rel="stylesheet" type="text/css" href="src/css/fonts/mirimedium/stylesheet.css">
-	<link rel="stylesheet" type="text/css" href="src/css/fonts/stam/stylesheet.css">
-	<link rel="stylesheet" type="text/css" href="src/css/fonts/carmela/stylesheet.css">
+	
+	<script src="vendorDist/index.vendor.js"></script>
+	
+	<script defer src="dist/index.js"></script>
+	<script defer src="node_modules/jquery.event.drag/event.drag/jquery.event.drag.js"></script defer>
+	<script defer src="node_modules/jquery.event.drag/event.drag/jquery.event.drag.live.js"></script defer>
+	<script defer src="node_modules/jquery.event.drag/event.drop/jquery.event.drop.js"> </script defer>
+	<script defer src="node_modules/jquery.event.drag/event.drop/jquery.event.drop.live.js"> </script defer>
+	<script defer src="bower_components/caman/dist/caman.full.min.js"></script>
+	
 </head>
-
 <body>
-
-
-
-
-<script type="text/javascript" src="vendorDist/index.vendor.js"></script>
-
-<script type="text/javascript" defer src="node_modules/jquery.event.drag/event.drag/jquery.event.drag.js">//TODO: move to NPM /BOWER ?   / defer loading </script>
-<script type="text/javascript" defer src="node_modules/jquery.event.drag/event.drag/jquery.event.drag.live.js">//TODO: move to NPM /BOWER ?   / defer loading </script>
-<script type="text/javascript" defer src="node_modules/jquery.event.drag/event.drop/jquery.event.drop.js">//TODO: move to NPM /BOWER ?   / defer loading </script>
-<script type="text/javascript" defer src="node_modules/jquery.event.drag/event.drop/jquery.event.drop.live.js">//TODO: move to NPM /BOWER ?   / defer loading </script>
-
-<script type="text/javascript" src="dist/index.js"></script>
-
-<script type="text/javascript" src="bower_components/caman/dist/caman.full.min.js">//TODO: move to NPM /BOWER ?   / defer loading </script>
-
 <!--
-
-<script type='text/javascript' id="__bs_script__">
+<script defer type='text/javascript' id="__bs_script__">
 	//<![CDATA[
     document.write("<script async src='//HOST:3000/browser-sync/browser-sync-client.1.9.2.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
 //]]>
 </script>
 -->
-
 </body>
 </html>

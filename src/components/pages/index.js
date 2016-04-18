@@ -1,21 +1,11 @@
 var _pages = require('./pages')(App);
 App.pages = new _pages;
 
-App.pages.on({
-	//~ "change:data" : (ev,i)=>{console.log(ev,i)}
-})
 App.fabricToolsChannel.on({
 		"page:add"		: App.pages.add,
 		"page:delete"	: App.pages.remove
 });
-App.pages.loadFirtPage = function(){
-	App.canvas.loadFromJSON(App.pages.first().get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
-	App.pages.first().set({"active" : true});
-};
-App.pages.loadLastPage = function(){
-	App.canvas.loadFromJSON(App.pages.last().get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
-	App.pages.last().set({"active" : true});
-};
+
 App.pages.addPage = function(){
 	App.pages.invoke('set', {"active": false});
 	var _preview = 	App.canvas.toDataURL({
@@ -41,10 +31,10 @@ App.pages.removePage = function(){
 		next =	App.pages.at(App.pages.indexOf(active) + 1);
 	
 	active.destroy();
-	next.set({"active" : true});
 	if(typeof next === "undefined"){
 		App.pages.loadLastPage();
 	} else {
+		next.set({"active" : true});
 		App.canvas.loadFromJSON(next.get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
 		
 	}
@@ -86,3 +76,11 @@ App.pages.swap = function (indexA, indexB) {
   this.models[indexA] = this.models.splice(indexB, 1, this.models[indexA])[0];
   App.layout.bookPreview.currentView.render();
 }
+//~ App.pages.loadFirtPage = function(){
+	//~ App.canvas.loadFromJSON(App.pages.first().get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
+	//~ App.pages.first().set({"active" : true});
+//~ };
+//~ App.pages.loadLastPage = function(){
+	//~ App.canvas.loadFromJSON(App.pages.last().get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
+	//~ App.pages.last().set({"active" : true});
+//~ };
