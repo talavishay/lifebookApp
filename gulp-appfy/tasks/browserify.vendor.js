@@ -43,7 +43,7 @@ module.exports = function ( config ) {
             .on( "error", onBundleError )
             .pipe( source( 'index.vendor.js' ) );
 
-        if ( config.debug ) {
+        //~ if ( config.debug ) {
             // source map external
             stream = stream.pipe(buffer())
                 .pipe(sourcemaps.init({
@@ -52,9 +52,9 @@ module.exports = function ( config ) {
                 .pipe(sourcemaps.write('./', {
                     sourceRoot: '/'
                 }));
-        } else {
-            stream = stream.pipe( streamify( uglify() ) );
-        }
+        //~ } else {
+            //~ stream = stream.pipe( streamify( uglify() ) );
+        //~ }
 
         stream = stream.pipe( gulp.dest( config.destVendorPath ) );
 
