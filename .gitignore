@@ -1,7 +1,5 @@
 *
 /*
-!gulp*
-!/gulp*/**
 !/src
 !/src/**
 /src/background
