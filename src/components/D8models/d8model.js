@@ -4,6 +4,7 @@ var _model = {
 		return this._fromExtendedJSON(resp);
 	},
 	_fromExtendedJSON: function(resp) {
+		
 		var id = this.idAttribute;
 		if (!_.isNull(resp) && !_.isUndefined(resp) ) {
 			_.each(resp, function(value, key) {
@@ -20,16 +21,20 @@ var _model = {
 		return resp;
 	},
 	_toExtendedJSON: function() {
-		var attrs = this.attributes ,id = this.idAttribute;
+		this.unset("changed");
+		this.unset("created");
+		var attrs = this.attributes,
+			id = this.idAttribute;
+		attrs = App._.omit(attrs, 'changed', 'created', 'langcode','uuid', 'user_id', 'status');
 		_.each(attrs, function(value, key) {
-		  if (_.isString(key) && key.charAt(0) != '_') {
-			attrs[key == id ? 'nid' : key] = [{ 'value': value }];
-		  }
+			attrs[key] = [{ 'value': value }];
 		});
-		return attrs;
+		attrs.id = this.id;
+		return attrs; 
 	},
 	sync		: function(method, model, options)  {
 		options.beforeSend = function (xhr) {
+//TODO: should this be done here ?
 //TODO: is this required? whats the default ?
 			xhr.setRequestHeader('Content-type', 'application/json');
 			xhr.setRequestHeader('Accept', 'application/json');

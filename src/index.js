@@ -87,7 +87,7 @@ App.collections 		= require('./components/collections')(App);
 
 App.canvasImages		= new App.collections.canvasImages();
 App.files				= new App.collections.files();
-//TODO: better namesapce ? dirModel belongs to the clipart / svg  widget..
+//TODO:  ? dirModel belongs to the clipart / svg  widget..
 App.dirModel			= new App.models.dirModel();
 // canvas image url resolver
 // make sure a local objectUrl as valid for each image in the canvas
@@ -96,7 +96,7 @@ App.caman				= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
-		
+
 /***********************************************************************
  * GLOBAL namespace anchor
 ***********************************************************************/

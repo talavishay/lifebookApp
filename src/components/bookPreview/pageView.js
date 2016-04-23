@@ -33,15 +33,16 @@ module.exports = App.Marionette.ItemView.extend({
 		if(ev.ctrlKey){
 			this.model.destroy();
 		} else {
-			
+			App.nprogress.start();
 			App.fabricToolsChannel.trigger("object:background:remove");
-			var data = this.model.get("data");
-			if(typeof data === "object"){
-				data = data[0].value;
-			}
-			App.canvas.loadFromJSON(data, App.canvas.renderAll.bind(App.canvas));
-			this.model.collection.invoke('set', {"active": false});		
-			this.model.set({"active": true});		
+			App.canvas.clear();
+			App.resolver
+				.initialize(JSON.parse(this.model.get("data")))
+				.then(function(stage){
+					App.canvas.loadFromJSON(stage, App.canvas.renderAll.bind(App.canvas));
+					App.nprogress.done();
+				});			
+			
 		}
 	},
 	_save : function(){

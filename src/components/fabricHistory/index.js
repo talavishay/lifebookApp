@@ -3,7 +3,7 @@ var _m = require('./model');
 App.fabricHistory = new _m({page : []});
 App.fabricHistory.timer = window.setInterval(function(){
 	App.fabricHistory.save();
-}, 2000);
+}, 20000);
 App.fabricToolsChannel.on("fabricHistory:undo", function(){
 	//get page history
 	var stack = App.fabricHistory.get("page");

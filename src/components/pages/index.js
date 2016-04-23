@@ -11,15 +11,19 @@ App.pages.addPage = function(){
 	var _preview = 	App.canvas.toDataURL({
 						format: 'png',
 						multiplier: .1
-					});
-	App.pages.create({
-		"pageNumber": App.pages.length,
-		"active" : false,
-		"data"	: [{ value : JSON.stringify( App.canvas.toJSON())	}],
-		"meta"	: [{ value : JSON.stringify({ preview : _preview }) }]
-	},{
-		url : '/entity/composition'
-	});
+		}),
+		meta = JSON.stringify({ preview : _preview });
+	App.resolver
+		.initialize()
+		.then(function(stage){
+			App.pages.create({
+				data : JSON.stringify(stage),
+				meta :	meta
+			},{
+				url : '/entity/composition'
+			});
+		});
+
 	//clear canvas by loading an empty canvas..
 	//~ App.canvas.loadFromJSON(App.pages.first().defaults.data, App.canvas.renderAll.bind(App.canvas));
 	App.fabricToolsChannel.trigger("object:background:remove");
