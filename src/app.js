@@ -43,6 +43,27 @@ var _App = {
 			this.fabricToolsChannel.trigger(command, data);
 	},
 	_keyboardAction			: function(ev){
+		//~ console.log(ev.keyCode);
+if(ev.shiftKey){
+	switch (ev.keyCode){
+		case 37:// keyboard key = LEFT
+			App.fabricToolsChannel.trigger("clip:move", "left");
+		break;
+		case 39:// keyboard key = RIGHT
+			App.fabricToolsChannel.trigger("clip:move", "right");
+		break;
+		case 40:// keyboard key = DOWN
+			App.fabricToolsChannel.trigger("clip:move", "down");
+		break;
+		case 38:// keyboard key = UP
+			//~ App.fabricToolsChannel.trigger("object:move", "up");
+			App.Backbone.Radio.trigger('fabricTools', "clip:move", "up");
+		break;
+		case 49:// keyboard key = 1
+			App.fabricToolsChannel.trigger("clip:toggleControl");
+		break;
+	}
+} else {
 		switch (ev.keyCode){
 
 		case 8:// keyboard key = del?
@@ -50,10 +71,6 @@ var _App = {
 			App.fabricToolsChannel.trigger("object:delete");
 			ev.preventDefault();
 			return false;
-		break;
-
-		case 37:// keyboard key = LEFT
-			App.fabricToolsChannel.trigger("object:move", "left");
 		break;
 
 		case 37:// keyboard key = LEFT
@@ -109,7 +126,11 @@ var _App = {
 			App.fabricToolsChannel.trigger("zoom:in", .1);
 
 		break;
-	}
+
+
+	
+		}
+	};
 },
 };
 return  App._.extend(new App.Marionette.Application(_App), App);

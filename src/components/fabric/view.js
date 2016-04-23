@@ -11,6 +11,7 @@ var obj = {
 				height : this.model.get('height')
 		});
 		this.canvas = App.canvas;
+		App.canvas._view = this;
 		this._Events();
 		require('./worker');
 		require('../clipboard');
@@ -25,21 +26,21 @@ var obj = {
 			'getActiveObject' 	: this.getActiveObject,
 			//~ 'getActiveGroup' 	: this.getActiveGroup
 		}, this);
-		this.listenTo(this.canvas, {
-			 'object' : (ev)=>{
-				 console.log(ev);
-				 console.log("ev");
-			 },
-			 'object:modified object:selected': this.showTools,
-			 'selection:cleared' : this.hideTools,
-			 'object:rotating object:moving' :  App._.debounce(this.hideTools, 500, true),
-		}, this);
+		this.canvas.on({
+			 //~ 'object:modified object:selected': this.showTools,
+			 //~ 'selection:cleared' : this.hideTools,
+			 //~ 'object:rotating object:moving' :  App._.debounce(this.hideTools, 500, true),
+			 //~ 'object:moving' : this.updateClip,
+		});
 		this.listenTo(App.fabricToolsChannel,{
 			"object:delete" 			:this.objectDelete,
 			"object:background:remove" 	:this.backgroundDelete,
 			"object:opacity"			:this.objectOpacity,
-			"object:clip" 				:this.clipSvg,
+			//~ "object:clip" 				:this.clipSvg,
+			"object:clip" 				:this.makeClipedObject,
 			"object:move" 				:this.objectMove,
+			"clip:move" 				:this.clipMove,
+			"clip:toggleControl" 		:this.clipToggleControl,
 			"object:move:rand"			:this._rand_positioning,
 			"image:add caman:done" 		:this.addImage,
 			"add:text" 					:this.addText,
@@ -55,7 +56,7 @@ var obj = {
 	print : function(multiplier) {
 		window.open(window.App.canvas.toDataURL({
 			  format: 'png',
-			  multiplier: 4
+			  multiplier: 3
 		}), "_blank");
 	},
 	getActiveObject : function() {
@@ -121,21 +122,45 @@ var obj = {
 				onChange: this.canvas.renderAll.bind(this.canvas),
 			},
 			step = 20;
-				
 			switch (ev){
 				case "left"	:obj.animate('left', '-=' + step  , options);break;
 				case "right":obj.animate('left', '+=' + step  , options);break;
 				case "down"	:obj.animate('top' , '+=' + step  , options);break;
 				case "up"	:obj.animate('top' , '-=' + step  , options);break;
 			};
+		};
+	},
+	clipMove 	: function(ev){
+		if(ev){
+			
+			var active = active || App.canvas.getActiveObject();
+			if(active._cliper){
+				var obj = active._cliper,
+				//animation options for the movment
+				options = {
+					duration: 10,
+					easing :  fabric.util.ease["easeOut"],
+					onChange: this.canvas.renderAll.bind(this.canvas),
+				},
+				step = 20;
+					
+				switch (ev){
+					case "left"	:obj.animate('left', '-=' + step  , options);break;
+					case "right":obj.animate('left', '+=' + step  , options);break;
+					case "down"	:obj.animate('top' , '+=' + step  , options);break;
+					case "up"	:obj.animate('top' , '-=' + step  , options);break;
+				};
+			}
 		}
 	},
 	promptReplaceImage : function(img){
 		var	obj	= App.canvas.getActiveObject(),
 			msg = "Replace current Active Object?";
+			
 //TODO: remove hardcoded msg .. msg = "Replace current Active Object?";
 		if(obj && ( App.replace  || window.confirm(msg) ) ) {
 			obj.setElement( img );
+			
 			// scale new image to obj dimensions
 			if( obj && img.width > obj.width){
 				obj.scale( obj.width / img.width );
@@ -150,10 +175,13 @@ var obj = {
 		var img = (img instanceof Image) ? img : img.target;
 		if( !this.promptReplaceImage(img)){
 			var fabricImage = new fabric.Image(img);
+			// scale new image to fit into canvas
+			if( fabricImage.width > App.canvas.width){
+				fabricImage.scale( App.canvas.width / fabricImage.width  );
+			};
 			App.canvas
 				.add(fabricImage)
 				.setActiveObject(fabricImage);
-			
 			//~ fabricImage.center();
 			App.canvas.renderAll();
 //TODO: fabric.js bug fix -- object are sometimes unselectable..
@@ -257,26 +285,50 @@ var obj = {
 			});
 		});
 	},
-	clipSvg	:	function(src,yscale,xscale){
-		this.loadSvg(src)
-			.then(function(svg){
-				var active = App.canvas.getActiveObject();
-				svg.set({
-					left	: 0,
-					top		: 0,
-					originX : 'center',
-					originY : 'center',
-					scaleY	: (active.height / svg.height) * yscale,
-					scaleX	: (active.width	/ svg.width) * xscale,
-				});
-				active.set({
-					clipTo: function(ctx) {
-						svg.render(ctx);
-					}
-				});
-				App.canvas.renderAll();
-			});
+	makeClipedObject	: 	function(src){
+		this.loadSvg(src).then(function(cliper){
+			var active	= App.canvas.getActiveObject(),
+				clipedObject	= new App.fabric.ClipedImage(active.getElement(), cliper );
+			
+			App.canvas.add(clipedObject);
+			App.canvas.remove(active);
+			
+		});
 	},
+	
+	clipToggleControl : function(active){
+		var active = active || App.canvas.getActiveObject();
+		if(active._cliper){
+			active._cliper.selectable = !active._cliper.selectable ;
+			active.selectable = !active.selectable ;
+
+			active._cliper.bringForward();
+
+			App.canvas.setActiveObject(active._cliper);
+			
+		};
+		if(active._cliped){
+			active._cliped.selectable = !active._cliped.selectable ;
+			active.selectable = !active.selectable ;
+
+			active._cliped.bringForward();
+			App.canvas.setActiveObject(active._cliped);
+			App.canvas.calcOffset();
+		}
+		App.canvas.calcOffset();
+	},
+	//~ function(){
+	//~ canvas.on('object:moving', function(e) {
+		//~ var obj = e.target;
+		  
+			//~ obj.set({
+				//~ clipName: 'clip1',
+				//~ clipTo: function(ctx) { 
+							//~ return _.bind(clipByName, obj)(ctx) 
+						//~ }
+			//~ });
+		  
+	//~ },
 	backgroundDelete	:	function (){
 		var grad =this.canvas.getItemByName("background_grad");
 		if( grad) { this.canvas.remove(grad)};

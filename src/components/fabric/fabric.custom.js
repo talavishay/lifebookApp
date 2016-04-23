@@ -19,7 +19,6 @@ fabric.Canvas.prototype.getAbxxxxxxx = function(object) {
 };
 
 
-
 fabric.Cropzoomimage = fabric.util.createClass(fabric.Image, {
 	type: 'cropzoomimage',
 	async : true,
@@ -221,7 +220,160 @@ fabric.Canvas.prototype.add_svg = function(src, xscale, yscale){
 		App.canvas.renderAll();
 	});
 
-}
+};
+fabric.Canvas.prototype.calcTransformMatrix =  function(obj) {
+	var multiplyMatrices = fabric.util.multiplyTransformMatrices,
+		center = obj.getCenterPoint(),
+		translateMatrix = [1, 0, 0, 1, center.x, center.y],
+		rotateMatrix = this._calcRotateMatrix(),
+		dimensionMatrix = obj._calcDimensionsTransformMatrix(obj, obj.skewX, obj.skewY, true),
+		matrix = obj.group ? this.calcTransformMatrix(obj.group) : [1, 0, 0, 1, 0, 0];
+		//~ matrix =  [1, 0, 0, 1, 0, 0];
+	matrix = multiplyMatrices(matrix, translateMatrix);
+	matrix = multiplyMatrices(matrix, rotateMatrix);
+	matrix = multiplyMatrices(matrix, dimensionMatrix);
+	return matrix;
+};
+fabric.Canvas.prototype._calcDimensionsTransformMatrix =  function(obj, skewX, skewY, flipping) {
+	var multiplyMatrices = fabric.util.multiplyTransformMatrices,
+		skewMatrixX = [1, 0, Math.tan(degreesToRadians(skewX)), 1],
+		skewMatrixY = [1, Math.tan(degreesToRadians(skewY)), 0, 1],
+		scaleX = obj.scaleX * (flipping && obj.flipX ? -1 : 1),
+		scaleY = obj.scaleY * (flipping && obj.flipY ? -1 : 1),
+		scaleMatrix = [scaleX, 0, 0, scaleY],
+		m = multiplyMatrices(scaleMatrix, skewMatrixX, true);
+	return multiplyMatrices(m, skewMatrixY, true);
+};
+fabric.Canvas.prototype._calcRotateMatrix =  function() {
+      if (this.angle) {
+        var theta = degreesToRadians(this.angle), cos = Math.cos(theta), sin = Math.sin(theta);
+        return [cos, sin, -sin, cos, 0, 0];
+      }
+      return [1, 0, 0, 1, 0, 0];
+};
 // fabric_canvas)view ## END
+fabric.DPI = 300;
 
+fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
+	type: 'clipedImage',
+	async : true,
+	initialize: function( element, _cliper, options ) {
+		options || (options = {});
+	
+		this._events();
+		this.callSuper('initialize', element, options);
+		//TODO: remove canvas App refernce ?
+		if( this.getWidth() > App.canvas.getWidth()){
+			this.scale( App.canvas.getWidth() / this.getWidth()  );
+		};
+		
+		this.set('_cliper', _cliper || 'undefinedCustomAttribute');
+		   
+	},
+	clipTo : function(ctx) {
+		ctx.save();
+		var myMatrix = App.canvas.calcTransformMatrix(this);
+		myMatrix = fabric.util.invertTransform(myMatrix);
+		ctx.transform.apply(ctx, myMatrix);
+
+		this._cliper.render(ctx);
+		ctx.restore();
+	},
+	_initElement: function(element, options) {
+		this.setElement(element, null, options);
+		fabric.util.addClass(this.getElement(), fabric.Image.CSS_CANVAS);
+    },
+	_events		: function(){
+		//~ this.off("moving");
+		//~ this.off("scaling");
+		this.on("mousedown", function(ev, b){
+			this._startPosition = {
+				top		: this.getTop(),
+				left	: this.getLeft(),
+				angle	: this.getAngle(),
+				scaleY	: this.getScaleY(),
+				scaleX	: this.getScaleX(),
+			};
+		});
+		
+		this.on("rotating", function(ev, b){
+			if(ev.e.shiftKey){
+				this.setAngle(this._startPosition.angle);
+				this._cliper.setAngle(this._cliper.getAngle()+ (ev.e.movementY * -1));
+			}
+		});
+		
+		this.on("moving", function(ev, b){
+			this.updateClipPos(ev);
+			if(ev.e.shiftKey){
+				this.setTop(this._startPosition.top);
+				this.setLeft(this._startPosition.left);
+			};
+		});
+		
+		this.on("scaling", function(ev, b){
+			if(ev.e.shiftKey){
+				this.updateClipScale(ev);
+				this.setScaleY(this._startPosition.scaleY);
+				this.setScaleX(this._startPosition.scaleX);
+			};
+		});
+	},
+	updateClipPos : function( ev){
+		if(this._cliper){
+			this._cliper.setTop(this._cliper.top + ev.e.movementY);
+			this._cliper.setLeft(this._cliper.left + ev.e.movementX);
+		};
+	},
+	updateClipScale : function(ev){
+		if(this._cliper){
+			var sX = this._cliper.getScaleX() + ev.e.movementY * -.1 ,
+				sY = this._cliper.getScaleY() + ev.e.movementY * -.1;
+			this._cliper.setScaleX(sX);
+			this._cliper.setScaleY(sY);
+		};
+	},
+	rerender	: function(callback){
+		var obj = this;
+		//~ obj.applyFilters(window.App.canvas.renderAll.bind(window.App.canvas));
+		obj.set({
+			left: obj.left,
+			top: obj.top,
+			angle: obj.angle
+		});
+		obj.setCoords();
+		if (callback) { callback(obj); };
+	},
+	toObject	: function(){
+		return fabric.util.object.extend(this.callSuper('toObject'), {
+			_cliper: this._cliper.toObject(),
+		});
+	},
+	//~ fromObject	: function(object, callback) {
+		//~ var _cliper = new fabric.PathGroup(obj, options);
+		
+		//~ var instance = new fabric.ClipedImage(cliped, _cliper);
+		//~ if (callback) { callback(instance); }
+	//~ },
+	
+	
+    _initClipping: function(options) {
+		if (!options.clipTo || typeof options.clipTo !== 'string') {
+			return;
+		};
+
+		var functionBody = fabric.util.getFunctionBody(options.clipTo);
+		if (typeof functionBody !== 'undefined') {
+			this.clipTo = new Function('ctx', functionBody);
+		}
+    },
+});
+fabric.ClipedImage.fromObject = function(object, callback) {
+	fabric.util.loadImage(object.src, function(img) {
+		var _cliper = new fabric.Path(object._cliper.path, object._cliper),
+			clipedObject = new App.fabric.ClipedImage(img, _cliper, object);
+		callback && callback(clipedObject);
+	}, null, object.crossOrigin);
+};
+fabric.ClipedImage.async = true;
 module.exports = fabric

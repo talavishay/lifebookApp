@@ -29,10 +29,14 @@ var urlResolver = {
 			options = this.options;
 			
 		return new Promise(function(resolve, reject){
-			App.resolver.urls = App._.map(App._.where(objects, options.filter),
-					function(item){
+			var match = ['image', 'clipedImage'],
+				_objects = App._.filter(objects, function(obj){
+					return App._.contains(match, obj.type) 
+				});
+				
+			App.resolver.urls = App._.map(_objects,	function(item){
 						return item[options.key];
-					});
+			});
 			resolve(App.resolver.urls);
 		});
 	},
@@ -41,7 +45,7 @@ var urlResolver = {
 			var	 _resolve = App._.after(urls.length, function(){
 					App.resolver.draftUrls = App._.filter(App.resolver.validUrls, function(url){
 						var _url = App.resolver.extractUrl(url);
-						return (_url.drupalId  === 0 && _url.id.split('-').length === 1)
+						return (_url.id !== "" && _url.drupalId  === 0 && _url.id.split('-').length === 1)
 					});
 					resolve(App.resolver.invalidUrls);
 			});
