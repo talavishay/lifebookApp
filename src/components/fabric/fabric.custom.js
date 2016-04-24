@@ -225,7 +225,7 @@ fabric.Canvas.prototype.calcTransformMatrix =  function(obj) {
 	var multiplyMatrices = fabric.util.multiplyTransformMatrices,
 		center = obj.getCenterPoint(),
 		translateMatrix = [1, 0, 0, 1, center.x, center.y],
-		rotateMatrix = this._calcRotateMatrix(),
+		rotateMatrix = this._calcRotateMatrix(obj),
 		dimensionMatrix = obj._calcDimensionsTransformMatrix(obj.skewX, obj.skewY, true),
 		matrix = obj.group ? this.calcTransformMatrix(obj.group) : [1, 0, 0, 1, 0, 0];
 	matrix = multiplyMatrices(matrix, translateMatrix);
@@ -243,9 +243,11 @@ fabric.Canvas.prototype._calcDimensionsTransformMatrix =  function(obj, skewX, s
 		m = multiplyMatrices(scaleMatrix, skewMatrixX, true);
 	return multiplyMatrices(m, skewMatrixY, true);
 };
-fabric.Canvas.prototype._calcRotateMatrix =  function() {
-      if (this.angle) {
-        var theta = degreesToRadians(this.angle), cos = Math.cos(theta), sin = Math.sin(theta);
+fabric.Canvas.prototype._calcRotateMatrix =  function(obj) {
+      if (obj.angle) {
+        var theta = fabric.util.degreesToRadians(obj.angle),
+			cos = Math.cos(theta),
+			sin = Math.sin(theta);
         return [cos, sin, -sin, cos, 0, 0];
       };
       return [1, 0, 0, 1, 0, 0];
@@ -265,6 +267,7 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 				'left' : options.left,
 				'angle' : options.angle,
 			});
+			_cliper.scaleToWidth( this.getWidth() );
 		};
 		this.set({
 			'_cliper' : _cliper,
@@ -275,7 +278,6 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 		if(!options.scale && this.getWidth() > App.canvas.getWidth()){
 			this.scale( App.canvas.getWidth() / this.getWidth()  );
 		};
-		_cliper.scaleToWidth( this.getWidth() );
 		
 		if(_cliper.getHeight() > this.getHeight()){
 				_cliper.scaleToHeight( this.getHeight() );
@@ -308,8 +310,8 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 		});
 	
 		this.on("moving", function(ev, b){
-			this.updateClipPos(ev);
 			if(ev.e.shiftKey){
+				this.updateClipPos(ev);
 				this.setTop(this._startPosition.top);
 				this.setLeft(this._startPosition.left);
 			};
