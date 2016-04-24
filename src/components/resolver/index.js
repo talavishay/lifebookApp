@@ -105,8 +105,12 @@ var urlResolver = {
 	getValidObjects : function(){
 		return new Promise(function(resolve, reject){
 			var	_objects = App._.clone(App.resolver.objects);
+				match = ['image', 'clipedImage'],
+				_imageObjects = App._.filter(_objects, function(obj){
+					return App._.contains(match, obj.type) 
+				});
 			
-			resolve(App._.map(_objects, function(obj){
+			resolvedImageObjects = App._.map(_imageObjects, function(obj){
 				App._.each(	App.resolver.resolvedUrls, function(resolvedUrl, index, list){
 					
 					var	_url = App.resolver.extractUrl(resolvedUrl);
@@ -122,7 +126,9 @@ var urlResolver = {
 					}
 				});
 				return obj;
-			}));
+			});
+			resolve(App._.extend(resolvedImageObjects, _objects));
+			
 		});
 	},
 	drupalizeStage : function(){
