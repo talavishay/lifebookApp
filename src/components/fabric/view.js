@@ -287,8 +287,10 @@ var obj = {
 	},
 	makeClipedObject	: 	function(src){
 		this.loadSvg(src).then(function(cliper){
+			cliper.set("new", true);
 			var active	= App.canvas.getActiveObject(),
-				clipedObject	= new App.fabric.ClipedImage(active.getElement(), cliper );
+				clipedObject	= new App.fabric.ClipedImage(active.getElement(), cliper, active.toObject() );
+				//~ clipedObject	= new App.fabric.ClipedImage(active.getElement(), cliper);
 			
 			App.canvas.add(clipedObject);
 			App.canvas.remove(active);

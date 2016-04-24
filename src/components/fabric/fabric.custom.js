@@ -226,9 +226,8 @@ fabric.Canvas.prototype.calcTransformMatrix =  function(obj) {
 		center = obj.getCenterPoint(),
 		translateMatrix = [1, 0, 0, 1, center.x, center.y],
 		rotateMatrix = this._calcRotateMatrix(),
-		dimensionMatrix = obj._calcDimensionsTransformMatrix(obj, obj.skewX, obj.skewY, true),
+		dimensionMatrix = obj._calcDimensionsTransformMatrix(obj.skewX, obj.skewY, true),
 		matrix = obj.group ? this.calcTransformMatrix(obj.group) : [1, 0, 0, 1, 0, 0];
-		//~ matrix =  [1, 0, 0, 1, 0, 0];
 	matrix = multiplyMatrices(matrix, translateMatrix);
 	matrix = multiplyMatrices(matrix, rotateMatrix);
 	matrix = multiplyMatrices(matrix, dimensionMatrix);
@@ -248,7 +247,7 @@ fabric.Canvas.prototype._calcRotateMatrix =  function() {
       if (this.angle) {
         var theta = degreesToRadians(this.angle), cos = Math.cos(theta), sin = Math.sin(theta);
         return [cos, sin, -sin, cos, 0, 0];
-      }
+      };
       return [1, 0, 0, 1, 0, 0];
 };
 // fabric_canvas)view ## END
@@ -257,30 +256,40 @@ fabric.DPI = 300;
 fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 	type: 'clipedImage',
 	async : true,
-	initialize: function( element, _cliper, options ) {
+	initialize: function( element, _cliper, options, fromObject ) {
 		options || (options = {});
-	
+		
+		if(_cliper.new){
+			_cliper.set({
+				'top' : options.top,
+				'left' : options.left,
+				'angle' : options.angle,
+			});
+		};
+		this.set({
+			'_cliper' : _cliper,
+		});
 		this._events();
-		this.callSuper('initialize', element, options);
-		//TODO: remove canvas App refernce ?
+		var _opt = App._.omit(options, "clipTo", "type", "_cliper");
+		this.callSuper('initialize', element, _opt);
 		if(!options.scale && this.getWidth() > App.canvas.getWidth()){
 			this.scale( App.canvas.getWidth() / this.getWidth()  );
 		};
 		_cliper.scaleToWidth( this.getWidth() );
-		this.set('_cliper', _cliper );
+		
+		if(_cliper.getHeight() > this.getHeight()){
+				_cliper.scaleToHeight( this.getHeight() );
+		};
 	},
 	clipTo : function(ctx) {
 		ctx.save();
 		var myMatrix = App.canvas.calcTransformMatrix(this);
 		myMatrix = fabric.util.invertTransform(myMatrix);
 		ctx.transform.apply(ctx, myMatrix);
-
 		this._cliper.render(ctx);
 		ctx.restore();
 	},
 	_events		: function(){
-		//~ this.off("moving");
-		//~ this.off("scaling");
 		this.on("mousedown", function(ev, b){
 			this._startPosition = {
 				top		: this.getTop(),
@@ -322,8 +331,8 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 	},
 	updateClipScale : function(ev){
 		if(this._cliper){
-			var sX = this._cliper.getScaleX() + ev.e.movementY * -.1 ,
-				sY = this._cliper.getScaleY() + ev.e.movementY * -.1;
+			var sX = this._cliper.getScaleX() + ev.e.movementY * .05 ,
+				sY = this._cliper.getScaleY() + ev.e.movementY * .05;
 			this._cliper.setScaleX(sX);
 			this._cliper.setScaleY(sY);
 		};
@@ -336,8 +345,9 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 });
 fabric.ClipedImage.fromObject = function(object, callback) {
 	fabric.util.loadImage(object.src, function(img) {
-		var _cliper = new fabric.Path(object._cliper.path, object._cliper),
-			clipedObject = new App.fabric.ClipedImage(img, _cliper, object);
+		var __cliper = new fabric.Path(object._cliper.path, object._cliper),
+		//~ var __cliper = new fabric.Path(object._cliper.path),
+			clipedObject = new App.fabric.ClipedImage(img, __cliper, object, true);
 		callback && callback(clipedObject);
 	}, null, object.crossOrigin);
 };
