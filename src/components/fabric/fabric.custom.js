@@ -263,10 +263,9 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 		this._events();
 		this.callSuper('initialize', element, options);
 		//TODO: remove canvas App refernce ?
-		if( this.getWidth() > App.canvas.getWidth()){
+		if(!options.scale && this.getWidth() > App.canvas.getWidth()){
 			this.scale( App.canvas.getWidth() / this.getWidth()  );
 		};
-		
 		_cliper.scaleToWidth( this.getWidth() );
 		this.set('_cliper', _cliper );
 	},
