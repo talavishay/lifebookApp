@@ -267,8 +267,9 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 			this.scale( App.canvas.getWidth() / this.getWidth()  );
 		};
 		
+		_cliper.scaleToWidth( this.getWidth() );
+		//~ _cliper.scaleToHeight( this.getHeight() );
 		this.set('_cliper', _cliper );
-		   
 	},
 	clipTo : function(ctx) {
 		ctx.save();
