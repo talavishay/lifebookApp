@@ -267,7 +267,7 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 			this.scale( App.canvas.getWidth() / this.getWidth()  );
 		};
 		
-		this.set('_cliper', _cliper || 'undefinedCustomAttribute');
+		this.set('_cliper', _cliper );
 		   
 	},
 	clipTo : function(ctx) {
@@ -279,10 +279,6 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 		this._cliper.render(ctx);
 		ctx.restore();
 	},
-	_initElement: function(element, options) {
-		this.setElement(element, null, options);
-		fabric.util.addClass(this.getElement(), fabric.Image.CSS_CANVAS);
-    },
 	_events		: function(){
 		//~ this.off("moving");
 		//~ this.off("scaling");
@@ -302,7 +298,7 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 				this._cliper.setAngle(this._cliper.getAngle()+ (ev.e.movementY * -1));
 			}
 		});
-		
+	
 		this.on("moving", function(ev, b){
 			this.updateClipPos(ev);
 			if(ev.e.shiftKey){
@@ -333,40 +329,11 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 			this._cliper.setScaleY(sY);
 		};
 	},
-	rerender	: function(callback){
-		var obj = this;
-		//~ obj.applyFilters(window.App.canvas.renderAll.bind(window.App.canvas));
-		obj.set({
-			left: obj.left,
-			top: obj.top,
-			angle: obj.angle
-		});
-		obj.setCoords();
-		if (callback) { callback(obj); };
-	},
 	toObject	: function(){
 		return fabric.util.object.extend(this.callSuper('toObject'), {
 			_cliper: this._cliper.toObject(),
 		});
 	},
-	//~ fromObject	: function(object, callback) {
-		//~ var _cliper = new fabric.PathGroup(obj, options);
-		
-		//~ var instance = new fabric.ClipedImage(cliped, _cliper);
-		//~ if (callback) { callback(instance); }
-	//~ },
-	
-	
-    _initClipping: function(options) {
-		if (!options.clipTo || typeof options.clipTo !== 'string') {
-			return;
-		};
-
-		var functionBody = fabric.util.getFunctionBody(options.clipTo);
-		if (typeof functionBody !== 'undefined') {
-			this.clipTo = new Function('ctx', functionBody);
-		}
-    },
 });
 fabric.ClipedImage.fromObject = function(object, callback) {
 	fabric.util.loadImage(object.src, function(img) {
