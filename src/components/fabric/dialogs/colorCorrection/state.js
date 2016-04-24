@@ -19,7 +19,7 @@ initialize:function(){
 
 	this.listenTo(App.fabricToolsChannel, {
 		"colorCorrection:restore" 	:this._revert,
-		"image:add:done"			:this._setup,
+		//~ "image:add:done"			:this._setup,
 		//~ "caman:done" 				:(data)=>{ this.save("result", data, {silent: true}) },
 	}, this );
 
@@ -38,7 +38,7 @@ initialize:function(){
 	},
 	_setup 		: function(){
 		var active = App.fabricToolsChannel.request('getActiveObject');
-		if(active !== null && active.type === "image"){
+		if(active !== null &&  /[i|I]mage/.test(active.type) ){
 			this.save({
 				"src"	: active.getSrc(), 
 				"result": false
