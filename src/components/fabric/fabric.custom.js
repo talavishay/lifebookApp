@@ -356,4 +356,6 @@ fabric.ClipedImage.fromObject = function(object, callback) {
 		callback && callback(clipedObject);
 	}, null, object.crossOrigin);
 };
+fabric.ClipedImage.async = true;
+
 module.exports 				= fabric;
