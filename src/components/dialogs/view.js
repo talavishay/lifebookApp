@@ -3,9 +3,9 @@ var dialogs = {
 	colorCorrection : require("./colorCorrection"),
 	templates 		: require("./templates"),
 	image 			: require("./image"),
-	backgroundEdit 	: require("../../backgroundEdit"),
-	crop 			: require("../../crop"),
-	fileBrowser		: require("../../fileBrowser")(App),
+	backgroundEdit 	: require("../backgroundEdit"),
+	crop 			: require("../crop"),
+	fileBrowser		: require("../fileBrowser")(App),
 	dropShadow 		: require("./dropShadow"),
 };
 module.exports =  App.Marionette.LayoutView.extend({
@@ -48,23 +48,7 @@ module.exports =  App.Marionette.LayoutView.extend({
 				this._show()},
 			"dialog:close"			:()=>{
 				this._hide()},
-			//~ "dialog:colorCorrection": function(){
-				//~ this.$el.find("#title").text('color corection');
-				//~ this.$el.find(".colorCorrectionBtn").addClass("active");
-				//~ this.toolContent.show( new dialogs.colorCorrection() );
-			//~ },
-			//~ "dialog:image"			:function(){
-				//~ this.$el.find("#title").text('image');
-				//~ var obj = App.fabricToolsChannel.request('getActiveObject');
-				//~ this.toolContent.show( new dialogs.image() );
-			//~ },
-			//~ "dialog:dropShadow"		:function(data,x){
-				//~ this.$el.find("#title").text('shadow');
-				//~ var obj = App.fabricToolsChannel.request('getActiveObject');
-				//~ this.toolContent.show(new dialogs.dropShadow({
-//~ x :0
-				//~ }));
-			//~ },
+			
 			"background:edit"		:function(src){
 				this.$el.find("#title").text('background edit');
 				this.toolContent.show(new dialogs.backgroundEdit({"src" : src}));
@@ -73,10 +57,7 @@ module.exports =  App.Marionette.LayoutView.extend({
 				this.$el.find("#title").text('crop');
 				this.toolContent.show(new dialogs.crop({"src" : src}));
 			},
-			//~ "dialog:templates"		:function(){
-				//~ this.$el.find("#title").text('templates');
-				//~ this.toolContent.show(new dialogs.templates());
-			//~ },
+			
 		}, this );
 	},
 });

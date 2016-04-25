@@ -1,5 +1,4 @@
-var Dialogs = require("./dialogs"),
-	Tools = require("./tools"),
+var Tools = require("./tools"),
 	view = require('./view.js'),
 	_state = require('./state.js');
 
@@ -8,7 +7,7 @@ module.exports = App.Marionette.LayoutView.extend({
 	regions : {
 		stage : '#stage',
 		tools : '#tools',
-		dialogs : "#dialogs"
+		
 	},
 	model : new _state,
 	modelEvents : {
@@ -18,7 +17,7 @@ module.exports = App.Marionette.LayoutView.extend({
 		"keyup #fabric" : "test"
 	},
 	initialize : function(){
-		_.bindAll(this, '_scrolldAction');
+		App._.bindAll(this,  "_scrolldAction");
 		App.$("#fonInit").hide(1000);
 		//~ this.listenTo(this,{
 			//~ "all" : function(eventName,m,d){

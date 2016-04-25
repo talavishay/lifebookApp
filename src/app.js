@@ -29,6 +29,7 @@ var _App = {
 		App.layoutChannel.trigger('set:sidebarFirst', 	require('./components/sidebarFirst') );
 		//~ this.layoutChannel.trigger('set:topToolbar', require('./components/topToolbar'));
 		App.layoutChannel.trigger('set:bookPreview', 	require('./components/bookPreview'));
+		App.layoutChannel.trigger('set:dialogs', 		require('./components/dialogs'));
 	},
 	_initBackboneRadioLog	: function(options){
 		if(options.debug){

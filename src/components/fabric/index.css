@@ -1,12 +1,9 @@
 @import './tools/index.css';
-@import './dialogs/index.css';
-
 #stage > div {
 	margin: 4px auto 0;
 	transform-origin: top;
 	position : relative;
 }
-
 canvas{
 	box-shadow: 1px 1px 1px 1px black;
 }
