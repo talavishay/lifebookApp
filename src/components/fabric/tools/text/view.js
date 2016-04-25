@@ -1,18 +1,13 @@
-'use strict';
-
-var $ = require('jquery'),
-	Radio = require('backbone.radio'),
-	spectrum = require('spectrum-colorpicker')($),
-	Marionette = require('backbone.marionette');
-
-
-var fabricToolsChannel = Radio.channel('fabricTools');
-
-var textToolsView = Marionette.ItemView.extend({
-	tagName	: 'span',
+var _state =require('./state.js');
+var textToolsView = {
 	className : 'toolbox text',
 	template: require('./template.html') ,
-	behaviors: [{ behaviorClass: require('../objectBehaviour.js')}],
+	initialize :function(object){
+		this.model 	= new _state(object);
+	},
+	behaviors: [
+		{ behaviorClass: require('../objectBehaviour.js')}
+	],
 	ui		:{
 		bold			: ".B",
 		italic			: ".I",
@@ -52,10 +47,10 @@ var textToolsView = Marionette.ItemView.extend({
         this.render();
     },
 	_style : function(key, val){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			var isStyled = (this.getStyle(obj, key) || '').indexOf(val) > -1;
 			this.setStyle(obj, key, isStyled ? '' : val);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 	underline : function(a){
 			this._style('textDecoration', "underline");			
@@ -67,77 +62,77 @@ var textToolsView = Marionette.ItemView.extend({
 			this._style('fontStyle', "italic");
 	},
 	setTextAlignRight : function(ev){
-		var obj = fabricToolsChannel.request('getActiveObject');
+		var obj = App.fabricToolsChannel.request('getActiveObject');;
 		obj.setTextAlign("right");
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 	},
 	setTextAlignCenter : function(ev){
-		var obj = fabricToolsChannel.request('getActiveObject');
+		var obj = App.fabricToolsChannel.request('getActiveObject');;
 		obj.setTextAlign("center");
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 	},
 	setTextAlignLeft : function(ev){
-		var obj = fabricToolsChannel.request('getActiveObject');
+		var obj = App.fabricToolsChannel.request('getActiveObject');;
 		obj.setTextAlign("left");
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 	},
 	setTextOpacity : function(a){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 				obj.setFill(tinycolor(obj.getFill()).setAlpha(a.target.value).toRgbString());
-				fabricToolsChannel.trigger('renderall');
+				App.fabricToolsChannel.trigger('renderall');
 	},
 	setfontSize : function(ev){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			obj.setFontSize(ev.currentTarget.value);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 	setFontFamily : function(ev){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			obj.setFontFamily(ev.currentTarget.value);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 	setLineHeight : function(ev){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			obj.setLineHeight(ev.currentTarget.value);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 	setTextStrokeWidth : function (ev) {
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			obj.setStroke(true);
 			obj.setStrokeWidth(ev.target.value);
 			
 			fabricToolsChannel.trigger('rebuildCanvas');
 	},
 	setTextStroke: function (style) {
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			if(obj.getStroke()){
 				obj.setStroke(false);
 			} else {
 					obj.setStroke(true);
 			}
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 	setTextBackgroundColor: function (ev) {
-		var obj = fabricToolsChannel.request('getActiveObject');
+		var obj = App.fabricToolsChannel.request('getActiveObject');;
 		if(obj.getTextBackgroundColor()){
 			obj.setTextBackgroundColor(null);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 		} else {
 			var _func = function(color) {
 				if(color){
 					obj.setTextBackgroundColor(color.toRgbString());		
-					fabricToolsChannel.trigger('renderall');
+					App.fabricToolsChannel.trigger('renderall');
 				}
 			};
 			this._spectrum(obj, _func);
 		}
 	},
 	setFontColor : function(ev){
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');;
 			var _func = function(color) {
 				if(color){
 					obj.setFill(color.toRgbString());		
-					fabricToolsChannel.trigger('renderall');
+					App.fabricToolsChannel.trigger('renderall');
 				}
 			};
 			this._spectrum(obj, _func);
@@ -176,6 +171,5 @@ var textToolsView = Marionette.ItemView.extend({
 			? object.getSelectionStyles()[styleName]
 			: object[styleName];
 	},
-});
-
-module.exports =  textToolsView;
+};
+module.exports =  App.Marionette.ItemView.extend(textToolsView);

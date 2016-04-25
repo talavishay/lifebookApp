@@ -1,8 +1,12 @@
 'use strict';
-
-var View = App.Marionette.ItemView.extend({
+var Model = require('./state.js');
+var	View = {
 	tagName	: 'span',
 	className : 'toolbox image',
+	initialize : function(object){
+		this.model = new Model(object);
+	},
+	
 	template: require('./template.html'),
     behaviors: [
 		{ behaviorClass: require('../objectBehaviour.js')},
@@ -39,6 +43,6 @@ var View = App.Marionette.ItemView.extend({
 			obj.setOpacity(ev.currentTarget.value);
 			App.fabricToolsChannel.trigger('renderall');
 	},	
-});
+};
 
-module.exports =  View;
+module.exports =  App.Marionette.ItemView.extend(View);

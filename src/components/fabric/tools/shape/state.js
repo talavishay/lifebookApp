@@ -3,7 +3,7 @@ module.exports = App.Backbone.Model.extend({
 			visible : false
 		},
 		initialize : function(object){
-			if(object) this._setup();
+			if(object) this._setup(object);
 		},
 		_setup : function(object){
 			this.set("selectOpacity",  this._selectFloat(0, 10, 1));

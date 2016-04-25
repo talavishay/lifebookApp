@@ -3,7 +3,7 @@ var _state =require('./state.js');
 var obj = {
 	className	: 'shadow dialog shadowOptions',
 	template	: require('./template.html'),
-	model 		: new _state,
+
 	ui 			: {
 		restore 			:".restore",
 		shadowTransperncy	:".transperncy",
@@ -19,8 +19,9 @@ var obj = {
 		//~ 'input @ui.shadowScatter' : 'setShadowScatter',
 		"click @ui.restore" : "restore",
 	},
-	initialize :function(){
+	initialize :function(object){
 		App._.bindAll(this, "handleInput");
+		this.model 	= new _state(object);
 	},
 	handleInput : App._.debounce(	function(ev){
 		this.model.save(App.Backbone.Syphon.serialize(this));

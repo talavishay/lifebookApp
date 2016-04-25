@@ -1,23 +1,15 @@
-'use strict';
-
-var $ = require('jquery'),
-	Radio = require('backbone.radio'),
-	spectrum = require('spectrum-colorpicker')($),
-	Marionette = require('backbone.marionette'),
-	_ = require('underscore');
-
-var fabricToolsChannel = Radio.channel('fabricTools');
-
-	
-var textToolsView = Marionette.ItemView.extend({
-	tagName	: 'span',
-	className : 'toolbox shape',
-	template: require('./template.html'),
-	behaviors: [{ behaviorClass: require('../objectBehaviour.js')}],
-	onRender : function(){
-		this.obj = fabricToolsChannel.request('getActiveObject');
+var Model = require('./state.js');	
+var textToolsView = {
+	tagName		: 'span',
+	className	: 'toolbox shape',
+	template	: require('./template.html'),
+	behaviors	: [
+		{ behaviorClass: require('../objectBehaviour.js')}]
+	,
+	initialize	: function(object){
+		this.model = new Model(object);
 	},
-	ui		:{
+	ui			:{
 		strokeWidth : "select.strokeWidth",
 		backgroundColor : ".boxBackgroundColor",
 	},
@@ -49,28 +41,27 @@ var textToolsView = Marionette.ItemView.extend({
 		},0);
 	},
 	setBackgroundColor: function (ev) {		
-		var obj = fabricToolsChannel.request('getActiveObject');
+		var obj = App.fabricToolsChannel.request('getActiveObject');
 		if(obj.getFill()){
 			obj.setFill(null);
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 		} else {
 			var _func = function(color) {
 				if(color){
 					obj.setFill(color.toRgbString());
-					fabricToolsChannel.trigger('renderall');		
+					App.fabricToolsChannel.trigger('renderall');		
 				}
 			};
 			this._spectrum(obj, _func);
 		}		
 	},
 	setStrokeWidth : function (ev) {
-			var obj = fabricToolsChannel.request('getActiveObject');
+			var obj = App.fabricToolsChannel.request('getActiveObject');
 			obj.setStroke(true);
 			obj.setStrokeWidth(ev.target.value);
 			
-			fabricToolsChannel.trigger('renderall');
+			App.fabricToolsChannel.trigger('renderall');
 	},
 
-});
-
-module.exports =  textToolsView;
+};
+module.exports =  App.Marionette.ItemView.extend(textToolsView);

@@ -18,7 +18,9 @@ canvas{
 	text-align: right;
 	background-color: white;
 	transform: scale(1.5);
-    transform-origin: top;
+    transform-origin: top right;
+        top: 10px;
+    right: 10px;
 }
 .fabricTools .toolbox > div{
     padding: 3px;

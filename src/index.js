@@ -74,7 +74,7 @@ App.nprogress._onprogress = function(e)  {
 		App.nprogress.set((Math.floor((e.loaded/e.total) * 100)) / 100):
 		App.nprogress.inc();
 };
-
+		
 /***********************************************************************
  * internal dependencies / app modules..
  * 

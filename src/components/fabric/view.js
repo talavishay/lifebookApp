@@ -4,7 +4,7 @@ var obj = {
 	template	: false,
 	tagName 	: 'canvas',
 	model		: new fabricModel(),
-	onShow		: (view)=>{
+	onShow		:  function(view){
 		view._initCanvas();
 		App._.bindAll(view, "_addImageElement");
 	},
@@ -30,9 +30,10 @@ var obj = {
 			//~ 'getActiveGroup' 	: this.getActiveGroup
 		}, this);
 		this.canvas.on({
-			 //~ 'object:modified object:selected': this.showTools,
-			 //~ 'selection:cleared' : this.hideTools,
-			 //~ 'object:rotating object:moving' :  App._.debounce(this.hideTools, 500, true),
+			 'object:selected': this.showTools,
+			 'object:modified': this.showTools,
+			 'selection:cleared' : this.hideTools,
+			 'object:rotating object:moving' :  App._.debounce(this.hideTools, 500, true),
 			 //~ 'object:moving' : this.updateClip,
 		});
 		this.listenTo(App.fabricToolsChannel,{
@@ -52,7 +53,7 @@ var obj = {
 			"set:backgroundColor"		:this.setBackgroundColor,
 			"set:backgroundGrad"		:this.setBackgroundGradient ,
 			"rebuildCanvas" 			:this.rebuildCanvas,
-			"renderall"					:this.canvas.renderAll,
+			"renderall"					:this.canvas.renderAll.bind(this.canvas),
 			"print"						:this.print,
 		}, this);
 	},

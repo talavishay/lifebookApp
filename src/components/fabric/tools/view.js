@@ -12,22 +12,17 @@ module.exports = App.Marionette.LayoutView.extend({
 	},
 	initialize : function(){
 		this.listenTo(App.fabricToolsChannel, {
-			"tools:show" : "show"
-		}, this);
-		this.listenTo(App.fabricToolsChannel, {
-			//~ "tools:destroy" : function(){
-								//~ if(this.tools.currentView){
-									//~ this.tools.currentView.destroy();
-								//~ };
-							//~ }
-			"tools:destroy" : "destroy"
+			"tools:show" : this.show,
+			"tools:destroy" : this.destroy
 		}, this);
 	},
 	destroy : function(){
-		this.tools.currentView.destroy
+		if(this.tools.currentView){
+			this.tools.currentView.destroy();
+		};
 	},
 	show : function(){
-		var obj = fabricToolsChannel.request('getActive');
+		var obj = App.fabricToolsChannel.request('getActiveObject');
 		switch(obj.type){
 
 			case "i-text":
@@ -37,6 +32,7 @@ module.exports = App.Marionette.LayoutView.extend({
 
 			case "image":
 			case "cropzoomimage":
+			case "clipedImage":
 				var type = image;
 			break;
 
@@ -51,7 +47,7 @@ module.exports = App.Marionette.LayoutView.extend({
 				var type = group;
 			break;
 		};
-		this.tools.show(new type());
+		this.tools.show(new type(obj));
 	},
 });
 
