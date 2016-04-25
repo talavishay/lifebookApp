@@ -10,7 +10,7 @@ var	View = {
 	template: require('./template.html'),
     behaviors: [
 		{ behaviorClass: require('../objectBehaviour.js')},
-		{ behaviorClass: require('../../dialogs/dialogsBehavior.js')}
+		{ behaviorClass: require('../../../dialogs/dialogsBehavior.js')}
     ],
     ui		: {
 		zoom : ".zoom",
