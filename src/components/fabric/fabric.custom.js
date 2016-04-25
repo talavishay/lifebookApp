@@ -153,6 +153,9 @@ fabric.Object.prototype.cornerColor = 'red';
 fabric.Object.prototype.cornerSize = 20;
 fabric.Object.prototype.borderOpacityWhenMoving =1;
 fabric.Object.prototype.borderScaleFactor= 4;
+
+fabric.Object.prototype.perPixelTargetFind = true;
+		//~ this.targetFindTolerance = 4;;
 //~ fabric.Image.prototype.lockUniScaling = true;
 
 
@@ -353,5 +356,4 @@ fabric.ClipedImage.fromObject = function(object, callback) {
 		callback && callback(clipedObject);
 	}, null, object.crossOrigin);
 };
-fabric.ClipedImage.async = true;
-module.exports = fabric
+module.exports 				= fabric;

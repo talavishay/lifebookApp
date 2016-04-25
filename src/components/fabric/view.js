@@ -4,7 +4,10 @@ var obj = {
 	template	: false,
 	tagName 	: 'canvas',
 	model		: new fabricModel(),
-	onShow		: (view)=>{view._initCanvas()},
+	onShow		: (view)=>{
+		view._initCanvas();
+		App._.bindAll(view, "_addImageElement");
+	},
 	_initCanvas : function() {
 		App.canvas = new App.fabric.Canvas(this.el,{
 				width : this.model.get('width'),
@@ -196,7 +199,6 @@ var obj = {
 		};
 	},
 	addImage 	: function(src, options){
-		App._.bindAll(this, "_addImageElement");	
 		this.loadImage(src).then(this._addImageElement);
 	},
 	loadImage 	: function(src){

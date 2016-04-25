@@ -65,7 +65,9 @@ if(ev.shiftKey){
 	}
 } else {
 		switch (ev.keyCode){
-
+		case 27:// keyboard key = ESC
+			App.canvas.deactivateAll().renderAll();
+		break;
 		case 8:// keyboard key = del?
 		case 46:// keyboard key = backs[pce]?
 			App.fabricToolsChannel.trigger("object:delete");

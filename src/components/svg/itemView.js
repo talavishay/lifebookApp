@@ -15,6 +15,7 @@ module.exports = App.Marionette.ItemView.extend({
 		"click" : 'triggerAddImage'
 	},
 	triggerAddImage : function(){
+		App.canvas.deactivateAll();
 		App.fabricToolsChannel.trigger("image:add", this.model.get("src"));
 	},
 
