@@ -255,9 +255,6 @@ fabric.Canvas.prototype._calcRotateMatrix =  function(obj) {
       };
       return [1, 0, 0, 1, 0, 0];
 };
-// fabric_canvas)view ## END
-fabric.DPI = 300;
-
 fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 	type: 'clipedImage',
 	async : true,
@@ -270,7 +267,7 @@ fabric.ClipedImage = fabric.util.createClass(fabric.Image, {
 				'left' : options.left,
 				'angle' : options.angle,
 			});
-			_cliper.scaleToWidth( this.getWidth() );
+			_cliper.scaleToWidth( options.width );
 		};
 		this.set({
 			'_cliper' : _cliper,
@@ -357,5 +354,5 @@ fabric.ClipedImage.fromObject = function(object, callback) {
 	}, null, object.crossOrigin);
 };
 fabric.ClipedImage.async = true;
-
+fabric.DPI = 300;
 module.exports 				= fabric;
