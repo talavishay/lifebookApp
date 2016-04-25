@@ -7,7 +7,6 @@ module.exports = App.Marionette.LayoutView.extend({
 	regions : {
 		stage : '#stage',
 		tools : '#tools',
-		
 	},
 	model : new _state,
 	modelEvents : {
@@ -19,27 +18,18 @@ module.exports = App.Marionette.LayoutView.extend({
 	initialize : function(){
 		App._.bindAll(this,  "_scrolldAction");
 		App.$("#fonInit").hide(1000);
-		//~ this.listenTo(this,{
-			//~ "all" : function(eventName,m,d){
-					//~ console.log(eventName)
-				//~ if(d && d.el && d.el){
-					//~ console.log(d.el);
-				//~ };
-			//~ }
-		//~ });
 		this.listenTo(App.fabricToolsChannel, {
 			"zoom:in" : this.zoomIn,
 			"zoom:out" : this.zoomOut
 		}, this);
 	},
 	onShow : function(ev){
-		this.dialogs.show(new Dialogs);
 		this.stage.show(new view);
 		this.tools.show(new Tools);
+		
+		this.$el.mousewheel( this._scrolldAction);
 	},
 	onAttach :function(){
-		this.$el.mousewheel( this._scrolldAction);
-		//~ App.dragDrop(this.el, this._handleDrop,	this.log, this.log);
 		var that = this;
 //TODO: load jQuery.event.drag proprely..
 		jQuery(document).ready(function(){
@@ -52,10 +42,6 @@ module.exports = App.Marionette.LayoutView.extend({
 			});
 		});
 	},
-	_log: function(c){
-		console.log(c)	;
-	},
-	//~ _handleDragLeave: console.log.bind(console),
 	_scrolldAction : function(ev){
 		if(ev.deltaY & !ev.shiftKey){
 			var _c = (ev.altKey) ? "left" : "top",

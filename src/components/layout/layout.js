@@ -1,4 +1,3 @@
-'use strict';
 module.exports = App.Marionette.LayoutView.extend({
     el : 'body',
     template:  require('./layout.html'),

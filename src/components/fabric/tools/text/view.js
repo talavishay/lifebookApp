@@ -101,7 +101,7 @@ var textToolsView = {
 			obj.setStroke(true);
 			obj.setStrokeWidth(ev.target.value);
 			
-			fabricToolsChannel.trigger('rebuildCanvas');
+			App.fabricToolsChannel.trigger('rebuildCanvas');
 	},
 	setTextStroke: function (style) {
 			var obj = App.fabricToolsChannel.request('getActiveObject');;

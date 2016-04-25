@@ -15,6 +15,7 @@ var obj = {
 		});
 		this.canvas = App.canvas;
 		App.canvas._view = this;
+		
 		this._Events();
 		require('./worker');
 		require('../clipboard');
@@ -87,7 +88,7 @@ var obj = {
 		this.canvas.loadFromJSON(data);
 		this.canvas.renderAll();
 		var active = this.canvas.getObjects()[id];
-		canvas.setActiveObject(active);
+		this.canvas.setActiveObject(active);
 		//~ fabricToolsChannel.trigger("show", {canvas : this.canvas, target : active});
 	},
 	scale	:	function(){

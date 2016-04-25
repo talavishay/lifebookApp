@@ -155,6 +155,7 @@ fabric.Object.prototype.borderOpacityWhenMoving =1;
 fabric.Object.prototype.borderScaleFactor= 4;
 
 fabric.Object.prototype.perPixelTargetFind = true;
+fabric.Textbox.prototype.perPixelTargetFind = false;
 		//~ this.targetFindTolerance = 4;;
 //~ fabric.Image.prototype.lockUniScaling = true;
 
