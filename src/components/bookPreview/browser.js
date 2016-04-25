@@ -1,17 +1,13 @@
 'use strict'
 module.exports = App.Marionette.CompositeView.extend({
-		className : "bookPreview fileBrowser",
+		className : "bookPreview",
 		template : require('./browser.html'),
 		childViewContainer: ".content",
 		collection 	: App.pages,
 		childView	: require('./pageView'),
 		collectionEvents : {
 				"sync" : "_render",
-				//~ "add" : "_render",
 				"remove" : "_render",
-				//~ "all" : function(ev){
-					//~ console.log(ev);
-				//~ },
 		},
 		_render :   function(){
 			this.render();
