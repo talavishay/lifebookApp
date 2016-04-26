@@ -269,6 +269,21 @@ var obj = {
 		canvas.setActiveObject(rect);
 		return rect;
 	},
+	addBackgroundGrad 	: function(options ){
+		var canvas = this.canvas,
+		_options = {
+			left: (canvas.width - canvas.width / 3)*Math.random(),
+			top: (canvas.height - canvas.height / 3)*Math.random(),
+			fill: this.getRandomColor(),
+			width: canvas.width / 3,
+			height: canvas.height / 3,
+			name : options.name ? options.name : false
+		};
+		var options = (typeof options === "undefined") ? _options : options;
+		var backgroundGrad = new App.fabric.BackgroundGrad(options);
+		canvas.add(backgroundGrad);
+		return backgroundGrad;
+	},
 	getRandomColor : function() {
 		var letters = '0123456789ABCDEF'.split('');
 		var color = '#';
@@ -361,6 +376,7 @@ var obj = {
 		canvas.setBackgroundImage(data, canvas.renderAll.bind(canvas), options);
 	},
 	setBackgroundColor : function(color){//~ "add:backgroundColor");
+		App.canvas.remove(App.canvas.getItemByName("background_grad"));
 		this.canvas.setBackgroundColor(color, this.canvas.renderAll.bind(this.canvas));
 	},
 	setBackgroundObject : function(){
@@ -377,7 +393,7 @@ var obj = {
 				selectable: false,
 				name : "background_grad"
 			};
-		var bg = this.addRect(_options);
+		var bg = this.addBackgroundGrad(_options);
 		bg.sendToBack();
 		return bg;
 	},
@@ -398,6 +414,7 @@ var obj = {
 	},
 	setBackgroundGradient : function (options){
 		//~ this.backgroundDelete();
+		this.canvas.setBackgroundColor(null);
 		//~ this.canvas.remove(this.canvas.getItemByName("background_grad"));
 		this.setGradient(this.getBackgroundObject(), options);
 	},
