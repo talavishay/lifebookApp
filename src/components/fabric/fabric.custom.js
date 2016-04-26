@@ -156,9 +156,6 @@ fabric.Object.prototype.borderScaleFactor= 4;
 
 fabric.Object.prototype.perPixelTargetFind = true;
 fabric.Textbox.prototype.perPixelTargetFind = false;
-		//~ this.targetFindTolerance = 4;;
-//~ fabric.Image.prototype.lockUniScaling = true;
-
 
 /**
  * Item name is non-unique

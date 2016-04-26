@@ -47,7 +47,9 @@ module.exports = App.Marionette.LayoutView.extend({
 				var type = group;
 			break;
 		};
-		this.tools.show(new type(obj));
+		if(type){
+			this.tools.show(new type(obj));
+		};
 	},
 });
 
