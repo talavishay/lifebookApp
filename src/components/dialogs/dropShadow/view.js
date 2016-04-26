@@ -25,7 +25,7 @@ var obj = {
 	},
 	handleInput : App._.debounce(	function(ev){
 		this.model.save(App.Backbone.Syphon.serialize(this));
-	}, 200),
+	}, 50),
 	//~ onBeforeRender : function(ev){
 		//~ var obj = App.fabricToolsChannel.request('getActiveObject');
 		//~ if(obj && !obj.getShadow()){

@@ -33,7 +33,7 @@ var dropShaodw = {
 		//~ });
 	},
 	_setup 		: function(active){
-		var active = App.fabricToolsChannel.request('getActiveObject');
+		//~ var active = App.fabricToolsChannel.request('getActiveObject');
 		if(active){
 			var shadow = active.getShadow();
 			return shadow !== null  ? shadow : this._setShadow(active);
@@ -92,7 +92,7 @@ var dropShaodw = {
 	defaults : {
 		_id:"state",
 		name :"dropShadow",
-		//~ color	: "rgba(0,0,0,.8)",
+		color	: "rgba(0,0,0,1)",
 		//~ id 		: 0,
 		alpha 	: 0,
 		distance: 0,
