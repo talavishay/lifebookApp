@@ -31,7 +31,7 @@ var urlResolver = {
 		return new Promise(function(resolve, reject){
 			var match = ['image', 'clipedImage'],
 				_objects = App._.filter(objects, function(obj){
-					return App._.contains(match, obj.type) 
+					return !/data:image/.test(obj.src) && App._.contains(match, obj.type) 
 				});
 				
 			App.resolver.urls = App._.map(_objects,	function(item){
