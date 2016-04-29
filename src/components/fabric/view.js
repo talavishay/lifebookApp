@@ -338,18 +338,6 @@ var obj = {
 		}
 		App.canvas.calcOffset();
 	},
-	//~ function(){
-	//~ canvas.on('object:moving', function(e) {
-		//~ var obj = e.target;
-		  
-			//~ obj.set({
-				//~ clipName: 'clip1',
-				//~ clipTo: function(ctx) { 
-							//~ return _.bind(clipByName, obj)(ctx) 
-						//~ }
-			//~ });
-		  
-	//~ },
 	backgroundDelete	:	function (){
 		var grad =this.canvas.getItemByName("background_grad");
 		if( grad) { this.canvas.remove(grad)};
@@ -357,11 +345,6 @@ var obj = {
 		this.canvas.setBackgroundColor(null);
 		this.canvas.renderAll();
 	},
-	//~ backgroundEdit	:	function (){
-		//~ this.canvas.getItemByName("background_grad");
-
-		//~ this.canvas.renderAll();
-	//~ },
 	dataURItoBackground	:	function (data){
 		var canvas = this.canvas,
 			options = {

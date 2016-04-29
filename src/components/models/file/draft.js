@@ -13,14 +13,10 @@ var file = {
 		};
 		if(	data.doc ) {
 			out = this._parsePouch(data.doc);
-			
 		};			
-		
 		if(	data.uuid ) {
 			out = this._parseRemote(data);
-			
 		};
-		
 		return out;
 	},
 	_parsePouch	: function(doc){
@@ -85,15 +81,6 @@ var file = {
 		});
 		return src + "#" + id;
 	},
-	initialize	: function(options){
-		// new model draft File model init without parse
-		if(options instanceof File && !arguments[1] && !arguments[1].parse) {
-			this.set(this.parse(options));
-		};
-		//~ this.on({
-			//~ "change:uuid change:fid change:_id" : this.refreshSrc();
-		//~ })
-	},
 	drupalize : function(){
 		var draft = this;
 		return new Promise(function(resolve, reject){			
@@ -124,7 +111,6 @@ _po.attach =  function(blob) {
 		_modelAttachments = {},
 		blob = blob || this.get("file"),
 		name = blob.name || this.get("filename");
-		
 
 	_modelAttachments[name] = {
 		type: blob.type,
@@ -138,13 +124,9 @@ _po.attach =  function(blob) {
 	return this.sync().db
 		.put(doc).then(function _cb(response, err) {
 			if (!err && response.rev) {
-				//~ that.set({ _rev: response.rev});
-				//~ that.get("fid") ? response.state = "remote" : response.state = "local" ;
 				that.set(that.parse(response));
 			};
 	});;
-
-	//~ var _res = ;
 };
 return imageModel.extend(_po);
 };

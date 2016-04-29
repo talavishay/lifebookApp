@@ -31,11 +31,9 @@ App.Backbone.LocalStorage				= require('backbone.localstorage');
 
 // jquery dependnt plugins
 require('Jcrop');
-
 require('jquery-mousewheel')(window.jQuery);
-require('spectrum-colorpicker')(window.jQuery),
+require('spectrum-colorpicker'),
 // jquery dependnt plugins ## END
-
 /***********************************************************************
  * backbone Radio setup / App message bus
 ***********************************************************************/
@@ -43,7 +41,6 @@ App.Backbone.Radio 		= require('backbone.radio');
 App.fabricFilesChannel	= App.Backbone.Radio.channel('fabricFiles');
 App.fabricToolsChannel	= App.Backbone.Radio.channel('fabricTools');
 App.layoutChannel		= App.Backbone.Radio.channel('layout');
-
 /***********************************************************************
  *	Backbone Plugins
 ***********************************************************************/

@@ -1,14 +1,4 @@
-'use strict';
-
-var $ = require('jquery'),
-	Radio = require('backbone.radio'),
-	spectrum = require('spectrum-colorpicker')($),
-	Marionette = require('backbone.marionette'),
-	_ = require('underscore');
-
-var fabricToolsChannel = Radio.channel('fabricTools');
-
-var View = Marionette.ItemView.extend({
+var View = {
 	tagName	: 'span',
 	className : 'toolbox shape',
 	template: require('./template.html'),
@@ -44,52 +34,52 @@ var View = Marionette.ItemView.extend({
 		//~ }
 	//~ },
 	alignTop : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginY : "top",
 				top : group.getBoundingRectHeight()/2 * (-1)
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	
 	alignBottomVert : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginY : "bottom",
 				top : group.getBoundingRectHeight()/2 - item.getBoundingRectHeight()
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	alignLeftHorz : function(){
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginX : "left",
 				left : group.getBoundingRectWidth()/2 * (-1)
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	alignMiddleHorz : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginX : "center",
 				left : item.getBoundingRectWidth()/2 * (-1)
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	alignMiddleVert : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginY : "center",
@@ -97,32 +87,32 @@ var View = Marionette.ItemView.extend({
 				
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	alignRightHorz : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
 			item.set({
 				OriginX : "right",
 				left : group.getBoundingRectWidth()/2 - item.width
 			});
 		});
-		fabricToolsChannel.trigger('renderall');
+		App.fabricToolsChannel.trigger('renderall');
 		this.reGroup();
 	},
 	groupObjects : function(){ 
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		var g = new fabric.Group();
 		
 		var g = _.extend(g, _.pick(group, '_objects', "top", "left", "width", "height"));		
 		this.deleteObject();
 		App.canvas.add(g).setActiveObject(g);
-		fabricToolsChannel.trigger('rebuildCanvas');
+		App.fabricToolsChannel.trigger('rebuildCanvas');
 		
 	},
 	unGroup : function() {
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		var destroyedGroup = group.destroy();
 		var items = destroyedGroup.getObjects();
 
@@ -132,7 +122,7 @@ var View = Marionette.ItemView.extend({
 		App.canvas.remove(group);
 	},
 	reGroup : function() {
-		var group = fabricToolsChannel.request('getActiveGroup');
+		var group = App.fabricToolsChannel.request('getActiveGroup');
 		if(group.objects){
 			var g = new fabric.Group();
 			_.each(group.objects || group._objects, function(item){
@@ -141,11 +131,10 @@ var View = Marionette.ItemView.extend({
 			});
 			var g = _.extend(g, _.pick(group,  'top', 'left'));
 			App.canvas.remove(group);
-			 App.canvas.discardActiveGroup();
+			App.canvas.discardActiveGroup();
 			App.canvas.add(g).setActiveObject(g);
 			this.groupObjects();
 		}
 	}
-});
-
-module.exports =  View;
+};
+module.exports =  App.Marionette.ItemView.extend(View);

@@ -24,7 +24,6 @@ module.exports =  App.Marionette.LayoutView.extend({
 		this.$el.show();
 	},
 	_hide : function(){
-		//~ this.toolContent.
 		this.$el.hide();
 	},
 	onShow 	:	function(){
@@ -39,10 +38,8 @@ module.exports =  App.Marionette.LayoutView.extend({
 					dialogName = _split[1];
 				if( dialog ) {
 					this.$el.find("#title").text(dialogName);
-					//~ var obj = App.fabricToolsChannel.request('getActiveObject');
 					this.toolContent.show(new dialogs[dialogName] );
 				}
-				//~ console.log(_split);
 			},
 			"dialog:show"			:()=>{
 				this._show()},
@@ -53,11 +50,6 @@ module.exports =  App.Marionette.LayoutView.extend({
 				this.$el.find("#title").text('background edit');
 				this.toolContent.show(new dialogs.backgroundEdit({"src" : src}));
 			},
-			"dialog:crop"					:function(src){
-				this.$el.find("#title").text('crop');
-				this.toolContent.show(new dialogs.crop({"src" : src}));
-			},
-			
 		}, this );
 	},
 });
