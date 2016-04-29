@@ -11,7 +11,6 @@
 @import './components/templateBrowser/index.css';
 @import './components/dialogs/index.css';
 @import './components/bookPreview/index.css';
-
 /*
 @import './components/layout/index.css';
 */
@@ -82,13 +81,13 @@ float:left;
 	max-height:20px;
 }
 .fileBrowser .content {
-	width: 95%;
-	padding: 0px 2.5%;
+	padding: 10px 0 2.5% 0;
 	display:flex;
 	flex-wrap:wrap;
 	justify-content:space-between;
 	align-items: center;
 	overflow-y: scroll;
+	max-height: 490px;
 }
 .fileBrowser input ,
 .fileBrowser .content {

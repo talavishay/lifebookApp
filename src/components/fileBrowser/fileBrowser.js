@@ -8,7 +8,7 @@ module.exports = function(App){
 		events : {
 			"change input" : (ev) => { 
 				App.$.each(ev.target.files, function(){
-					App.fabricFilesChannel.trigger("files:input:draft", this);
+					App.fabricFilesChannel.trigger("files:input:local", this);
 				});
 			} 
 		},

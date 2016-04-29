@@ -40,7 +40,7 @@ module.exports =  App.Marionette.LayoutView.extend({
 				if( dialog ) {
 					this.$el.find("#title").text(dialogName);
 					//~ var obj = App.fabricToolsChannel.request('getActiveObject');
-					this.toolContent.show(new dialogs[dialogName](dialogName) );
+					this.toolContent.show(new dialogs[dialogName] );
 				}
 				//~ console.log(_split);
 			},

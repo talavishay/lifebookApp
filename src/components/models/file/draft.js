@@ -31,7 +31,9 @@ var file = {
 		if(	 doc.file) {
 			doc.src = this.getSrcId(doc);
 		};
-		//~ return App._.extend(_doc, doc);
+		if(doc.state !== "remote"){
+			doc.state = "local";
+		};
 		return  doc;
 	},
 	_parseRemote	: function(data){
@@ -99,6 +101,8 @@ var file = {
 			drupalFile.set("_file", draft);
 			drupalFile._saveFile()
 				.then(function(res){
+					draft.save("state", "remote");
+					//~ draft.save();
 					resolve(res);
 				},function(err){
 					reject(err);
@@ -118,7 +122,6 @@ var imageModel = App.Backbone.Model.extend(file),
 _po.attach =  function(blob) {
 	var that = this,
 		_modelAttachments = {},
-		fid = this.get("file") || 0,
 		blob = blob || this.get("file"),
 		name = blob.name || this.get("filename");
 		
@@ -131,17 +134,12 @@ _po.attach =  function(blob) {
     var doc = App._.omit(App._.extend({
 	  _attachments: _modelAttachments
     }, this.attributes), "file","src","state");
-//TODO: cleanup - fid is allready present..
-// "draft" model gets the fid + blob from the D8model@file
-	//~ if( !fid ){
-		//~ doc.fid = fid;
-	//~ };
 
 	return this.sync().db
 		.put(doc).then(function _cb(response, err) {
 			if (!err && response.rev) {
 				//~ that.set({ _rev: response.rev});
-				that.get("fid") ? response.state = "remote" : response.state = "local" ;
+				//~ that.get("fid") ? response.state = "remote" : response.state = "local" ;
 				that.set(that.parse(response));
 			};
 	});;

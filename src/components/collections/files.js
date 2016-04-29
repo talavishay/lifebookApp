@@ -3,34 +3,17 @@ var files = {
 	model: require("../models/file/draft.js")(App),
 	initialize : function(){
 		this.listenTo(App.fabricFilesChannel, {
-			"files:input:draft" : this.addFile,
+			"files:input:draft" : this.addDraft,
+			"files:input:local" : this.addLocal,
 			"files:input:remote" : this.addDrupal,
 		}, this);
 		App.fabricToolsChannel.reply({
 			"files:output" : this.getSrcId
 		}, this);
-		App._.bindAll(this, "addFile");
+		App._.bindAll(this, "addLocal", "addDraft");
 	},
-	
 	getById : function (id){
-		var file = this.find(function(item){
-			return item.id === id;
-		});
-		return file ;
-	},
-	resolveBySrc : function(src){
-		var _src = src.split('#'),
-			src = _src[0],
-			id  = _src[1] || src,
-			_id = id.split('?'),
-			id  = _id.length > 1 ? id[0] : id ,
-			fid = _id.length > 1 ? id[1] : 0 ;
-
-		this.validateSrc(src)
-			.reject(this.resolveByFid(fid)
-			.then(function(model){
-				console.log(model);
-			}));
+		return this.get(id) ;
 	},
 	resolveByFid : function(fid){
 		return new Promise(function(resolve, reject){
@@ -68,10 +51,17 @@ var files = {
 	addDrupal : function (D8model){
 		this.add(D8model.get("_file"), {parse: false});
 	},
-	addFile : function (file){
+	addDraft : function (file){
 		this.add(file, {parse: true});
 	},
-	
+	addLocal : function (file){
+		this.create(file, {
+			parse: true,
+			success : function(file){
+				file.save("state", "local");
+			}
+		});
+	},
 	parse : function(result){
 		if(result.rows){  
 			return result.rows ;
@@ -95,7 +85,6 @@ var files = {
 			}
 		}
 	}),
-	
 };
 return App.Backbone.Collection.extend(files);
 };
