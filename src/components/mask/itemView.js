@@ -1,11 +1,4 @@
-'use strict';
-var Marionette = require('backbone.marionette'),
-	fabric = App.fabric,
-	_extend =require('./object.js');
-
-
-
-var view = Marionette.ItemView.extend({
+var view = {
 	tagName : "img",
 	template: false,
 	attributes: function () {
@@ -17,20 +10,33 @@ var view = Marionette.ItemView.extend({
 	events : {
 		"click" : '_click'
 	},
-
 	showPreview 		: function(ev){
 		this.$el.attr("src", this.model.get("src"));
-		//~ this.generatePreview();
+			//~ this.generatePreview();
 	},
 	initialize : function(){
-		App._.extend( this , _extend);
-
-
 		this.listenTo(App.fabricToolsChannel,{
 			"_updateMask" : this.showPreview
 		}, this);
-
 	},
+	_click: function(){
+		App.fabricToolsChannel.trigger("object:clip", this.model.get("mask"), .9,.9);
+	},
+	showPreview : function(){
+		this.$el.attr("src", this.model.get("src") );
+	},
+	generatePreview : function(ev){
+		var imageUrl= 	this.model.collection.currentImgPreviewThumb;
+		if(imageUrl){
+			var model 	= 	this.model;
+			this.listenToOnce(model, "change:src", this.showPreview);
+			App.fabricToolsChannel
+					.request("worker:mask:img", imageUrl, this.model.get("src"))
+					.then(function(result) {
+						model.set("src", result);
+				});
+			}
+	}
 	//~ onAttach: function(){
 		//~ var active = App.fabricToolsChannel.request('getActiveObject'),
 			//~ model= this.model;
@@ -47,8 +53,5 @@ var view = Marionette.ItemView.extend({
 				//~ }
 		//~ }
 	//~ }
-
-});
-
-
-module.exports =  view;
+};
+module.exports =  App.Marionette.ItemView.extend(view);

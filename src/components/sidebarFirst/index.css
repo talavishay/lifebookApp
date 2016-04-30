@@ -28,8 +28,10 @@
 	padding-bottom:3px;
 	border-bottom:3px solid #4F90C8;
 }
+/*
 .collapsed.collapsingArea,
-.collapsed .collapsingArea{
+*/
+[data-active=false].collapsingArea{
 /*
 .collapsed .fileBrowser > span,
 */

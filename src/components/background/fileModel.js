@@ -1,7 +1,4 @@
-'use strict';
-var Backbone = require('backbone');
-
-module.exports = Backbone.Model.extend({
+var model = {
 	parse : function(response){
 		var filename = response,
 			url = this.url()+"/"+filename.trim();
@@ -13,4 +10,5 @@ module.exports = Backbone.Model.extend({
 	defaults : {
 		src :""
 	},	
-});
+};
+module.exports = App.Backbone.Model.extend(model);

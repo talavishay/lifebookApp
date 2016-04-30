@@ -1,13 +1,9 @@
-var Marionette = App.Marionette;
-
-module.exports = Marionette.Behavior.extend({
-		events  : {
-			"click h3" : '_toggle'
+module.exports = App.Marionette.Behavior.extend({
+	events  : {
+		"click h3" :  function(ev){
+			//~ this.$el.parents(".collapsable")
+				//~ .toggleClass("collapsed");
+			this.view.model.set("active", !this.view.model.get("active"));
 		},
-		_toggle : function(ev){
-			//~ this.$el.find('.content')
-			//~ .toggleClass("collapsed");
-			this.$el.parents(".collapsable")
-			.toggleClass("collapsed");
-		},
+	},
 });

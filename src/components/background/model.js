@@ -1,9 +1,7 @@
-'use strict';
-
-module.exports =  App.Backbone.Model.extend({
+var model = {
 		localStorage: new App.Backbone.LocalStorage("background:edit"), // Unique name within your app.
 		initialize:function(){
-			this.fetch();
+			//~ this.fetch();
 		},
 		defaults : {
 			_id:"colorOptions",
@@ -15,4 +13,5 @@ module.exports =  App.Backbone.Model.extend({
 				"1" : "#ff0"
 			},
 		},
-});
+};
+module.exports =  App.Backbone.Model.extend(model);

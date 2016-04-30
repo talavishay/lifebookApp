@@ -1,12 +1,13 @@
-var	Marionette = App.Marionette,
-	_fileBrowser = require("./filesCollection.js");	
-
-module.exports = Marionette.CompositeView.extend({
+var	_fileBrowser= require("./filesCollection.js"),
+	dirModel= require("./dirModel.js"),
+view	= {
 	className : "fileBrowser svgBrowser loader",
 	template: require('./filesCompositeView.html'),
-	model : App.dirModel,
+	behaviors: [{ behaviorClass: require('../behaviors/toggle.js')},
+				{ behaviorClass: require('../behaviors/pager.js')}],
+	model : new dirModel(),
 	modelEvents : {
-		"change:dirs" : "render"
+		"change" : "render"
 	},
 	childViewContainer: ".content",
 	childView: require('./itemView.js'),  
@@ -28,8 +29,6 @@ module.exports = Marionette.CompositeView.extend({
 	toggle : function(){
 		this.$el.find('h3').click();
 	},
-	behaviors: [{ behaviorClass: require('../behaviors/toggle.js')},
-				{ behaviorClass: require('../behaviors/pager.js')}],
 	events : {
 		"click .home" : "homeDir",
 		"change select" : "changeDir"
@@ -41,9 +40,9 @@ module.exports = Marionette.CompositeView.extend({
 		this.collection.fetch();
 	},
 	changeDir : function(ev){
-		this.collection.url = App.svg.urlRoot+"_"+ev.currentTarget.value +
-			App.svg.urlTail;
+		this.collection.url = App.svg.urlRoot+"_"+ev.currentTarget.value +	App.svg.urlTail;
  
 		this.collection.fetch();
 	}
-});
+};
+module.exports = App.Marionette.CompositeView.extend(view);

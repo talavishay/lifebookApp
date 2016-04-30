@@ -1,17 +1,11 @@
-'use strict';
-var Marionette = require('backbone.marionette'),
-	fabric = App.fabric;
-	
-var view = Marionette.ItemView.extend({
+var view = {
 	className : "item ",
 	template: require('./template.html'),
 	events : {
-		"click" : '_click'
+		"click" : function(){
+			App.fabricToolsChannel.trigger("add:background", this.model.get("src"));
+		},
 	},
-	_click: function(){
-		App.fabricToolsChannel.trigger("add:background", this.model.get("src"));
-	},
+};
+module.exports =  App.Marionette.ItemView.extend(view);
 
-});
-
-module.exports =  view;

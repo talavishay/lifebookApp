@@ -1,14 +1,13 @@
-module.exports =  function(App){
 var dirModel = {
 	localStorage: new App.Backbone.LocalStorage("fileBrowser:svg"), // Unique name within your app.
-	initialize:function(){
-		this.fetch();
-	},
+	//~ initialize:function(){
+		//~ this.fetch();
+	//~ },
 	defaults : {
 		_id:"dirs",
 		"dirs" : [],
-		"root" : ""
+		"root" : "",
+		active : false
 	},
 };
-return App.Backbone.Model.extend(dirModel);
-};
+module.exports =  App.Backbone.Model.extend(dirModel);

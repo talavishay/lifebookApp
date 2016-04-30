@@ -70,10 +70,12 @@ img[data-extension] {
 float:right;
 
 }
+/*
 .fileBrowser select,
 .fileBrowser select + button{
 float:left;
 }
+*/
 .fileBrowser select,
 .fileBrowser select + button,
 .fileBrowser .nextPage,

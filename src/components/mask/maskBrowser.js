@@ -7,95 +7,48 @@ var c = require("./masks.js")
 	template	: require('./maskBrowser.html'),
 	model 		: new m,
 	collection	: new c,
-
+	behaviors: [{ behaviorClass: require('../behaviors/toggle.js')},
+				{ behaviorClass: require('../behaviors/pager.js')}],
+	modelEvents: {
+		"change" : "render",
+		"change:active" : "_generatePreview"
+	},
+	
 	initialize : function(){
-
 		this.listenTo(App.fabricToolsChannel,{
 			"tools:show" : this._generatePreview ,
-			//~ "add:image:done" : this._generatePreview ,
-			"dialog:imageMask:show" : this._expend,
-			"dialog:imageMask:hide" : this._collapse,
 		},this);
-
+		App._.bindAll(this, "_generate");
 	},
 	_generatePreview: function(ev){
-		if( this.model.get("collapsed") ) {
-			return;
-		}
-		var active = App.fabricToolsChannel.request('getActiveObject'),
-			cache = this.model.get("cache" );
-
-		//~ if(typeof active != "undefined" && active !== null ){
-			var activeHash = App.objectHash( active.getSrc() );
+		var active = App.fabricToolsChannel.request('getActiveObject');
+		if(active && this.model.get("active")){
+			var	cache		= this.model.get("cache"),
+				activeSrc	= active.getSrc();
 
 			if(typeof cache === "undefined"  ){
-				this.model.set("cache", active );
-				var	cacheHash = App.objectHash( Date.now() );
-			} else {
-				var	cacheHash = App.objectHash( cache.getSrc() );
+				this.model.set("cache", activeSrc );
+				cache = Date.now();
+			}; 
+			if( cache != activeSrc ){
+				this.model.set("cache", activeSrc );
+				App.blobUtil.dataURLToBlob(active.toDataURL({
+					format: 'png',  multiplier: .1}))
+					.then(this._generate);
 			};
-			if( cacheHash != activeHash ){
-				this.model.set("cache", active );
-				var imageUrl= 	URL.createObjectURL(App.dataURItoBlob(active.toDataURL({
-				  format: 'png',
-				  //TODO :  Full size? image manipulation only if nesscery
-				  //~  the smaller the FASTER ...
-				  // this.setMaskedImage is only for the mask preview widget
-				  // so no need for full size here
-				  multiplier: .1
-				})));
-				this._generate(imageUrl);
-			};
-		//~ };
-
+		};
 	},
-	_generate: function(imageUrl){
+	_generate: function(blob){
+		var imageUrl = URL.createObjectURL(blob);
 		this.collection.each(function(model){
 			App.fabricToolsChannel
-				.request("worker:img:mask", imageUrl, model.get("orgMask"))
+				.request("worker:img:mask", imageUrl, model.get("mask"))
 				.then(function(result) {
 					model.set({
 						src : result,
-						currentImgSrc : imageUrl
 					});
 				});
 			});
-
 	},
-	behaviors: [
-		{ 	behaviorClass: require('../behaviors/pager.js') },
-	],
-	collectionEvents: {
-		"sync": function(e){
-			this.$el.removeClass("loader");
-		},
-	},
-	modelEvents: {
-		"change:collapsed change:currentImgSrc": "render",
-	},
-	events  : {
-		"click h3" : '_toggle',
-	},
-	_toggle : function(){
-		this.model.get("collapsed") ?
-		this._expend() : this._collapse() ;
-	},
-	_expend : function(){
-		var browser = this;
-		this.collection.fetch({success: function(){
-			browser.$el
-			.parents(".collapsable").removeClass("collapsed");
-			browser.model.set("collapsed", false);
-			browser._generatePreview();
-		}});
-	},
-	_collapse : function(){
-		this.$el.parents(".collapsable").addClass("collapsed");
-		this.model.set({
-			"collapsed": true,
-		});
-		this.model.unset("cache");
-		this.collection.reset();
-	},
-
+	
 });

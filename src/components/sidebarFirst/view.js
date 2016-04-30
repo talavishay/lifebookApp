@@ -1,6 +1,4 @@
-var Marionette = require('backbone.marionette');
-	
-module.exports = Marionette.LayoutView.extend({
+var view = {
 	template : require('./layout.html'),
 	
 	regions : {
@@ -23,4 +21,5 @@ module.exports = Marionette.LayoutView.extend({
 		this.templates.show(new view);
 	}
 	
-});
+};
+module.exports = App.Marionette.LayoutView.extend(view);

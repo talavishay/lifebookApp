@@ -2,11 +2,8 @@
 module.exports = App.Backbone.Model.extend({
 	defaults : {
 		src : "#",
-		OrgSrc : "#",
+		mask : "#",
 		"data-extension" : "",
 		"data-name" : "",
 	},	
-	initialize : function(){
-		this.set("orgMask", this.get("src"));
-	}
 });

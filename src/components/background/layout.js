@@ -1,20 +1,22 @@
-var	Marionette = App.Marionette,
-	_backgroundBrowser = require('./backgroundBrowser.js')
-	_colorPicker = require('../colorPicker');
-
-module.exports =  Marionette.LayoutView.extend({
+var	_backgroundBrowser = require('./backgroundBrowser.js')
+	_colorPicker = require('../colorPicker'),
+	s = require('./state'),
+	view = {
 	template: require('./layout.html'),
 	regions : {
 			colorPicker : ".colorPicker",
 			browser: ".backgroundBrowser",
 	},
-	onShow : function(ev){
+	model : new s,
+	modelEvents: {
+		"change" : "render",
+	},
+	onRender : function(ev){
 		this.colorPicker.show(new _colorPicker(this.options));		
 		this.browser.show(new _backgroundBrowser(this.options));		
 	},
 	behaviors: [{ behaviorClass: require('../behaviors/toggle')},
-				{ behaviorClass: require('../behaviors/DropFiles')},
-				],
+				{ behaviorClass: require('../behaviors/DropFiles')},				],
 	events : {
 		"click .delete" : ()=>{
 			App.fabricToolsChannel.trigger("object:background:remove");
@@ -52,4 +54,5 @@ module.exports =  Marionette.LayoutView.extend({
 			//used in =>  { behaviorClass: require('../behaviors/DropFiles')},
 			App.fabricToolsChannel.trigger("add:background", URL.createObjectURL(files[0]));
 	},
-});
+};
+module.exports =  App.Marionette.LayoutView.extend(view);

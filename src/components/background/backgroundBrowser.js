@@ -1,15 +1,14 @@
-var _fileBrowser = require("./filesCollection");	
-
+var backgrounds = require("./backgrounds");	
 var view = {
 	className : "fileBrowser backgroundBrowser loader",
 	template: require('./backgroundBrowser.html'),
 	model : App.colorPickerModel,
 	behaviors: [
-		{ behaviorClass: require('../behaviors/pager')},
+			{ behaviorClass: require('../behaviors/pager')},
 	],
 	childViewContainer: ".content",
 	childView: require('./itemView'),
-	collection:  new _fileBrowser ,
+	collection:  new backgrounds ,
 	collectionEvents: {
 		"sync": function(e){
 			this.$el.removeClass("loader");

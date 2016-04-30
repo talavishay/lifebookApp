@@ -77,15 +77,14 @@ App.nprogress._onprogress = function(e)  {
  * 
 ***********************************************************************/
 //TODO:  manage the load depnedncies
-App.D8models			= require('./components/D8models')(App);
-App.models 				= require('./components/models')(App) || {};
+App.D8models			= require('./components/models/D8models')(App);
+App.models 				=  {};
 App.models.files		= require('./components/models/file')(App);
 App.collections 		= require('./components/collections')(App);
-
-App.canvasImages		= new App.collections.canvasImages();
+//~ App.canvasImages		= new App.collections.canvasImages();
 App.files				= new App.collections.files();
-//TODO:  ? dirModel belongs to the clipart / svg  widget..
-App.dirModel			= new App.models.dirModel();
+
+
 // canvas image url resolver
 // make sure a local objectUrl as valid for each image in the canvas
 App.resolver			= require('./components/resolver')(App);

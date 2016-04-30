@@ -5,16 +5,16 @@ module.exports =  App.Backbone.Collection.extend({
 		url : function(){
 			return App.mask.collectionUrl;
 		},
-
-		//~ sync: cacheControl.getModelSync(),
+		initialize : function(){
+			this.fetch();
+		},
 		mode : 'client',
-		//~ state: {
-            //~ pageSize: 9
-        //~ },
 		model : require('./fileModel'),
 		parse : function(response){
 			App.fabricToolsChannel.trigger("dialog:mask:dirs", response.dirs);
-			this.currentImgPreviewThumb
-			return response.files;
+			return App._.map(response.files, function(file){
+				file.mask = file.src;
+				return file;
+			});
 		}
 });
