@@ -3,7 +3,7 @@ var view = {
 	template: require('./template.html'),
 	events : {
 		"click" : function(){
-			App.fabricToolsChannel.trigger("add:background", this.model.get("src"));
+			App.fabricToolsChannel.trigger("add:background", this.model.get("org"));
 		},
 	},
 };

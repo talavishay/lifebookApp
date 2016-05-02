@@ -1,14 +1,13 @@
 var model = {
 	parse : function(response){
-		var filename = response,
-			url = this.url()+"/"+filename.trim();
-
 		return {
-			src 		: url,
+			src 	: response.field_background_images,
+			org 	: response.field_background_images_1
 		};	
 	},
 	defaults : {
-		src :""
+		src :"",
+		org : ""
 	},	
 };
 module.exports = App.Backbone.Model.extend(model);
