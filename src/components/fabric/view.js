@@ -72,7 +72,7 @@ var obj = {
 	showTools 	: function(options){
 		var active = this.getActiveObject();
 		if(typeof active != "undefined" && active !== null ){
-			App.fabricToolsChannel.trigger("tools:show");
+			App.fabricToolsChannel.trigger("tools:show", active);
 		}
 	},
 	hideTools 	: function(){
