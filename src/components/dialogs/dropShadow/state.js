@@ -1,106 +1,79 @@
-'use strict';
 var dropShaodw = {
 	localStorage: new App.Backbone.LocalStorage("dropShadow"),
 	initialize:function(){
-		this.fetch();
-		this.listenTo(App.fabricToolsChannel, {
-			"dropShadow:restore" 	:this._revert,
-			"tools:show"			:this._setup,
-		}, this );
-
 		this.on({
-			"sync"	:this._change
+			"change"	:this._change,
 		}, this);
-
-		App._.bindAll(this, "_revert", "_setup");
+		this._setup();
 	},
-	_change : function(ev){
+	_setup 		: function(){
 		var active = App.fabricToolsChannel.request('getActiveObject');
-
-		active.setShadow(this.generateShadow(active));
-
-		App.canvas.renderAll();
-		//~ App.fabricToolsChannel.trigger('renderall');
-		//App.fabricToolsChannel.trigger(	"dropshadow", this.attributes);
-	},
-	generateShadow : function(active){
-		var _shadow  = this._setup(active);
-		return this.scatter(this._distance(this.transperncy(_shadow)));
-	},
-	_revert : function(){
-//TODO:_revert : function(){
-		//~ this.save(this.defaults, {	silent 	: true,//~ success : this._setup
-		//~ });
-	},
-	_setup 		: function(active){
-		//~ var active = App.fabricToolsChannel.request('getActiveObject');
 		if(active){
 			var shadow = active.getShadow();
-			return shadow !== null  ? shadow : this._setShadow(active);
-		} else {
-			return this.defaults;
+			if(shadow){
+				this.shadowToModel(active);
+			} else{
+				active.setShadow(this.generateShadow());
+				App.canvas.renderAll();
+			};
 		};
 	},
-
-	_setShadow : function(active){
-		active.setShadow({
-				color:	'rgba(0,0,0,.8)',
-				offsetX : active.width*0.05,
-				offsetY : active.height*0.05,
-				blur	: active.width*0.03
-		});
-		return active.getShadow();
+	_change : function(ev){
+		App.fabricToolsChannel.request('getActiveObject')
+			.setShadow(this.generateShadow());
+		App.canvas.renderAll();
 	},
-	transperncy : function(shadow){
-		var alpha = this.get("alpha"),
-			color = this.get("color");
-
-		shadow.color = tinycolor(color)
-			.setAlpha(alpha)
-			.toRgbString();
-		return shadow
+	generateShadow : function(){
+		return this.scatter(this._distance(this.transperncy()));
 	},
-	//~ setShadowAngle : function(ev){
-		//~ var angle = this.get("angle");
-			//~ _angle = (180 - angle) * Math.PI / 180; // convert to radians
-		//~ var distance = this.$el.find(".distance").val();
-
-		//~ _shadow.offsetX = Math.round(Math.cos(angle) * distance);
-		//~ _shadow.offsetY = Math.round(Math.sin(angle) * distance);
-		//~ obj.setShadow(_shadow);
-
-		//~ App.fabricToolsChannel.trigger('renderall');
-	//~ },
+	transperncy : function(){
+		return {
+			color : tinycolor(this.get("color"))
+						.setAlpha(this.get("alpha"))
+						.toRgbString()
+		};
+	},
 	_distance : function(_shadow){
 		var distance = this.get("distance"),
 			angle = this.get("angle"),
+			angleRadian = (180 - angle) * Math.PI / 180; // convert to radians
 
-			angleRadian = (180 - angle) * Math.PI / 180, // convert to radians
-			x =  Math.round(Math.cos( angleRadian ) * distance),
-			y =  Math.round(Math.sin( angleRadian ) * distance);
-
-		_shadow.offsetX = x;
-		_shadow.offsetY = y;
-
+		_shadow.offsetX = Math.round(Math.cos( angleRadian ) * distance);
+		_shadow.offsetY = Math.round(Math.sin( angleRadian ) * distance);
 		return _shadow;
 	},
 	scatter : function(shadow){
 		shadow.blur = this.get("blur");
 		return shadow;
 	},
-
+	degrees : function(shadow){
+		var angle = Math.atan2(shadow.offsetY, shadow.offsetX); // get angle in radians
+		var discontinuity = angle * (180.0 / Math.PI); // convert to degrees
+		return Math.round(180 + ( discontinuity * -1));// map to 0-360..
+	},
+	shadowToModel : function(active){
+		var shadow = active.getShadow();
+		if(shadow){
+			this.set({
+				color	: shadow.color,
+				alpha 	: tinycolor(shadow.color).getAlpha(),
+				distance: this.lineDistance(shadow),
+				angle	: this.degrees(shadow),
+				blur	: shadow.blur,
+			});
+		};
+	},
+	lineDistance : function ( shadow ){
+		return Math.sqrt( Math.pow(shadow.offsetX, 2) + Math.pow(shadow.offsetY, 2));
+	},
 	defaults : {
 		_id:"state",
 		name :"dropShadow",
 		color	: "rgba(0,0,0,1)",
-		//~ id 		: 0,
-		alpha 	: 0,
-		distance: 0,
-		angle	: 0,
-		blur	: 0,
-		//~ offsetX : 0,
-		//~ offsetY : 0,
-		//~ shadow 	: 0,
+		alpha 	: 0.8,
+		distance: 10,
+		angle	: 75,
+		blur	: 10,
 	},
 };
 module.exports =  App.Backbone.Model.extend(dropShaodw);
