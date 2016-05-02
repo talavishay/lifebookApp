@@ -1,11 +1,5 @@
-'use strict';
-var Backbone = require('backbone');
-
 module.exports = App.Backbone.Model.extend({
 		localStorage: new App.Backbone.LocalStorage("background:edit"), // Unique name within your app.
-		initialize:function(){
-			this.fetch();
-		},
 		defaults : {
 			_id : "crop",
 			croped : "#",

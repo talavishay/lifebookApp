@@ -87,8 +87,9 @@ App.files				= new App.collections.files();
 
 // canvas image url resolver
 // make sure a local objectUrl as valid for each image in the canvas
-App.resolver			= require('./components/resolver')(App);
-App.caman				= require('./components/caman').initialize();
+App.crop			= require('./components/croper')();
+App.resolver		= require('./components/resolver')(App);
+App.caman			= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();

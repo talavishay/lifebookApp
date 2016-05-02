@@ -10,6 +10,13 @@ var urlResolver = {
 		this.validUrls 	= [];	this.invalidUrls =[];
 		this.resolvedUrls = [];	this.replacedObjects = [];
 		
+		backgroundImage = this.stage.backgroundImage;
+			
+		if(backgroundImage) {
+			backgroundImage.background = true;
+			this.objects.push(backgroundImage);
+		};
+		
 		return this.extractUrls( this.objects)
 			.then(this.validateUrls)
 			.then(this.resolveUrls)
@@ -18,25 +25,32 @@ var urlResolver = {
 			.then(function(validObjects){
 				App.resolver.validObjects = validObjects;
 				App.resolver.validStage = App._.clone(App.resolver.stage);
-				App.resolver.validStage.objects = validObjects;
+				App.resolver.validStage.objects 		= App._.reject(validObjects, {background:true});
+				var backgroundImage = App._.where(validObjects, {background:true});
+				if(backgroundImage.length){
+					App.resolver.validStage.backgroundImage = backgroundImage[0];
+				};
 				return App.resolver.validStage;
 			},function(err){
 				console.log("failed resolving", err);
 			});
 	},
 	extractUrls : function(objects){
-		var objects = objects || this.objects;
-			options = this.options;
+		var objects			= objects || this.objects;
+			options			= this.options;
 			
 		return new Promise(function(resolve, reject){
 			var match = ['image', 'clipedImage'],
 				_objects = App._.filter(objects, function(obj){
-					return !/data:image/.test(obj.src) && App._.contains(match, obj.type) 
+					return	!/^http:\/\//.test(obj.src) &&
+							!/data:image/.test(obj.src) &&
+							 App._.contains(match, obj.type) 
 				});
 				
 			App.resolver.urls = App._.map(_objects,	function(item){
 						return item[options.key];
 			});
+			
 			resolve(App.resolver.urls);
 		});
 	},

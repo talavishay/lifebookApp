@@ -1,9 +1,6 @@
 'use strict';
 module.exports = App.Backbone.Model.extend({
 		localStorage: new App.Backbone.LocalStorage("crop"), // Unique name within your app.
-		initialize:function(){
-			//~ this._setup();
-		},
 		_setup : function(){
 			var obj 	= App.fabricToolsChannel.request('getActiveObject').toObject(),
 				urlData	= App.resolver.extractUrl(obj.src);
