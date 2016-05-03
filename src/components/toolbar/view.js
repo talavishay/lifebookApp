@@ -4,7 +4,7 @@ var view = Marionette.ItemView.extend({
 	template : require('./template.html'),
 	events : {
 		"click .photo" : () => {
-			App.Backbone.Radio.trigger('fabricTools', 'dialog:image');
+			App.Backbone.Radio.trigger('fabricTools', 'dialog:fileBrowser');
 			//~ App.fabricToolsChannel.trigger("add:image");
 		},	
 		"click .shape" : () => {

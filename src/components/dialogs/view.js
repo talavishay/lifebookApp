@@ -2,7 +2,7 @@
 var dialogs = {
 	colorCorrection : require("./colorCorrection"),
 	templates 		: require("./templates"),
-	image 			: require("./image"),
+	//~ image 			: require("./image"),
 	backgroundEdit 	: require("../backgroundEdit"),
 	crop 			: require("../crop"),
 	fileBrowser		: require("../fileBrowser")(App),
