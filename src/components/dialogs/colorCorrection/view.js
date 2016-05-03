@@ -30,6 +30,7 @@ var view = {
 		this.ui.color.spectrum({	
 				preferredFormat: "hex",
 				showInitial: true,
+				   color: "#f00"
 				//~ showAlpha: true,
 				//~ showButtons: false	
 		});
