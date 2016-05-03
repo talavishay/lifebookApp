@@ -1971,6 +1971,8 @@ var itextrtl = {
 
     for (var i = 0, len = this._textLines.length; i < len; i++) {
       line = this._textLines[i];
+      charIndex = line.length,
+      
       height += this._getHeightOfLine(this.ctx, i) * this.scaleY;
 
       var widthOfLine = this._getLineWidth(this.ctx, i),
@@ -1986,7 +1988,7 @@ var itextrtl = {
                  this.scaleX;
 
         if (height <= mouseOffset.y || width <= mouseOffset.x) {
-          charIndex++;
+          charIndex--;
           continue;
         }
 
