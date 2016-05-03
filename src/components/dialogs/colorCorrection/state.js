@@ -14,7 +14,6 @@ var state = {
 		obj = obj ? obj : this.get("obj");
 		if( /[i|I]mage/.test(obj.type) ){
 			urlData = App.resolver.extractUrl(obj.getSrc());
-			//~ .attributes)
 			this.set({
 				"file"	: App.files.get(urlData.id),
 				"result"	: false

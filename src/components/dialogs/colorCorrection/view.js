@@ -6,6 +6,13 @@ var view = {
 		App._.bindAll(this, "_revert");
 		var obj		= App.fabricToolsChannel.request('getActiveObject');
 		this.model	= new _s(obj);
+		this.listenTo(App.fabricToolsChannel, {
+			"tools:show"	: function(obj){
+				var obj		= App.fabricToolsChannel.request('getActiveObject');
+				this.model	= new _s(obj);
+				this.render();
+			},
+		}, this );
 	},
 	ui 			: {
 		restore		: ".restore",
