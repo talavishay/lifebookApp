@@ -18,7 +18,9 @@ fabric.Canvas.prototype.getAbxxxxxxx = function(object) {
 	};
 };
 
+// ITEXT RTL ## START
 
+// ITEXT RTL ## END
 //~ fabric.Cropzoomimage = fabric.util.createClass(fabric.Image, {
 	//~ type: 'cropzoomimage',
 	//~ async : true,
@@ -254,10 +256,22 @@ fabric.Canvas.prototype._calcRotateMatrix =  function(obj) {
       return [1, 0, 0, 1, 0, 0];
 };
 /***********************************************************************
+ * 	fabric.util.createClass(fabric.ItextRtl, itextrtl)
+***********************************************************************/
+var ITextrtl = require('./types/itextrtl.js');
+fabric.ITextrtl = fabric.util.createClass(fabric.Text, fabric.Observable, ITextrtl);
+
+fabric.ITextrtl.fromObject = function (object, callback) {
+    callback(new fabric.Itextrtl(object.text, object));
+};
+
+fabric.ITextrtl.async = true;
+/***********************************************************************
  * 	fabric.util.createClass(fabric.Image, clipedImage)
 ***********************************************************************/
 var clipedImage = require('./types/clipedImage.js');
 fabric.ClipedImage = fabric.util.createClass(fabric.Image, clipedImage);
+
 fabric.ClipedImage.fromObject = function(object, callback) {
 	fabric.util.loadImage(object.src, function(img) {
 		var __cliper = new fabric.Path(object._cliper.path, object._cliper),

@@ -221,26 +221,26 @@ var obj = {
 			this.canvas.renderAll();
 			this.objectMove("up");//fabric bugfix.. object unselectable..
 	},
-	addText 	: function(text){
+	addText 	: function(_text){
 		//~ var text = new fabric.IText(text, {
-		var text = new fabric.Textbox(text, {
+		var text = new fabric.ITextrtl(_text, {
 				//~ width:this.canvas.width*.8,
-				width	: 260,
-				caching : false,
-				fontFamily : 'nootregular',
-				fontSize: 25,
-				originX : 'left',
-				originY : 'top',
-				textAlign : 'center'
+				//~ width	: 260,
+				//~ caching : false,
+				//~ fontFamily : 'nootregular',
+				//~ fontSize: 25,
+				//~ originX : 'left',
+				//~ originY : 'top',
+				textAlign : 'right'
 			}),
 			h = this.canvas.height + text.height;
 
-		text.set({
-			left : this.canvas.width/10,
-			top: _.random(h*.1, h*.3),
+		//~ text.set({
+			//~ left : this.canvas.width/10,
+			//~ top: _.random(h*.1, h*.3),
 			//~ left : 10 ,
 			//~ top:  this.canvas.height/3,
-		});
+		//~ });
 		this.canvas.add(text);
 	},
 	addRect 	: function(options ){
