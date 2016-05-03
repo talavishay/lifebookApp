@@ -1,6 +1,7 @@
 var state = {
 	localStorage: new App.Backbone.LocalStorage("colorCorrection"),
 	initialize	: function(obj){
+		this.set("obj", obj);
 		this._setup(obj);
 		App._.bindAll(this, "_revert", "_setup");
 		this.on({
@@ -10,6 +11,7 @@ var state = {
 		});
 	},
 	_setup 		: function(obj){
+		obj = obj ? obj : this.get("obj");
 		if( /[i|I]mage/.test(obj.type) ){
 			urlData = App.resolver.extractUrl(obj.getSrc());
 			//~ .attributes)
@@ -20,9 +22,7 @@ var state = {
 		};
 	},
 	_revert : function(){
-		this.set(this.defaults, {
-			silent 	: true,
-		});
+		this.set(this.defaults);
 		this._setup();
 	},
 	defaults : {

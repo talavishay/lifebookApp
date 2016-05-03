@@ -9,12 +9,25 @@ var view = {
 	},
 	ui 			: {
 		restore		: ".restore",
-		setTintColor: "#tintColor"
+		color : "#tintColor"
 	},
 	events		: {
 		"click @ui.restore" : "_revert",
-		"click @ui.setTintColor" : "getTintColor",
-		"input" : "_input"
+		//~ "click @ui.setTintColor" : "getTintColor",
+		"input" : "_input",
+		"change @ui.color" : "getTintColor",
+	},
+	onRender: function(){
+		// init Color picekr -- spectrum
+		//~ this.$el.find("input").spectrum({	
+		this.ui.color.spectrum({	
+				preferredFormat: "hex",
+				showInitial: true,
+				//~ showAlpha: true,
+				//~ showButtons: false	
+		});
+		
+		App._.bindAll(this,'getTintColor');
 	},
 	_revert		: function(){
 		this.model._revert();
@@ -29,10 +42,14 @@ var view = {
 	}, 500),
 
 	getTintColor 	: function(ev){
-		this._spectrum(null, (color)=>{
-			this.model.set({"tintcolor" : color.toHexString()});
-			this.render();
-		});
+		
+		//~ this._spectrum(null, (color)=>{
+			//~ this.model.set({"tintcolor" : color.toHexString()});
+			//~ this.render();
+		//~ });
+		//~ var color = this.view.$el.find(".first").val()
+		var color = this.ui.color.val();
+		this.model.set({"tintcolor" : color});
 	},
 	_spectrum 		: function(obj, _func){
 		var _elm = this.$el;

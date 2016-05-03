@@ -71,7 +71,7 @@ module.exports = {
 	_parseActions	: function(data){
 		var actions = [];
 		App._.each(data, function(i,k){
-			if(i!=="0" && !isNaN(parseInt(i))){
+			if(i!=="0" && i!== 0 && !isNaN(parseInt(i))){
 				var o = {}
 				o[k] = i;
 				actions.push(o);

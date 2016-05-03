@@ -106,7 +106,7 @@ if(ev.shiftKey){
 			App.fabricToolsChannel.trigger("dialog:templates");
 		break;
 		case 54:// keyboard key = 6
-			App.fabricToolsChannel.trigger("dialog:image");
+			//~ App.fabricToolsChannel.trigger("dialog:image");
 		break;
 		case 55:// keyboard key = 7
 			App.fabricToolsChannel.trigger("add:text", "לחץ להוספת טקסט");
