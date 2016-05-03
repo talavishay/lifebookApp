@@ -73,6 +73,7 @@ var urlResolver = {
 						_resolve();
 					});
 			});
+			if(!urls.length) resolve(urls);
 		});
 	},		
 	//~ validateUrl : function(url){
@@ -147,20 +148,24 @@ var urlResolver = {
 	},
 	drupalizeStage : function(){
 		return new Promise(function(resolve, reject){
-			var _resolve = App._.after(App.resolver.draftUrls.length, function(){
-				resolve(App.resolver.resolvedUrls);
-			 });
-			App._.each(App.resolver.draftUrls ,function(obj){
-				App.resolver.draftToRemote(obj)
-					.then(function(res){
-							_resolve(res);
-					},function(err){
-							reject(err);
-					});
-			});
-			if(!App.resolver.draftUrls.length) {
+			if(App.resolver.draftUrls){				
+				var _resolve = App._.after(App.resolver.draftUrls.length, function(){
+					resolve(App.resolver.resolvedUrls);
+				 });
+				App._.each(App.resolver.draftUrls ,function(obj){
+					App.resolver.draftToRemote(obj)
+						.then(function(res){
+								_resolve(res);
+						},function(err){
+								reject(err);
+						});
+				});
+				if(!App.resolver.draftUrls.length) {
+					resolve();
+				};
+			} else {
 				resolve();
-			};
+			}
 		});
 	},
 	draftToRemote : function(url){

@@ -43,7 +43,6 @@ var	_backgroundBrowser = require('./backgroundBrowser.js')
 			m.save({
 				"data"	:	JSON.stringify(temp),
 			});
-			
 		});
 	},
 	_edit : function(){
@@ -51,8 +50,12 @@ var	_backgroundBrowser = require('./backgroundBrowser.js')
 		App.fabricToolsChannel.trigger("background:edit", URL.createObjectURL(blob) );
 	},
 	_handleFiles : function (files) { 
-			//used in =>  { behaviorClass: require('../behaviors/DropFiles')},
-			App.fabricToolsChannel.trigger("add:background", URL.createObjectURL(files[0]));
+		//used in =>  { behaviorClass: require('../behaviors/DropFiles')},
+		var draft = new App.models.files.draft(files[0], {
+			parse : true
+		});
+		App.files.add(draft);
+		App.fabricToolsChannel.trigger("add:background", draft.refreshSrc());
 	},
 };
 module.exports =  App.Marionette.LayoutView.extend(view);
