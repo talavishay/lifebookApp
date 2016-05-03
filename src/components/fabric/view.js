@@ -28,7 +28,7 @@ var obj = {
 		App.fabricToolsChannel.reply({
 			'getBackgroundObject':this.getBackgroundObject,
 			'getActiveObject' 	: this.getActiveObject,
-			//~ 'getActiveGroup' 	: this.getActiveGroup
+			'getActiveGroup' 	: this.getActiveGroup
 		}, this);
 		this.canvas.on({
 			 'object:selected': this.showTools,
@@ -65,15 +65,18 @@ var obj = {
 		}), "_blank");
 	},
 	getActiveObject : function() {
-		//~ var	_o = this.canvas.getActiveObject();
-		//~ return _o ? _o : this.canvas.getActiveGroup();
-		return this.canvas.getActiveObject();
+		var	_o = this.canvas.getActiveObject();
+		return _o ? _o : this.canvas.getActiveGroup();
+		//~ return this.canvas.getActiveObject();
+	},
+	getActiveGroup : function() {
+		return this.getActiveObject();
 	},
 	showTools 	: function(options){
-		var active = this.getActiveObject();
-		if(typeof active != "undefined" && active !== null ){
-			App.fabricToolsChannel.trigger("tools:show", active);
-		}
+		var obj = this.getActiveObject
+		if(obj){
+			App.fabricToolsChannel.trigger("tools:show", obj);
+		};
 	},
 	hideTools 	: function(){
 		App.fabricToolsChannel.trigger("tools:destroy");

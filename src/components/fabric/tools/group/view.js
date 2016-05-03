@@ -2,9 +2,9 @@ var View = {
 	tagName	: 'span',
 	className : 'toolbox shape',
 	template: require('./template.html'),
-	behaviors: [{ behaviorClass: require('../objectBehaviour.js')}],
+	//~ behaviors: [{ behaviorClass: require('../objectBehaviour.js')}],
 	ui		:{
-		//~ deleteObject	:	".trash",			
+		deleteObject	:	".trash",			
 		alignTop 		:	".alignTop" ,
 		alignMiddleVert : 	".alignMiddleVert",
 		alignBottomVert : 	".alignBottomVert",
@@ -15,7 +15,7 @@ var View = {
 		unGroup			:	".unGroup"
 	},
 	events 	:{
-		//~ 'click @ui.deleteObject' : 'deleteObject',
+		'click @ui.deleteObject' : 'deleteObject',
 		'click @ui.alignTop' 		:	"alignTop" ,
 		'click @ui.alignMiddleVert' : 	"alignMiddleVert",
 		'click @ui.alignBottomVert' : 	"alignBottomVert",
@@ -25,14 +25,14 @@ var View = {
 		'click @ui.groupObjects'	:	"groupObjects",
 		'click @ui.unGroup'			:	"unGroup"
 	},
-	//~ deleteObject :function(){
-		//~ if(App.canvas.getActiveGroup()){
-		  //~ App.canvas.getActiveGroup().forEachObject(function(o){ App.canvas.remove(o) });
-		  //~ App.canvas.discardActiveGroup().renderAll();
-		//~ } else {
-		  //~ App.canvas.remove(App.canvas.getActiveObject());
-		//~ }
-	//~ },
+	deleteObject :function(){
+		if(App.canvas.getActiveGroup()){
+		  App.canvas.getActiveGroup().forEachObject(function(o){ App.canvas.remove(o) });
+		  App.canvas.discardActiveGroup().renderAll();
+		} else {
+		  App.canvas.remove(App.canvas.getActiveObject());
+		}
+	},
 	alignTop : function(){ 
 		var group = App.fabricToolsChannel.request('getActiveGroup');
 		_.each(group.objects || group._objects, function(item){
@@ -106,9 +106,15 @@ var View = {
 		var g = new fabric.Group();
 		
 		var g = _.extend(g, _.pick(group, '_objects', "top", "left", "width", "height"));		
-		this.deleteObject();
+		group.forEachObject(function(o){ 
+			App.canvas.remove(o);
+		}); 
+		App.canvas.discardActiveGroup().renderAll();
+		
 		App.canvas.add(g).setActiveObject(g);
-		App.fabricToolsChannel.trigger('rebuildCanvas');
+		App.canvas.renderAll();
+		//~ App.fabricToolsChannel.trigger('rebuildCanvas');
+		//~ App.can
 		
 	},
 	unGroup : function() {
