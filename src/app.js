@@ -122,7 +122,6 @@ var _App = {
 					App.fabricToolsChannel.trigger("dialog:close");
 					//~ App.fabricToolsChannel.trigger("hide");
 				break;
-
 				case 189:// keyboard key => -/_
 					App.fabricToolsChannel.trigger("zoom:out", .1);
 				break;
