@@ -4,6 +4,7 @@ var textToolsView = {
 	template: require('./template.html') ,
 	initialize :function(object){
 		this.model 	= new _state(object);
+		
 	},
 	behaviors: [
 		{ behaviorClass: require('../objectBehaviour.js')}
@@ -23,26 +24,33 @@ var textToolsView = {
 		fontFamily		: ".fontFamily",
 		lineHeight		: ".lineHeight",
 		underline		: ".U",
+		editor			: ".editor"
 	},
 	events 	:{
-		'click @ui.underline' : 'underline',
-		'click @ui.bold' : 'bold',
-		'click @ui.italic' : 'italic',
+		'click @ui.underline'	: 'underline',
+		'click @ui.bold'		: 'bold',
+		'click @ui.italic'		: 'italic',
 		'click @ui.textAlignLeft' : "setTextAlignLeft",
 		'click @ui.textAlignRight' : "setTextAlignRight",
 		'click @ui.textAlignCenter' : "setTextAlignCenter",
-		'input @ui.textOpacity' : 'setTextOpacity',
-		'change @ui.fontSize' : 'setfontSize',
-		'change @ui.fontFamily' : 'setFontFamily',
-		'change @ui.lineHeight' : 'setLineHeight',
-		'click @ui.textStroke' : 'setTextStroke',
-		'change @ui.strokeWidth' : 'setTextStrokeWidth',
+		'input @ui.textOpacity'	: 'setTextOpacity',
+		'change @ui.fontSize'	: 'setfontSize',
+		'change @ui.fontFamily'	: 'setFontFamily',
+		'change @ui.lineHeight'	: 'setLineHeight',
+		'click @ui.textStroke'	: 'setTextStroke',
+		'change @ui.strokeWidth': 'setTextStrokeWidth',
 		'mouseup @ui.textBackgroundColor' : 'setTextBackgroundColor',
-		'mouseup @ui.fontColor' : 'setFontColor',
+		'mouseup @ui.fontColor'	: 'setFontColor',
+		'input @ui.editor'		: 'edit'
 	},
 	modelEvents: {
         'change': 'refreshView'
     },
+    edit : function(ev){
+		var obj = App.fabricToolsChannel.request('getActiveObject');
+		obj.text = ev.currentTarget.value
+		App.fabricToolsChannel.trigger('renderall');
+	},
     refreshView: function() {
         this.render();
     },
