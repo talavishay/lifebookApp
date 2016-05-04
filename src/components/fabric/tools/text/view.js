@@ -1,10 +1,10 @@
-var _state =require('./state.js');
-var textToolsView = {
+var _state =require('./state.js'),
+	autosize = require('autosize'),
+textToolsView = {
 	className : 'toolbox text',
 	template: require('./template.html') ,
 	initialize :function(object){
 		this.model 	= new _state(object);
-		
 	},
 	behaviors: [
 		{ behaviorClass: require('../objectBehaviour.js')}
@@ -46,6 +46,10 @@ var textToolsView = {
 	modelEvents: {
         'change': 'refreshView'
     },
+    
+    onAttach : function(ev){
+		autosize(this.ui.editor);
+	},
     edit : function(ev){
 		var obj = App.fabricToolsChannel.request('getActiveObject');
 		obj.text = ev.currentTarget.value
