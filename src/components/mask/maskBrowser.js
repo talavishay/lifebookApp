@@ -22,7 +22,7 @@ var c = require("./masks.js")
 	},
 	_generatePreview: function(ev){
 		var active = App.fabricToolsChannel.request('getActiveObject');
-		if(active && this.model.get("active")){
+		if(active && /[i|I]mage/.test(active.type) && this.model.get("active")){
 			var	cache		= this.model.get("cache"),
 				activeSrc	= active.getSrc();
 

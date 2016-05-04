@@ -47,7 +47,7 @@ module.exports = App.Marionette.LayoutView.extend({
 			var _c = (ev.altKey) ? "left" : "top",
 				_step = this.model.get(_c)  - ev.deltaY*30;
 
-			this.model.save(_c, _step);
+			this.model.set(_c, _step);
 			App.$("#stage > div ").css(	_c , _step);
 		};
 		if(ev.deltaX && ev.shiftKey){
@@ -62,11 +62,11 @@ module.exports = App.Marionette.LayoutView.extend({
 	},
 	zoomIn : function(factor){
 		var _s = factor + this.model.get("scale");
-		this.model.save("scale",_s);
+		this.model.set("scale",_s);
 		},
 	zoomOut : function(factor){
 		var _s = this.model.get("scale") - factor ;
-		this.model.save("scale",_s);
+		this.model.set("scale",_s);
 	},
 	_handleDrop : function (files) {
 		var file = URL.createObjectURL(files[0]);

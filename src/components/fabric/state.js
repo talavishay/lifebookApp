@@ -1,7 +1,7 @@
 module.exports = Backbone.Model.extend({
 	localStorage: new App.Backbone.LocalStorage("viewport"),
 	initialize:function(){
-		this.fetch();
+		//~ this.fetch();
 	},
 	defaults	:	{
 		_id : "state",
