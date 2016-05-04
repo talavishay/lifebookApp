@@ -229,8 +229,7 @@ var obj = {
 		var text = new fabric.Textbox(text, {
 				//~ width:this.canvas.width*.8,
 				width	: 260,
-				caching : false,
-				fontFamily : 'nootregular',
+				fontFamily : 'alef',
 				fontSize: 25,
 				originX : 'left',
 				originY : 'top',

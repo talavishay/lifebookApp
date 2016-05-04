@@ -75,7 +75,6 @@ if(ev.shiftKey){
 			ev.preventDefault();
 			return false;
 		break;
-
 		case 37:// keyboard key = LEFT
 			App.fabricToolsChannel.trigger("object:move", "left");
 		break;
