@@ -97,7 +97,7 @@ if(ev.shiftKey){
 			App.Backbone.Radio.trigger('fabricTools', "object:move", "up");
 		break;
 		case 49:// keyboard key = 1
-			App.fabricToolsChannel.trigger("image:add", "DSC_0193.JPG");
+			App.fabricToolsChannel.trigger("dialog:help");
 		break;
 		case 50:// keyboard key = 2
 			App.fabricToolsChannel.trigger("dialog:colorCorrection");
@@ -136,9 +136,6 @@ if(ev.shiftKey){
 			App.fabricToolsChannel.trigger("zoom:in", .1);
 
 		break;
-
-
-	
 		}
 	};
 },
