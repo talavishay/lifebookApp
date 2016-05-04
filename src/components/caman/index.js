@@ -64,10 +64,8 @@ module.exports = {
 					App.fabricToolsChannel.trigger("caman:done", 	file.refreshSrc());
 					App.nprogress.done();
 					App.files.add(file);
-					
 			});
 	},
-	
 	_parseActions	: function(data){
 		var actions = [];
 		App._.each(data, function(i,k){
