@@ -27,7 +27,16 @@
 /*
 @import './css/fonts/noot_aj/stylesheet.css';
 */
-
+/*
+ * meeting  START
+ * */
+.toolbox.image .imageMaskBtn,
+#background .all{
+	display : none;
+}
+/*
+ * pre meeting END
+ * */
 body{
 	font-family : arial, Arial, 'arial', 'Arial';
 	padding: 0px;
