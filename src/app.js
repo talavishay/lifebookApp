@@ -2,11 +2,19 @@
 module.exports = function(App){
 var _App = {
 	onBeforeStart			: function() {
-		jQuery.get('/rest/session/token').done(function f(csrfToken){
+		jQuery.get('/rest/session/token')
+			.done(function f(csrfToken){
 			// Drupal8 rest POST/PATCHE/DELETE requirement
-			App.csrfToken = 	csrfToken;
+				App.csrfToken = 	csrfToken;
+				
+			})
+		App.$(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
+			if(xhr.status === 403){
+				if(window.confirm("Not logged In..\n press OK to redirect to login page")){
+					window.location.href = '/user/login';
+				};				
+			}
 		});
-		
 		var layout = require('./components/layout');
 		this.layout = new layout;//~ view.el : "body" ..
 		this.layout.render();
