@@ -19,7 +19,7 @@ module.exports = App.Marionette.LayoutView.extend({
 			'set:sidebarSeconed': (view)=> {this.sidebarSeconed.show(new view)},
 			'set:sidebarFirst'	: (view)=> {this.sidebarFirst.show(new view)},
 			'set:topToolbar'	: (view)=> {this.topToolbar.show(new view)},
-			'set:bookPreview'	: (view)=> {this.bookPreview.show(new view)},
+			//~ 'set:bookPreview'	: (view)=> {this.bookPreview.show(new view)},
 			'set:dialogs'		: (view)=> {this.dialogs.show(new view)}
 		}, this);
     },

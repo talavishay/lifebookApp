@@ -69,8 +69,9 @@ var Behavior = {
 			if(obj.getStroke()){
 				obj.setStroke(false);
 			} else {
-				obj.setStroke(true);
-			}
+				obj.setStroke('rgba(0,0,0,1)');
+				obj.setStrokeWidth(2);
+			};
 			App.fabricToolsChannel.trigger('renderall');
 	},
 	setFlipX : function(ev){
