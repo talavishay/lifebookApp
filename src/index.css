@@ -27,16 +27,7 @@
 /*
 @import './css/fonts/noot_aj/stylesheet.css';
 */
-/*
- * meeting  START
- * */
-.toolbox.image .imageMaskBtn,
-#background .all{
-	display : none;
-}
-/*
- * pre meeting END
- * */
+
 body{
 	font-family : arial, Arial, 'arial', 'Arial';
 	padding: 0px;
@@ -180,3 +171,30 @@ App.log
     height: 2px;
     background: red;
 }
+/*
+ * meeting  START
+ * */
+#toolbar .page.number,
+.toolbox.image .imageMaskBtn,
+#background .all{
+	display : none;
+}
+.crop button.preview,
+.crop .qualityIndex,
+.backgroundEdit .qualityIndex,
+.backgroundEdit .cancel{
+	opacity : 0 ;
+}
+#toolbar .undo, #toolbar .redo {
+    margin : 10px 70px;
+}
+#toolbar .undo{
+	margin-right : 10px;
+}
+#toolbar .redo{
+	margin-left : 10px;
+}
+
+/*
+ * pre meeting END
+ * */
