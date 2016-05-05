@@ -52,7 +52,7 @@ var _App = {
 			this.fabricToolsChannel.trigger(command, data);
 	},
 	_keyboardAction			: function(ev){
-		//~ console.log(ev.keyCode);
+		if(App.textEditor) return;
 if(ev.shiftKey){
 	switch (ev.keyCode){
 		case 37:// keyboard key = LEFT
