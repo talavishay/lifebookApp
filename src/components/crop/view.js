@@ -28,7 +28,13 @@ var view = {
 			setSelect	:   [ width/10, height/4, width*.8, height/2 ],
 			onSelect	: App.crop.init
 		};
-		this.$el.find("img.org").Jcrop(options);
+		var org = this.$el.find("img.org");
+		org.Jcrop(options);
+
+		var jcrop_api = org.Jcrop('api');
+		jcrop_api.container.on('cropstart',function(e,s,c){
+				App.nprogress.start();
+		});
 	},
 };
 module.exports = App.Marionette.ItemView.extend(view);
