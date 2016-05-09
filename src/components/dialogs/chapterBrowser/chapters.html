@@ -1,0 +1,5 @@
+<select>
+	<% App._.each(chapters, function(chapter){%>
+		<option value="<%=chapter.id%>"><%= chapter.name%></option>
+	<% })%>
+</select>

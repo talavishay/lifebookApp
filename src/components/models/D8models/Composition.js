@@ -1,5 +1,7 @@
-module.exports = function(App){
-	var composition = require('./d8model.js')(App);
+
+//~ module.exports = function(App){
+	//~ var composition = require('./d8model.js')(App);
+	var composition = require('./d8model.js');
 	composition.prototype._type = 'composition';
 	composition.prototype._root = 'lifebook';
 	composition.prototype.idAttribute 	= 'id';
@@ -29,5 +31,6 @@ module.exports = function(App){
 		attrs.name = this.attributes.name;
 		return attrs; 
 	};
-	return composition;
-}
+	//~ return composition;
+//~ }
+module.exports =  composition;

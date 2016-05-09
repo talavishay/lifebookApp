@@ -10,8 +10,20 @@ var _App = {
 		var layout = require('./components/layout');
 		this.layout = new layout;//~ view.el : "body" ..
 		this.layout.render();
+		var _Workspace = Backbone.Router.extend({
+			routes: {
+				"chapter/:chapter": "gotoChapter"   // #search/kiwis/p7
+			},
+			gotoChapter : function(chapter) {
+				App.nprogress.start();
+				App.fabricToolsChannel.trigger("goto:chapter", chapter);
+			}
+		});
+		this.router = new _Workspace;
+		
 	},
 	onStart 				: function(options){
+		
 		App._.bindAll(this, '_keyboardAction');
 		var options 	=  options || {"debug":'fabricTools'}; 
 		if(options.debug) this._initBackboneRadioLog(options);
@@ -21,6 +33,7 @@ var _App = {
 		
 		this.files.fetch();
 		this._setupLayoutRegions();
+		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 		App.$(document).on("keydown", this._keyboardAction);
 	},
 	_setupLayoutRegions		: function(options){
@@ -30,6 +43,7 @@ var _App = {
 		//~ this.layoutChannel.trigger('set:topToolbar', require('./components/topToolbar'));
 		App.layoutChannel.trigger('set:bookPreview', 	require('./components/bookPreview'));
 		App.layoutChannel.trigger('set:dialogs', 		require('./components/dialogs'));
+		
 	},
 	_initBackboneRadioLog	: function(options){
 		if(options.debug){
@@ -90,7 +104,7 @@ if(ev.shiftKey){
 			App.Backbone.Radio.trigger('fabricTools', "object:move", "up");
 		break;
 		case 49:// keyboard key = 1
-			App.fabricToolsChannel.trigger("image:add", "DSC_0193.JPG");
+			App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 		break;
 		case 50:// keyboard key = 2
 			App.fabricToolsChannel.trigger("dialog:colorCorrection");
@@ -129,9 +143,6 @@ if(ev.shiftKey){
 			App.fabricToolsChannel.trigger("zoom:in", .1);
 
 		break;
-
-
-	
 		}
 	};
 },

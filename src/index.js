@@ -77,7 +77,8 @@ App.nprogress._onprogress = function(e)  {
  * 
 ***********************************************************************/
 //TODO:  manage the load depnedncies
-App.D8models			= require('./components/models/D8models')(App);
+App.D8models			= require('./components/models/D8models');
+//~ App.D8models			= require('./components/models/D8models')(App);
 App.models 				=  {};
 App.models.files		= require('./components/models/file')(App);
 App.collections 		= require('./components/collections')(App);
@@ -93,13 +94,15 @@ App.caman			= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
+require('./components/models/book');
 
 /***********************************************************************
  * GLOBAL namespace anchor
 ***********************************************************************/
 var app 				= require('./app')(App);
 app.start();
-
+App.Backbone.history.start({root: document.location.pathname});
+App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 //TODO:  clean up ...
 //~ (function() {
 	//~ var src = ('https:' === document.location.protocol ? 'https' : 'http') +
