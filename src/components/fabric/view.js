@@ -180,6 +180,7 @@ var obj = {
 		}
 	},
 	_addImageElement 	: function(img){
+		
 		var img = (img instanceof Image) ? img : img.target;
 		if( !this.promptReplaceImage(img)){
 			var fabricImage = new fabric.Image(img);
@@ -192,6 +193,7 @@ var obj = {
 				.setActiveObject(fabricImage);
 			//~ fabricImage.center();
 			App.canvas.renderAll();
+		
 //TODO: fabric.js bug fix -- object are sometimes unselectable..
 //
 //even after renderAll..
@@ -202,6 +204,8 @@ var obj = {
 			App.Backbone.Radio.trigger('fabricTools', "object:move", "up");
 			App.Backbone.Radio.trigger('fabricTools', "image:add:done", "up");
 		};
+		
+			
 	},
 	addImage 	: function(src, options){
 		this.loadImage(src).then(this._addImageElement);
@@ -359,6 +363,9 @@ var obj = {
 			};
 		canvas.setBackgroundColor(null);
 		canvas.setBackgroundImage(data, canvas.renderAll.bind(canvas), options);
+		App._.defer(function(){
+			App.nprogress.done();
+		});
 	},
 	setBackgroundColor : function(color){//~ "add:backgroundColor");
 		App.canvas.remove(App.canvas.getItemByName("background_grad"));
@@ -369,7 +376,6 @@ var obj = {
 			_options = {
 				top	:	0,
 				left	:	0,
-				//fill	:	getRandomColor(),
 				width	:	canvas.width ,
 				height	:	canvas.height ,
 				originX : "left",
