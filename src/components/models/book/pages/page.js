@@ -1,14 +1,14 @@
-var composition	= require('./comp.js');
+var composition	= App.models.composition = require('./comp.js');
 	//~ d8model		= require('../../D8models/d8model.js');
 
 var page = {
 	url		: function(){
-		return '/bokker/page/page/' + this.id + '?_format=json';
+		return '/lifebook/pages/' + this.id + '?_format=json';
 	},
 	parse: function(resp) {
-		if(resp.field_page_compotitions){
-			this.composition = new composition(resp.field_page_compotitions[0]);
-			delete resp.field_page_compotitions;
+		if(resp.field_composition_ref){
+			this.composition = new composition(resp.field_composition_ref[0]);
+			delete resp.field_composition_ref;
 		};
 		return this._fromExtendedJSON(resp);
 	},
@@ -35,7 +35,7 @@ var page = {
 	},
 	_fromExtendedJSON: function(resp) {
 		resp = App._.mapObject(resp, function(val, key) {
-			if(!App._.isUndefined(val[0].value)){
+			if(val.length && !App._.isUndefined(val[0].value)){
 				return val[0].value;
 			} else {
 				return val;

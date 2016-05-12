@@ -2,25 +2,15 @@
 module.exports = function(App){
 var _App = {
 	onBeforeStart			: function() {
-		jQuery.get('/rest/session/token').done(function f(csrfToken){
-			// Drupal8 rest POST/PATCHE/DELETE requirement
-			App.csrfToken = 	csrfToken;
-		});
-		
+		App.nprogress.start();
 		var layout = require('./components/layout');
 		this.layout = new layout;//~ view.el : "body" ..
 		this.layout.render();
-		var _Workspace = Backbone.Router.extend({
-			routes: {
-				"chapter/:chapter": "gotoChapter"   // #search/kiwis/p7
-			},
-			gotoChapter : function(chapter) {
-				App.nprogress.start();
-				App.fabricToolsChannel.trigger("goto:chapter", chapter);
+		App.user.fetch({
+			success : function(user){
+				App.bookChannel.trigger("user:chapters", user);
 			}
 		});
-		this.router = new _Workspace;
-		
 	},
 	onStart 				: function(options){
 		
@@ -35,6 +25,29 @@ var _App = {
 		this._setupLayoutRegions();
 		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 		App.$(document).on("keydown", this._keyboardAction);
+		var _Workspace = Backbone.Router.extend({
+			routes: {
+				"chapter/:chapter"	: "gotoChapter",
+				"*path"				:	"_default",
+			},
+			_default : function(){
+				//TODO: move to edit mode ?
+				jQuery.get('/rest/session/token').done(function f(csrfToken){
+					// Drupal8 rest POST/PATCHE/DELETE requirement
+					App.csrfToken = 	csrfToken;
+				});
+				//~ App.user.fetch({
+					//~ success : function(user){
+						//~ App.fabricToolsChannel.trigger("goto:chapter", user.get("field_mychapters")[0].target_id);
+					//~ }
+				//~ });
+			},
+			gotoChapter : function(chapter) {
+				App.nprogress.start();
+				App.bookChannel.trigger("goto:chapter", chapter);
+			}
+		});
+		this.router = new _Workspace;
 	},
 	_setupLayoutRegions		: function(options){
 		App.layoutChannel.trigger('set:content', 		require('./components/fabric'));

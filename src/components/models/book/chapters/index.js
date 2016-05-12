@@ -1,10 +1,10 @@
 var chapters = {
-	url			: "/testChapter",
+	url			: "/lifebook/my/chapters",
 	model		: require('./chapter.js'),
 	initialize	: function(){
 		this.on({
 			"sync"	:	function(){
-				App.fabricToolsChannel.trigger("chapters", this.models);
+				App.bookChannel.trigger("chapters", this.models);
 			}
 		},this);
 	},

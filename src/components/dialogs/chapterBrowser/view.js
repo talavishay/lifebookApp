@@ -14,10 +14,12 @@ view = {
 		this.model.on("add", this.render);
 	},
 	_chpaters	: function(){
-		this.model.set("chapters", App.chapters.map(function(item){return {
-			name : item.get("name"),
-			id   : item.id
-		}}));
+		if(App.chapters){
+			this.model.set("chapters", App.chapters.map(function(item){return {
+				name : item.get("name"),
+				id   : item.id
+			}}));
+		};
 		this.render();
 	},
 	switchChapter : function(chapterId){
@@ -28,7 +30,8 @@ view = {
 		App.pages.set(compositions);
 	},
 	_switchChapter : function(ev){
-		this._switchChapter(ev.currentTarget.value);
+		ev = App._.isString(ev) ? ev : ev.currentTarget.value;
+		this.switchChapter(ev);
 	}
 };
 module.exports = App.Marionette.ItemView.extend(view);

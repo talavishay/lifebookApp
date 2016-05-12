@@ -17,7 +17,7 @@ module.exports = App.Marionette.ItemView.extend({
 		"click .moveUp" :"movePageUp",
 		"click .moveDown" :"movePageDown",
 		//~ "click .moveDown" :"_prev",
-		'click [data-active="false"]'	: "goToPage",
+		'click [data-active="false"]'	: "_click",
 		'click [data-active="true"]'	: "_save",
 		
 		
@@ -29,7 +29,10 @@ module.exports = App.Marionette.ItemView.extend({
 		App.pages.moveDown(this.model);
 		
 	},
-	goToPage: function(ev){
+	_click: function(ev){
+		if(ev.shiftKey){
+			this._save();
+		};
 		if(ev.ctrlKey){
 			this.model.destroy();
 		} else {
@@ -46,13 +49,12 @@ module.exports = App.Marionette.ItemView.extend({
 		}
 	},
 	_save : function(){
-		//~ console.log(JSON.parse(this.model.get("data")).objects);
 		var id = this.model.id,
 			format = '?_format=json',
 			_url =  isNaN(parseInt(id)) ? '/entity/composition' + format : '/lifebook/composition/'+ id + format;
 			
 		this.model.save({
-			"active" : false,
+			
 			"data"		: JSON.stringify(App.canvas.toJSON()),
 			"meta"	: JSON.stringify({ preview : App.canvas.toDataURL({
 						format: 'png',

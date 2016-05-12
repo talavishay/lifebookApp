@@ -2,9 +2,9 @@ var pages	= require('../pages/index.js');
 var chapter = {
 	idAttribute: "id",
 	parse: function(resp) {
-		this.pages = new pages(resp.field_book_pages);
+		this.pages = new pages(resp.field_pages_ref);
 		this.pages.chapter =  this;
-		delete resp.field_book_pages;
+		delete resp.field_pages_ref;
 		return this._fromExtendedJSON(resp);
 	},
 	defaults : {
@@ -14,7 +14,7 @@ var chapter = {
 	},
 	_fromExtendedJSON: function(resp) {
 		resp = App._.mapObject(resp, function(val, key) {
-			if(!App._.isUndefined(val[0].value)){
+			if(val.length && !App._.isUndefined(val[0].value)){
 				return val[0].value;
 			} else {
 				return val;

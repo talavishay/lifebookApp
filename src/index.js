@@ -41,6 +41,7 @@ App.Backbone.Radio 		= require('backbone.radio');
 App.fabricFilesChannel	= App.Backbone.Radio.channel('fabricFiles');
 App.fabricToolsChannel	= App.Backbone.Radio.channel('fabricTools');
 App.layoutChannel		= App.Backbone.Radio.channel('layout');
+App.bookChannel		= App.Backbone.Radio.channel('book');
 /***********************************************************************
  *	Backbone Plugins
 ***********************************************************************/
@@ -94,7 +95,9 @@ App.caman			= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
+
 require('./components/models/book');
+require('./components/user');
 
 /***********************************************************************
  * GLOBAL namespace anchor
