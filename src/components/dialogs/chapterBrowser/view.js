@@ -7,7 +7,7 @@ view = {
 	},
 	initialize	: function(){
 		//~ this._chpaters();
-		this.listenTo(App.fabricToolsChannel,{
+		this.listenTo(App.bookChannel,{
 			"chapters"		: this._chpaters,
 			//~ "goto:chapter"	: this.switchChapter
 		}, this);
