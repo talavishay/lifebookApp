@@ -1,7 +1,8 @@
-module.exports = function(App){
-	return {
-		file 	: require('./File.js')(App),
-		template 	: require('./Template.js')(App),
-		composition : require('./Composition.js')(App)
+//~ module.exports = function(App){
+	//~ return {
+module.exports = {
+		file 	: require('./File.js'),
+		template 	: require('./Template.js'),
+		composition : require('./Composition.js')
 	}
-}
+//~ }

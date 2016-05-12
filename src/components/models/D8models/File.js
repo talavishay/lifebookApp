@@ -1,5 +1,6 @@
-module.exports = function(App){
-	var file = require('./d8model.js')(App);
+//~ module.exports = function(App){
+	//~ var file = require('./d8model.js')(App);
+	var file = require('./d8model.js');
 	//~ defaults : {
 		//~ filename : "null.svg",
 	//~ },
@@ -75,8 +76,9 @@ App.nprogress.start();
 			
 		});
 	};
-	return file;
-};
+	//~ return file;
+//~ };
+module.exports = file;
 //~ file.prototype.formatBytes = function (bytes,decimals) {
 	   //~ if(bytes == 0) return '0 Byte';
 	   //~ var k = 1000; // or 1024 for binary

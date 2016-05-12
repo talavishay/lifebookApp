@@ -1,6 +1,6 @@
 'use strict'
-module.exports = App.Marionette.CompositeView.extend({
-		className : "bookPreview",
+var view = {
+		className	: "bookPreview",
 		template : require('./browser.html'),
 		childViewContainer: ".content",
 		collection 	: App.pages,
@@ -16,7 +16,5 @@ module.exports = App.Marionette.CompositeView.extend({
 			"click .new" : App.pages.addPage,
 			"click .delete" : App.pages.removePage
 		},
-		initialize : function(){
-			this.collection.fetch();
-		}
-});
+};
+module.exports = App.Marionette.CompositeView.extend(view);

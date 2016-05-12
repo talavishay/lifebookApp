@@ -1,5 +1,6 @@
-module.exports = function(App){
+//~ module.exports = function(App){
 var _model = {
+	idAttribute : "id",
 	parse		: function(resp, options) {
 		return this._fromExtendedJSON(resp);
 	},
@@ -62,5 +63,6 @@ var _model = {
 	},
    
 };
-return App.Backbone.Model.extend(_model);
-};
+//~ return App.Backbone.Model.extend(_model);
+//~ };
+module.exports = App.Backbone.Model.extend(_model);

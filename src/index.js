@@ -41,6 +41,7 @@ App.Backbone.Radio 		= require('backbone.radio');
 App.fabricFilesChannel	= App.Backbone.Radio.channel('fabricFiles');
 App.fabricToolsChannel	= App.Backbone.Radio.channel('fabricTools');
 App.layoutChannel		= App.Backbone.Radio.channel('layout');
+App.bookChannel		= App.Backbone.Radio.channel('book');
 /***********************************************************************
  *	Backbone Plugins
 ***********************************************************************/
@@ -77,7 +78,8 @@ App.nprogress._onprogress = function(e)  {
  * 
 ***********************************************************************/
 //TODO:  manage the load depnedncies
-App.D8models			= require('./components/models/D8models')(App);
+App.D8models			= require('./components/models/D8models');
+//~ App.D8models			= require('./components/models/D8models')(App);
 App.models 				=  {};
 App.models.files		= require('./components/models/file')(App);
 App.collections 		= require('./components/collections')(App);
@@ -94,12 +96,16 @@ App.caman			= require('./components/caman').initialize();
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
 
+require('./components/models/book');
+require('./components/user');
+
 /***********************************************************************
  * GLOBAL namespace anchor
 ***********************************************************************/
 var app 				= require('./app')(App);
 app.start();
-
+App.Backbone.history.start({root: document.location.pathname});
+App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 //TODO:  clean up ...
 //~ (function() {
 	//~ var src = ('https:' === document.location.protocol ? 'https' : 'http') +

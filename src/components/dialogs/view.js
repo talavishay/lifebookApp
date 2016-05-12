@@ -8,6 +8,7 @@ var dialogs = {
 	fileBrowser		: require("../fileBrowser")(App),
 	dropShadow 		: require("./dropShadow"),
 	help 			: require("./help"),
+	chapterBrowser 	: require("./chapterBrowser"),
 };
 module.exports =  App.Marionette.LayoutView.extend({
 	tagName	: 'span',

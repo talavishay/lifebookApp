@@ -2,12 +2,7 @@
 module.exports = function(App){
 var _App = {
 	onBeforeStart			: function() {
-		jQuery.get('/rest/session/token')
-			.done(function f(csrfToken){
-			// Drupal8 rest POST/PATCHE/DELETE requirement
-				App.csrfToken = 	csrfToken;
-				
-			})
+		App.nprogress.start();
 		App.$(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
 			if(xhr.status === 403){
 				if(window.confirm("Not logged In..\n press OK to redirect to login page")){
@@ -18,8 +13,14 @@ var _App = {
 		var layout = require('./components/layout');
 		this.layout = new layout;//~ view.el : "body" ..
 		this.layout.render();
+		App.user.fetch({
+			success : function(user){
+				App.bookChannel.trigger("user:chapters", user);
+			}
+		});
 	},
 	onStart 				: function(options){
+		
 		App._.bindAll(this, '_keyboardAction');
 		var options 	=  options || {"debug":'fabricTools'}; 
 		if(options.debug) this._initBackboneRadioLog(options);
@@ -29,7 +30,31 @@ var _App = {
 		
 		this.files.fetch();
 		this._setupLayoutRegions();
+		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 		App.$(document).on("keydown", this._keyboardAction);
+		var _Workspace = Backbone.Router.extend({
+			routes: {
+				"chapter/:chapter"	: "gotoChapter",
+				"*path"				:	"_default",
+			},
+			_default : function(){
+				//TODO: move to edit mode ?
+				jQuery.get('/rest/session/token').done(function f(csrfToken){
+					// Drupal8 rest POST/PATCHE/DELETE requirement
+					App.csrfToken = 	csrfToken;
+				});
+				//~ App.user.fetch({
+					//~ success : function(user){
+						//~ App.fabricToolsChannel.trigger("goto:chapter", user.get("field_mychapters")[0].target_id);
+					//~ }
+				//~ });
+			},
+			gotoChapter : function(chapter) {
+				App.nprogress.start();
+				App.bookChannel.trigger("goto:chapter", chapter);
+			}
+		});
+		this.router = new _Workspace;
 	},
 	_setupLayoutRegions		: function(options){
 		App.layoutChannel.trigger('set:content', 		require('./components/fabric'));
@@ -38,6 +63,7 @@ var _App = {
 		//~ this.layoutChannel.trigger('set:topToolbar', require('./components/topToolbar'));
 		App.layoutChannel.trigger('set:bookPreview', 	require('./components/bookPreview'));
 		App.layoutChannel.trigger('set:dialogs', 		require('./components/dialogs'));
+		
 	},
 	_initBackboneRadioLog	: function(options){
 		if(options.debug){
@@ -113,7 +139,7 @@ var _App = {
 					App.fabricToolsChannel.trigger("dialog:templates");
 				break;
 				case 54:// keyboard key = 6
-					//~ App.fabricToolsChannel.trigger("dialog:image");
+					App.fabricToolsChannel.trigger("dialog:chapterBrowser");
 				break;
 				case 55:// keyboard key = 7
 					App.fabricToolsChannel.trigger("add:text", "לחץ להוספת טקסט");
@@ -139,6 +165,7 @@ var _App = {
 			}
 		};
 	},
+
 };
 return  App._.extend(new App.Marionette.Application(_App), App);
 };
