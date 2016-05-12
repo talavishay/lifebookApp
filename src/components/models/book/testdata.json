@@ -1,0 +1,33 @@
+module.exports = {
+	title : "",
+	chapters : [
+		{
+				delta : 0,
+				title : "aaa",
+				pages :[
+					{
+						pageNumber : 0,
+						composition : {}
+					},
+					{
+						pageNumber : 1,
+						composition : {}
+					},
+				]
+		},
+		{
+				delta : 1,
+				title : "bbb",
+				pages :[
+					{
+						pageNumber : 0,
+						composition : {}
+					},
+					{
+						pageNumber : 1,
+						composition : {}
+					},
+				]
+		}
+	]
+};
