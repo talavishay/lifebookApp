@@ -62,7 +62,6 @@ App.pages.removePage = function(){
 //~ };
  App.pages.moveUp = function(model) {
   var index = this.indexOf(model);
-
   if (index > 0){
     App.pages.swap(index, index-1);
   }
@@ -78,8 +77,10 @@ App.pages.moveDown =  function(model) {
 
 App.pages.swap = function (indexA, indexB) {
   this.models[indexA] = this.models.splice(indexB, 1, this.models[indexA])[0];
-  App.layout.bookPreview.currentView.render();
-}
+  this.trigger("sort");
+  App.chapter.compositions.reset(this.models);
+  App.bookChannel.trigger("chapter:sort", App.chapter, this);
+};
 //~ App.pages.loadFirtPage = function(){
 	//~ App.canvas.loadFromJSON(App.pages.first().get("data")[0].value, App.canvas.renderAll.bind(App.canvas));
 	//~ App.pages.first().set({"active" : true});

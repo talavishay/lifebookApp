@@ -1,5 +1,3 @@
-//~ App.testdata = require('./testdata.json');
-
 var chapters =  require('./chapters/index.js'),
 	chapter =  require('./chapters/chapter.js'),
 	//~ doit = function(chapterId){
@@ -15,7 +13,10 @@ var chapters =  require('./chapters/index.js'),
 		var compositions = model.pages.map(function(model){
 				return model.composition;
 		});
+		
 		App.pages.reset(compositions);
+		App.chapter = model;
+		App.chapter.compositions = App.pages.clone();
 		App.nprogress.done();
 		
 	};
@@ -23,9 +24,7 @@ App.chapters =  new chapters;
 App.bookChannel.on({
 	"user:chapters" : function(user){
 		App._.each(user.get("field_mychapters"), function(item){
-			item.id = item.target_id;
-			var _c =  new chapter(item);
-			_c.url = item.url+"?_format=json";
+			var _c =  new chapter({ id : item.target_id});
 			_c.fetch({
 				success : function(chpater, response, options){
 					var pages = chpater.pages,

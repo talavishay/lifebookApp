@@ -8,6 +8,7 @@ var view = {
 		collectionEvents : {
 				"sync" : "_render",
 				"remove" : "_render",
+				"sort" : "_render",
 		},
 		_render :   function(){
 			this.render();
