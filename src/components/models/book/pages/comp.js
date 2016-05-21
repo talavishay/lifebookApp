@@ -11,7 +11,7 @@ var comp = {
 	url		: function(){
 		var format = '?_format=json';
 			return isNaN(parseInt(this.id)) ? 
-				'/lifebook/composition' + format :
+				'/entity/composition' + format :
 				'/lifebook/composition/'+ this.id + format;
 	},
 	sync		: function(method, model, options)  {
@@ -51,7 +51,7 @@ var comp = {
 	},
 	_toExtendedJSON: function() {
 		//~ var attrs = App._.pick(this.attributes, 'data', 'meta');
-		var attrs = App._.omit(this.attributes, 'name' ,'url', 'changed', 'created','uuid', 'user_id', 'status', 'langcode', 'target_id', 'target_id', 'target_type' ,'target_uuid');
+		var attrs = App._.omit(this.attributes, 'url', 'changed', 'created','uuid', 'user_id', 'status', 'langcode', 'target_id', 'target_id', 'target_type' ,'target_uuid');
 		_.each(attrs, function(value, key) {
 			attrs[key] = [{ 'value': value }];
 		});
@@ -61,8 +61,8 @@ var comp = {
 	},
 	defaults :  {
 		name : "name",
-		data :"{'objects':[],'background' : null}",
-		meta :"{'preview':'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAABVCAIAAAHtYiAhAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+AFCg8RBswrHy4AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAgUlEQVRo3u3XQQqFMAxAwST3v3O8QLsoqBiZLDU8hvo/YnZ3rKZiM7+/kcsjqYPItKu5+xGcHZztcduevG3b/vM3TcVjIy0tLS0tPTLttSstLS0tLS0tLS0tLS0t/Y0P6ZHnAQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDf3eXKN0FicG67qgAAAAAElFTkSuQmCC'}",
+		data :'{"objects":[],"background" : null}',
+		meta :'{"preview":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAABVCAIAAAHtYiAhAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+AFCg8RBswrHy4AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAgUlEQVRo3u3XQQqFMAxAwST3v3O8QLsoqBiZLDU8hvo/YnZ3rKZiM7+/kcsjqYPItKu5+xGcHZztcduevG3b/vM3TcVjIy0tLS0tPTLttSstLS0tLS0tLS0tLS0t/Y0P6ZHnAQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDf3eXKN0FicG67qgAAAAAElFTkSuQmCC"}',
 	}
 }
 module.exports = App.Backbone.Model.extend(comp);

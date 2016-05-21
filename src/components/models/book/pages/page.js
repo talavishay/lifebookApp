@@ -3,7 +3,10 @@ var composition	= App.models.composition = require('./comp.js');
 
 var page = {
 	url		: function(){
-		return '/lifebook/pages/' + this.id + '?_format=json';
+		var format = '?_format=json';
+		return isNaN(parseInt(this.id)) ? 
+			'/entity/pages' + format :
+			'/lifebook/pages/' + this.id + '?_format=json';
 	},
 	parse: function(resp) {
 		if(resp.field_composition_ref){
@@ -13,7 +16,9 @@ var page = {
 		return this._fromExtendedJSON(resp);
 	},
 	initialize : function(options){
-		if(App._.isUndefined(this.id) && !App._.isUndefined(options.target_id)){
+		if(	App._.isUndefined(this.id)				&&
+			!App._.isUndefined(options) 			&&
+			!App._.isUndefined(options.target_id) 	){
 			this.id = options.target_id;
 			this.fetch();
 		};

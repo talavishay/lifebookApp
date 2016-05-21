@@ -4,7 +4,8 @@ var _App = {
 	onBeforeStart			: function() {
 		App.nprogress.start();
 		App.$(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
-			if(xhr.status === 403){
+			if(xhr.status === 403 && 
+			isNaN(parseInt(App.user.get("uid")))  ){
 				if(window.confirm("Not logged In..\n press OK to redirect to login page")){
 					window.location.href = '/user/login';
 				};				
