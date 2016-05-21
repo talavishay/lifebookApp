@@ -1,9 +1,7 @@
 #bookPreview{
 	background :black;
-/*
-	    min-height: 110px;
-*/
-	    color:white;
+	min-height: 70px;
+	color:white;
 }
 
 .bookPreview .left{

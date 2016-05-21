@@ -43,6 +43,7 @@ module.exports = App.Marionette.LayoutView.extend({
 		});
 	},
 	_scrolldAction : function(ev){
+		if(App.textEditor){		return;	};
 		if(ev.deltaY & !ev.shiftKey){
 			var _c = (ev.altKey) ? "left" : "top",
 				_step = this.model.get(_c)  - ev.deltaY*30;

@@ -15,10 +15,12 @@ module.exports = App.Marionette.LayoutView.extend({
 			"tools:show" : this.show,
 			"tools:destroy" : this.destroy
 		}, this);
+		App.textEditor = false;
 	},
 	destroy : function(){
 		if(this.tools.currentView){
 			this.tools.currentView.destroy();
+			App.textEditor = false;
 		};
 	},
 	show : function(){
@@ -27,6 +29,7 @@ module.exports = App.Marionette.LayoutView.extend({
 
 			case "i-text":
 			case "textbox":
+				App.textEditor = true;
 				var type = text;
 			break;
 

@@ -1,5 +1,11 @@
 /* text tools line 1 */
 
+.toolbox .editor{
+    direction: rtl;
+    min-width: 100%;
+    max-height: 200px !important;
+    overflow-y: scroll !important;
+}
 .toolbox .textColor{
   width: 12px;
   height: 15px;
