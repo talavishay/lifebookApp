@@ -1,4 +1,3 @@
-var pages	= require('../pages/index.js');
 var chapter = {
 	idAttribute: "id",
 	url		: function(){
@@ -9,13 +8,6 @@ var chapter = {
 	},
 	parse: function(resp) {
 		if(	!App._.isUndefined(resp)){
-			//~ if(!App._.isUndefined(resp.field_pages_ref)){
-				//~ this.pages = new pages(resp.field_pages_ref,{
-					//~ parse : true
-				//~ });
-				//~ this.pages.chapter =  this;
-			//~ };
-			//~ resp = App._.omit(resp, "target_id", "target_type", "target_uuid", "url");
 			return this._fromExtendedJSON(resp);
 		};
 	},

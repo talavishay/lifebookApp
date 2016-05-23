@@ -9,9 +9,9 @@ App.bookChannel.on({
 		var chapter =  new App.models.chapter(data.get("chapter"), {
 			 parse : true 
 		});
+		App.chapter = chapter;
 		chapter.pages = new App.collections.pages(data.get("pages"), {
 			parse	: true,
-			chapter : chapter
 		});
 		App.chapters.add(chapter);
 		
@@ -19,15 +19,17 @@ App.bookChannel.on({
 			model.composition.refPage = model;
 			return model.composition;
 		});
+		App.pages.reset(compositions);
+		App.chapter.compositions = App.pages.clone();
 		
 		chapter.pageObjects = new App.collections.pageObjects(data.get("pageObjects"), {
 			parse	: true,
 		});
 		App.fabricToolsChannel.trigger("pageObjects:reset", chapter.pageObjects);
 		
-		App.pages.reset(compositions);
-		App.chapter = chapter;
-		App.chapter.compositions = App.pages.clone();
+		
+		//TODO: loading first page as default ??
+		App.fabricToolsChannel.trigger("set:stage" 	,App.pages.first());
 	},
 	"goto:chapter" : function(chapterId){
 		var _chapter = App.chapter.get(chapterId);
