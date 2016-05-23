@@ -3,6 +3,11 @@ module.exports = function(App){
 var _App = {
 	onBeforeStart			: function() {
 		App.nprogress.start();
+		//TODO: move get token to edit mode..
+		jQuery.get('/rest/session/token').done(function f(csrfToken){
+			// Drupal8 rest POST/PATCHE/DELETE requirement
+			App.csrfToken = 	csrfToken;
+		});
 		App.$(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
 			if(xhr.status === 403 && 
 			isNaN(parseInt(App.user.get("uid")))  ){
