@@ -1,0 +1,8 @@
+div#addPageObjects {
+    position: fixed;
+    top: 50px;
+    right: 260px;
+    min-height: 181px;
+    background: red;
+    width: 140px;
+}
