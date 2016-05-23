@@ -1,50 +1,34 @@
-var chapters =  require('./chapters/index.js'),
-	chapter =  require('./chapters/chapter.js'),
-	//~ doit = function(chapterId){
-		//~ var pages = App.chapter.get(chapterId).pages,
-			//~ compositions = pages.map(function(model){
-				//~ return model.composition;
-			//~ });
-		//~ App.pages.set(compositions);
-		//~ App.nprogress.done();
-		
-	//~ };
-	doit = function(model){
-		var compositions = model.pages.map(function(model){
-				return model.composition;
-		});
-		
-		App.pages.reset(compositions);
-		App.chapter = model;
-		App.chapter.compositions = App.pages.clone();
-		App.nprogress.done();
-		
-	};
-App.chapters =  new chapters;
 App.bookChannel.on({
 	"user:chapters" : function(user){
 		App._.each(user.get("field_mychapters"), function(item){
-			var _c =  new chapter({ id : item.target_id});
-			_c.fetch({
-				success : function(chpater, response, options){
-					var pages = chpater.pages,
-						_doit = App._.after(pages.length, doit);
-					
-					pages.each(function(item){
-						item.on("sync" , function(page){
-							App.nprogress.inc();
-							page.composition.on("sync" , function(model){
-								App.nprogress.inc();
-								_doit(chpater);
-							});
-						});	
-					});
-				}
-			});
-			App.chapters.add(_c);
+			var _c =  new App.chapterResources({id : item.target_id});
+			_c.fetch();
 		});
 	},
-	
+	"init:chapter" : function(data){
+		var chapter =  new App.models.chapter(data.get("chapter"), {
+			 parse : true 
+		});
+		chapter.pages = new App.collections.pages(data.get("pages"), {
+			parse	: true,
+			chapter : chapter
+		});
+		App.chapters.add(chapter);
+		
+		var compositions = chapter.pages.map(function(model){
+			model.composition.refPage = model;
+			return model.composition;
+		});
+		
+		chapter.pageObjects = new App.collections.pageObjects(data.get("pageObjects"), {
+			parse	: true,
+		});
+		App.fabricToolsChannel.trigger("pageObjects:reset", chapter.pageObjects);
+		
+		App.pages.reset(compositions);
+		App.chapter = chapter;
+		App.chapter.compositions = App.pages.clone();
+	},
 	"goto:chapter" : function(chapterId){
 		var _chapter = App.chapter.get(chapterId);
 		if(!App._.isUndefined(App.chapter) && !App._.isUndefined(_chapter)){
@@ -68,6 +52,40 @@ App.bookChannel.on({
 					});	
 				});
 			}
+		});
+	},
+	"user:chaptersxxxx" : function(user){
+		var doit = function(model){
+			var compositions = model.pages.map(function(model){
+					return model.composition;
+			});
+			
+			App.pages.reset(compositions);
+			App.chapter = model;
+			App.chapter.compositions = App.pages.clone();
+			App.nprogress.done();
+			
+		};
+
+		App._.each(user.get("field_mychapters"), function(item){
+			var _c =  new App.models.chapter({ id : item.target_id});
+			_c.fetch({
+				success : function(chpater, response, options){
+					var pages = chpater.pages,
+						_doit = App._.after(pages.length, doit);
+					
+					pages.each(function(item){
+						item.on("sync" , function(page){
+							App.nprogress.inc();
+							page.composition.on("sync" , function(model){
+								App.nprogress.inc();
+								_doit(chpater);
+							});
+						});	
+					});
+				}
+			});
+			App.chapters.add(_c);
 		});
 	},
 	

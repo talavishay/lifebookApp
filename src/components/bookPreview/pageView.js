@@ -34,24 +34,20 @@ var view = {
 			this._save();
 		};
 		if(ev.ctrlKey){
-			this.model.destroy();
+			//~ this.model.destroy();
 		} else {
-			App.nprogress.start();
-			App.fabricToolsChannel.trigger("object:background:remove");
-			App.canvas.clear();
-			App.resolver
-				.initialize(JSON.parse(this.model.get("data")))
-				.then(function(stage){
-					App.canvas.loadFromJSON(stage, App.canvas.renderAll.bind(App.canvas));
-					App.nprogress.done();
-				});			
+			App.fabricToolsChannel.trigger("set:stage", this.model);
+			this.model.collection.invoke("set",{active : false});
+			this.model.set({active : true});
 			
 		}
 	},
 	_save : function(){
-		var id = this.model.id,
-			format = '?_format=json',
-			_url =  isNaN(parseInt(id)) ? '/entity/composition' + format : '/lifebook/composition/'+ id + format;
+		//~ var id = this.model.id,
+			//~ format = '?_format=json',
+			//~ _url =  isNaN(parseInt(id)) ?
+				//~ '/entity/composition' + format :
+				//~ '/lifebook/composition/'+ id + format;
 			
 		this.model.save({
 			
@@ -64,4 +60,5 @@ var view = {
 			url : _url
 		});
 	},
-});
+};
+module.exports = App.Marionette.ItemView.extend(view);

@@ -38,6 +38,7 @@ var obj = {
 			 //~ 'object:moving' : this.updateClip,
 		});
 		this.listenTo(App.fabricToolsChannel,{
+			"set:stage" 				:this.setStage,
 			"object:delete" 			:this.objectDelete,
 			"object:background:remove" 	:this.backgroundDelete,
 			"object:opacity"			:this.objectOpacity,
@@ -57,6 +58,19 @@ var obj = {
 			"renderall"					:this.canvas.renderAll.bind(this.canvas),
 			"print"						:this.print,
 		}, this);
+	},
+	setStage : function(pageModel) {
+		App.nprogress.start();
+		App.fabricToolsChannel.trigger("object:background:remove");
+		App.canvas.clear();
+		App.resolver
+			.initialize(JSON.parse(pageModel.get("data")))
+			.then(function(stage){
+				App.canvas.loadFromJSON(stage, App.canvas.renderAll.bind(App.canvas));
+				App.nprogress.done();
+				App.page = pageModel;
+			});			
+			
 	},
 	print : function(multiplier) {
 		window.open(window.App.canvas.toDataURL({
