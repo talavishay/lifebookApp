@@ -72,7 +72,8 @@ App.nprogress._onprogress = function(e)  {
 		App.nprogress.set((Math.floor((e.loaded/e.total) * 100)) / 100):
 		App.nprogress.inc();
 };
-		
+var layout = require('./components/layout');
+App.layout = new layout;//~ view.el : "body" ..
 /***********************************************************************
  * internal dependencies / app modules..
  * 
@@ -82,10 +83,16 @@ App.D8models			= require('./components/models/D8models');
 //~ App.D8models			= require('./components/models/D8models')(App);
 App.models 				=  {};
 App.models.files		= require('./components/models/file')(App);
+App.models.chapter		= require('./components/models/book/chapters/chapter.js');
+App.models.page 		= require('./components/models/book/pages/page.js');
+App.models.composition 	= require('./components/models/book/pages/comp.js');
 App.collections 		= require('./components/collections')(App);
+App.collections.chapters= require('./components/models/book/chapters/index.js');
+App.collections.pages	= require('./components/models/book/pages/index.js');
+App.collections.pageObjects= require('./components/models/book/chapters/pageObjects/index.js');
 //~ App.canvasImages		= new App.collections.canvasImages();
-App.files				= new App.collections.files();
-
+App.files		= new App.collections.files;
+App.chapters	= new App.collections.chapters;
 
 // canvas image url resolver
 // make sure a local objectUrl as valid for each image in the canvas
@@ -95,8 +102,8 @@ App.caman			= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
-
 require('./components/models/book');
+App.chapterResources = require('./components/models/book/chapters/chapterResources.js');
 require('./components/user');
 
 /***********************************************************************

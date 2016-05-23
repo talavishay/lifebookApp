@@ -11,24 +11,20 @@ var _App = {
 				};				
 			}
 		});
-		var layout = require('./components/layout');
-		this.layout = new layout;//~ view.el : "body" ..
 		this.layout.render();
 		App.user.fetch({
 			success : function(user){
 				App.bookChannel.trigger("user:chapters", user);
 			}
 		});
-	},
-	onStart 				: function(options){
 		
 		App._.bindAll(this, '_keyboardAction');
 		var options 	=  options || {"debug":'fabricTools'}; 
 		if(options.debug) this._initBackboneRadioLog(options);
-
+	},
+	onStart 				: function(options){
 		require('./components/pages');
 		require('./components/templates');
-		
 		this.files.fetch();
 		this._setupLayoutRegions();
 		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
@@ -36,19 +32,7 @@ var _App = {
 		var _Workspace = Backbone.Router.extend({
 			routes: {
 				"chapter/:chapter"	: "gotoChapter",
-				"*path"				:	"_default",
-			},
-			_default : function(){
-				//TODO: move to edit mode ?
-				jQuery.get('/rest/session/token').done(function f(csrfToken){
-					// Drupal8 rest POST/PATCHE/DELETE requirement
-					App.csrfToken = 	csrfToken;
-				});
-				//~ App.user.fetch({
-					//~ success : function(user){
-						//~ App.fabricToolsChannel.trigger("goto:chapter", user.get("field_mychapters")[0].target_id);
-					//~ }
-				//~ });
+				//~ "*path"				:	"_default",
 			},
 			gotoChapter : function(chapter) {
 				App.nprogress.start();
