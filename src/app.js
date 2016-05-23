@@ -16,6 +16,11 @@ var _App = {
 				};				
 			}
 		});
+		App.$(document).bind("ajaxSend", function(){
+			App.nprogress.start();
+		}).bind("ajaxComplete", function(){
+			App.nprogress.done();
+		});
 		this.layout.render();
 		App.user.fetch({
 			success : function(user){
