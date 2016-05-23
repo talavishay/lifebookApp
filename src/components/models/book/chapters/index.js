@@ -3,7 +3,7 @@ var chapters = {
 	model		: require('./chapter.js'),
 	initialize	: function(){
 		this.on({
-			"sync"	:	function(){
+			"all"	:	function(){
 				App.bookChannel.trigger("chapters", this.models);
 			}
 		},this);

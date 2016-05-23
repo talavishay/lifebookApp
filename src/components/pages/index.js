@@ -5,29 +5,44 @@ App.fabricToolsChannel.on({
 		"page:add"		: App.pages.add,
 		"page:delete"	: App.pages.remove
 });
+App.bookChannel.on({
+				"adding:page:start" :function(){
+					App.nprogress.start();
+					App.addingPage = true;
+				},
+				"adding:page:done" :function(){
+					App.addingPage = false;
+					App.nprogress.done();
+				},
+			}, this);
 
 App.pages.addPage = function(){
-	App.pages.invoke('set', {"active": false});
-	var _preview = 	App.canvas.toDataURL({
-						format: 'png',
-						multiplier: .1
-		}),
-		meta = JSON.stringify({ preview : _preview });
-	App.resolver
-		.initialize()
-		.then(function(stage){
-			App.pages.create({
-				data : JSON.stringify(stage),
-				meta :	meta
-			},{
-				url : '/entity/composition'
-			});
-		});
+	App.bookChannel.trigger("adding:page:start");
+	if(App.pages.length == parseInt(App.chapter.get("field_max_pages")) ) {
+		alert("cant add a new page ! \nreached chapter max pages ");
+		return;
+	}
+	var newPage = new App.models.page,
+		newComp = new App.models.composition;
+		
+	newPage.composition = newComp;
+	App.pages.add(newPage.composition);
+	App.chapter.pages.add(newPage);
 
-	//clear canvas by loading an empty canvas..
-	//~ App.canvas.loadFromJSON(App.pages.first().defaults.data, App.canvas.renderAll.bind(App.canvas));
-	App.fabricToolsChannel.trigger("object:background:remove");
-	App.canvas.clear();
+	newComp.save({},{
+		success : function(model){
+			newPage.save({
+				"field_composition_ref" : [{
+						target_id : model.id,
+						target_type : "composition"	}]
+			},{
+				success : function(model){
+					App.bookChannel.trigger("chapter:sort", App.chapter, App.pages);
+					App.bookChannel.trigger("adding:page:done");
+				}
+			});
+		}
+	});
 };
 
 App.pages.removePage = function(){

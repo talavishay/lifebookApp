@@ -64,5 +64,5 @@ var comp = {
 		data :'{"objects":[],"background" : null}',
 		meta :'{"preview":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAABVCAIAAAHtYiAhAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+AFCg8RBswrHy4AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAgUlEQVRo3u3XQQqFMAxAwST3v3O8QLsoqBiZLDU8hvo/YnZ3rKZiM7+/kcsjqYPItKu5+xGcHZztcduevG3b/vM3TcVjIy0tLS0tPTLttSstLS0tLS0tLS0tLS0t/Y0P6ZHnAQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDf3eXKN0FicG67qgAAAAAElFTkSuQmCC"}',
 	}
-}
+};
 module.exports = App.Backbone.Model.extend(comp);
