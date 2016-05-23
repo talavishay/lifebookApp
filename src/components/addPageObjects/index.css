@@ -2,10 +2,11 @@ div#addPageObjects {
     position: fixed;
     top: 50px;
     right: 260px;
+    overflow-y :scroll;
     min-height: 181px;
     width: 140px;
     background : white;
-    border-radius :10px;
+    border-radius :5px;
     box-shadow: 0px 0px 2px 1px black;
     padding : 5px;
 }
