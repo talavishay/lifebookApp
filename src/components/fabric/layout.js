@@ -2,6 +2,7 @@ var Tools			= require("./tools"),
 	view			= require('./view.js'),
 	addPageObjects	= require('../addPageObjects/view.js'),
 	pageNotes		= require('../pageNotes/view.js'),
+	pageType		= require('../pageType/view.js'),
 	_state			= require('./state.js');
 
 module.exports = App.Marionette.LayoutView.extend({
@@ -11,6 +12,7 @@ module.exports = App.Marionette.LayoutView.extend({
 		tools			: '#tools',
 		addPageObjects	: '#addPageObjects',
 		pageNotes		: '#pageNotes',
+		pageType		: '#pageType',
 	},
 	model : new _state,
 	modelEvents : {
@@ -32,6 +34,7 @@ module.exports = App.Marionette.LayoutView.extend({
 		this.tools.show(new Tools);
 		this.addPageObjects.show(new addPageObjects);
 		this.pageNotes.show(new pageNotes);
+		this.pageType.show(new pageType);
 		
 		this.$el.mousewheel( this._scrolldAction);
 	},

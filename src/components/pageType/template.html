@@ -1,0 +1,16 @@
+<%
+
+var pageType = ["--", "cover", "group", "student", "greetings"],
+	selected = "--";
+if(typeof field_page_type !== "undefined"){
+	selected = field_page_type;
+};
+%>
+Page type:</br>
+
+<select class="pageType">
+<% _.each(pageType, function(type){ %>
+	<option <%if(type === selected){%> selected="selected" <%}%> value="<%= type %>"><%= type %></option>
+<% }) %>
+</select>
+
