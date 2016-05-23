@@ -26,6 +26,7 @@ App.pages.addPage = function(){
 		newComp = new App.models.composition;
 		
 	newPage.composition = newComp;
+	newPage.composition.refPage = newPage;
 	App.pages.add(newPage.composition);
 	App.chapter.pages.add(newPage);
 
