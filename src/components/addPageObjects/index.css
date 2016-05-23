@@ -3,6 +3,18 @@ div#addPageObjects {
     top: 50px;
     right: 260px;
     min-height: 181px;
-    background: red;
     width: 140px;
+    background : white;
+    border-radius :10px;
+    box-shadow: 0px 0px 2px 1px black;
+    padding : 5px;
+}
+div#addPageObjects ul{
+	margin-top: 1em;
+	padding: 0 0px 0 20px;
+}
+
+div#addPageObjects li{
+padding : 3px 0;
+cursor: pointer;
 }

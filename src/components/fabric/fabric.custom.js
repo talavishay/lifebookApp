@@ -270,6 +270,14 @@ fabric.ClipedImage.async = true;
 /***********************************************************************
  * 	fabric.util.createClass(fabric.Rect, backgroundGrad)
 ***********************************************************************/
+var pageObject = require('./types/pageObject.js');
+fabric.PageObject = fabric.util.createClass(fabric.Textbox, pageObject);
+fabric.PageObject.fromObject = function(object, callback) {
+		return new fabric.PageObject(object.text, object);
+};
+/***********************************************************************
+ * 	fabric.util.createClass(fabric.Rect, backgroundGrad)
+***********************************************************************/
 var backgroundGrad = require('./types/backgroundGrad.js');
 fabric.BackgroundGrad = fabric.util.createClass(fabric.Rect, backgroundGrad);
 fabric.BackgroundGrad.fromObject = function(object, callback) {

@@ -1,4 +1,33 @@
 var pageObjectStudent = {
+	idAttribute: "id",
+	removePageRef 	: function(){
+		var pageObject = this;
+			page = App.page;
+
+		page._save(function(){
+				pageObject.save("field_page",[]);
+		});
+	},
+	addPageRef 		: function(){
+		var pageObject = this;
+			page = App.page;
+
+		page._save(function(){
+				pageObject.save("field_page",[{
+					"target_id" : page.id,
+					"target_type" : "pages",
+				}]);
+		});
+		//~ page.save({},{
+			//~ success : function(){
+				//~ pageObject.save("field_page",[{
+					//~ "target_id" : page.id,
+					//~ "target_type" : "pages",
+				//~ }]);
+			//~ }
+		//~ });
+		
+	},
 	url		: function(){
 		var format = '?_format=json';
 			return isNaN(parseInt(this.id)) ? 

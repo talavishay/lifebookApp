@@ -29,6 +29,7 @@ module.exports = App.Marionette.LayoutView.extend({
 
 			case "i-text":
 			case "textbox":
+			case "pageObject":
 				App.textEditor = true;
 				var type = text;
 			break;

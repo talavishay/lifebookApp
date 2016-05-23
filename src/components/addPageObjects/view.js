@@ -5,8 +5,12 @@ var view = {
 	childViewContainer: ".list",
 	initialize	: function(){
 		this.listenTo(App.fabricToolsChannel,{
-			"pageObjects:reset" : this.loadObjects
+			"pageObjects:reset" : this.loadObjects,
 		}, this);
+		this.listenTo(App.bookChannel,{
+			"chapter:sort" : this.render
+		}, this)
+			
 	},
 	loadObjects	: function(pageObjects){
 		this.collection = pageObjects;

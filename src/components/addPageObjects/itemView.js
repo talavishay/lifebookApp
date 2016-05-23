@@ -1,10 +1,16 @@
 var view = {
 	template : require('./item.html'),
-	Events : {
+	modelEvents : {
+		"change" : "render"
+	},
+	events : {
 		"click" : "_addToPage"
 	},
 	_addToPage : function(){
-		console.log(this.model);
+		if(!this.model.get("field_page").length){
+			App.fabricToolsChannel.trigger("add:pageObject", this.model);
+		};
+			
 	}
 }
-module.exports = App.Marionette.ItemView.extend(view)
+module.exports = App.Marionette.ItemView.extend(view);

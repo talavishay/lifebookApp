@@ -1,1 +1,7 @@
-<li><%=name%> <%=field_last_name%></li>
+<%
+var onPage = "";
+if(_.isArray(field_page) && field_page.length && field_page[0].target_id){
+	onPage = App.pages.indexOf(App.pages.get(field_page[0].target_id)) + 1;	
+};
+%>
+<li><%=name%> <%=field_last_name%> <%if(onPage !== ""){%> <%=onPage%> <%}%></li>

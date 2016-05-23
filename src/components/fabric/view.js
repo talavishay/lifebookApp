@@ -50,6 +50,7 @@ var obj = {
 			"object:move:rand"			:this._rand_positioning,
 			"image:add caman:done" 		:this.addImage,
 			"add:text" 					:this.addText,
+			"add:pageObject" 			:this.addPageObject,
 			"add:background"			:this.dataURItoBackground,
 			"set:backgroundOpacity" 	:this.setBackgroundOpacity,
 			"set:backgroundColor"		:this.setBackgroundColor,
@@ -59,6 +60,25 @@ var obj = {
 			"print"						:this.print,
 		}, this);
 	},
+	addPageObject : function(model){
+		var text = model.get("name") +  " " + model.get("field_last_name"),
+			pageObject = new fabric.PageObject(text, {
+				width		:this.canvas.width*.5,
+				fontFamily	: 'alef',
+				fontSize	: 25,
+				originX		: 'left',
+				originY		: 'top',
+				textAlign	: 'center',
+				pageObjectId: model.id
+			}),
+			h = this.canvas.height + pageObject.height;
+
+		pageObject.set({
+			left : this.canvas.width/10,
+			top: _.random(h*.1, h*.3),
+		});
+		this.canvas.add(pageObject);
+	},	
 	setStage : function(pageModel) {
 		App.nprogress.start();
 		App.fabricToolsChannel.trigger("object:background:remove");
