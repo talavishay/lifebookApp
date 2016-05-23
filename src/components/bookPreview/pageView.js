@@ -1,4 +1,4 @@
-module.exports = App.Marionette.ItemView.extend({
+var view = {
 	tagName : "div",
 	className : "page",
 	template : require('./page.html'),
