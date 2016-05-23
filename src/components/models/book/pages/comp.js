@@ -51,13 +51,24 @@ var comp = {
 	},
 	_toExtendedJSON: function() {
 		//~ var attrs = App._.pick(this.attributes, 'data', 'meta');
-		var attrs = App._.omit(this.attributes, 'url', 'changed', 'created','uuid', 'user_id', 'status', 'langcode', 'target_id', 'target_id', 'target_type' ,'target_uuid');
+		var attrs = App._.omit(this.attributes, 'active', 'url', 'changed', 'created','uuid', 'user_id', 'status', 'langcode', 'target_id', 'target_id', 'target_type' ,'target_uuid');
 		_.each(attrs, function(value, key) {
 			attrs[key] = [{ 'value': value }];
 		});
 		attrs.id = this.id;
 		attrs.name = this.attributes.name;
 		return attrs; 
+	},
+	_save : function(cb){
+		this.save({
+			"data"		: JSON.stringify(App.canvas.toJSON()),
+			"meta"	: JSON.stringify({ preview : App.canvas.toDataURL({
+						format: 'png',
+						multiplier: .1})
+					})
+		} , {
+			success : cb
+		});
 	},
 	defaults :  {
 		name : "name",

@@ -49,16 +49,7 @@ var view = {
 				//~ '/entity/composition' + format :
 				//~ '/lifebook/composition/'+ id + format;
 			
-		this.model.save({
-			
-			"data"		: JSON.stringify(App.canvas.toJSON()),
-			"meta"	: JSON.stringify({ preview : App.canvas.toDataURL({
-						format: 'png',
-						multiplier: .1})
-					})
-			},{
-			url : _url
-		});
+		this.model._save();
 	},
 };
 module.exports = App.Marionette.ItemView.extend(view);
