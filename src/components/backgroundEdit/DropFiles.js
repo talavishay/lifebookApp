@@ -3,9 +3,9 @@ var Marionette = App.Marionette;
 module.exports = Marionette.Behavior.extend({
 	onAttach: function(){
 		App._.bindAll(this, "_handleFiles");
-		App.dragDrop(this.view.el, {
-			onDrop :this._handleFiles,
-		});
+		//~ App.dragDrop(this.view.el, {
+			//~ onDrop :this._handleFiles,
+		//~ });
 		
 	},
 	_handleFiles : function (files) {

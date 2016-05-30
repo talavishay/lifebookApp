@@ -23,7 +23,7 @@ var CompositeView = {
 		this.collection.fetch();		
 	},
 	onAttach : function(){
-		App.dragDrop(this.el, this._handleDrop);
+		//~ App.dragDrop(this.el, this._handleDrop);
 	},
 	_handleDrop : function (files) {
 			App.fabricFilesChannel.trigger("file:image:input", files[0]);	
