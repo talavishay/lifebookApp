@@ -26,11 +26,11 @@ App.Backbone.Model.prototype.idAttribute = '_id';
 App.$= window.Backbone.$= window.jQuery = require('jquery');
 App._ = window._ 						= require('underscore');
 App.Marionette 							= require('backbone.marionette');
-//~ window.PouchDB 							= require('pouchdb');
+window.PouchDB 							= require('pouchdb');
 App.Backbone.LocalStorage				= require('backbone.localstorage');
 
 // jquery dependnt plugins
-//~ require('jcrop');
+require('jcrop');
 require('jquery-mousewheel')(window.jQuery);
 require('spectrum-colorpicker'),
 // jquery dependnt plugins ## END
@@ -47,7 +47,7 @@ App.bookChannel		= App.Backbone.Radio.channel('book');
 ***********************************************************************/
 App.Backbone.syphon 	= require('backbone.syphon');
 //~ App.Backbone.upload = require('backbone-model-file-upload');
-//~ App.Backbone.Hoard		= require('backbone.hoard')
+App.Backbone.Hoard		= require('backbone.hoard')
 App.BackbonePouch		= require('backbone-pouch');
 
 /***********************************************************************
@@ -55,14 +55,13 @@ App.BackbonePouch		= require('backbone-pouch');
 ***********************************************************************/
 App.routePattern		= require('route-pattern');
 //~ App.await 				= require('await');
-//~ App.dataURItoBlob 		= require('./misc/dataURItoBlob.js');
+App.dataURItoBlob 		= require('./misc/dataURItoBlob.js');
 App.fabric 				= require('./components/fabric/fabric.custom.js');
-window.PouchDB = require('pouchdb');//~ App.PouchDB.debug.enable('*');
-App.PouchDB = window.PouchDB ;
+App.PouchDB				= require('pouchdb');//~ App.PouchDB.debug.enable('*');
 App.blobUtil			= require('blob-util');
 App.objectHash			= require('object-hash');
 App.screenfull			= require('screenfull');
-//~ App.dragDrop			= require('drag-drop');
+App.dragDrop			= require('drag-drop');
 
 //TODO: require('./components/jimp');
 App.nprogress 			= require('nprogress');
@@ -99,7 +98,7 @@ App.chapters	= new App.collections.chapters;
 // make sure a local objectUrl as valid for each image in the canvas
 App.crop			= require('./components/croper')();
 App.resolver		= require('./components/resolver')(App);
-//~ App.caman			= require('./components/caman').initialize();
+App.caman			= require('./components/caman').initialize();
 //TODO: ..caman script is loaded in index.html 
 //TODO: cleanup namespace _caman / caman 
 //~ App._caman				= App.caman.initialize();
