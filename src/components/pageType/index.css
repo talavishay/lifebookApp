@@ -1,7 +1,10 @@
 div#pageType {
     position: fixed;
-    top: 490px;
+    top: 438px;
+/*
     right: 260px;
+*/
+    right: 0px;
     min-height: 40px;
     width: 140px;
     background : white;

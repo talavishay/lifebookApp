@@ -1,7 +1,3 @@
-//~ var composition	= App.models.composition = require('./comp.js');
-//~ var composition	= App.models.composition ;
-	//~ d8model		= require('../../D8models/d8model.js');
-
 var page = {
 	idAttribute : "id",
 	url			: function(){
@@ -11,11 +7,11 @@ var page = {
 			'/lifebook/pages/' + this.id + '?_format=json';
 	},
 	parse: function(resp) {
-		if(_.isUndefined(resp)) return;
-		if(	!_.isUndefined(resp.compositions)&&resp.compositions.length){
+		if(App._.isUndefined(resp)) return;
+		if(	!App._.isUndefined(resp.compositions)&&resp.compositions.length){
 			this.attachComposition(resp.compositions);
 		};
-		if(	!_.isUndefined(resp.page)){
+		if(	!App._.isUndefined(resp.page)){
 			return this._fromExtendedJSON(resp.page);
 		};
 		return this._fromExtendedJSON(resp);
@@ -65,13 +61,13 @@ var page = {
 		return ret;
 	},
 	_fromExtendedJSON: function(resp) {
-		resp = _.mapObject(resp, function(val, key) {
-			if(_.isArray(val)){
+		resp = App._.mapObject(resp, function(val, key) {
+			if(App._.isArray(val)){
 				if( val.length ){
-					if(!_.isUndefined(val[0].value)){
+					if(!App._.isUndefined(val[0].value)){
 						return val[0].value;
 					}
-					if(!_.isUndefined(val[0].target_id)){
+					if(!App._.isUndefined(val[0].target_id)){
 						return val;
 					}
 				}else {
@@ -84,17 +80,13 @@ var page = {
 	_toExtendedJSON: function() {
 		//~ var attrs = App._.pick(this.attributes, 'data', 'meta');
 		var attrs = App._.omit(this.attributes, 'url', 'changed', 'created','uuid', 'user_id', 'status', 'langcode', 'target_id', 'target_id', 'target_type' ,'target_uuid');
-		_.each(attrs, function(value, key) {
+		App._.each(attrs, function(value, key) {
 			attrs[key] = [{ 'value': value }];
 		});
 		if(this.attributes.field_composition_ref){
 			attrs.field_composition_ref = this.attributes.field_composition_ref
 		};
-			
 		return attrs; 
 	},
 }
-//~ module.exports = d8model.extend(page);
 module.exports = App.Backbone.Model.extend(page);
-
- 

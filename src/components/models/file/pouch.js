@@ -84,7 +84,7 @@ var file = {
 	drupalize : function(){
 		var draft = this;
 		return new Promise(function(resolve, reject){			
-			var drupalFile = new App.models.D8models.file();
+			var drupalFile = new App.D8models.file();
 			drupalFile.set("_file", draft);
 			drupalFile._saveFile()
 				.then(function(res){

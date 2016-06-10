@@ -13,8 +13,8 @@ App.bookChannel.on({
 		chapter.pages = new App.collections.pages(data.get("pages"), {
 			parse	: true,
 		});
-		App.chapters.add(chapter);
-		
+		App.Book.chapters.add(chapter);
+
 		var compositions = chapter.pages.map(function(model){
 			model.composition.refPage = model;
 			return model.composition;

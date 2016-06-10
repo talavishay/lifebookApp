@@ -1,0 +1,17 @@
+div#actionWidget {
+    position: fixed;
+    bottom: 110px;
+    right: 0px;
+    overflow-y: scroll;
+    min-height: 30px;
+    width: 240px;
+    background: white;
+    border-radius: 0 5px 0 5px;
+    box-shadow: 0px 0px 2px 1px black;
+    padding: 5px;
+    display: flex;
+    z-index: 9;
+}
+div#actionWidget button{
+	padding : 3 5px;
+}

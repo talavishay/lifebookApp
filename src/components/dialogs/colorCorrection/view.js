@@ -46,7 +46,7 @@ var view = {
 		this.handleInput();
 	},
 	handleInput : App._.debounce(	function(ev){
-		this.model.set(App.Backbone.Syphon.serialize(this));
+		this.model.set(App.Backbone.syphon.serialize(this));
 	}, 500),
 
 	getTintColor 	: function(ev){

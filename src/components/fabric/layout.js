@@ -3,6 +3,7 @@ var Tools			= require("./tools"),
 	addPageObjects	= require('../addPageObjects/view.js'),
 	pageNotes		= require('../pageNotes/view.js'),
 	pageType		= require('../pageType/view.js'),
+	actionWidget	= require('../actionWidget/view.js'),
 	_state			= require('./state.js');
 
 module.exports = App.Marionette.LayoutView.extend({
@@ -13,6 +14,7 @@ module.exports = App.Marionette.LayoutView.extend({
 		addPageObjects	: '#addPageObjects',
 		pageNotes		: '#pageNotes',
 		pageType		: '#pageType',
+		actionWidget	: '#actionWidget',
 	},
 	model : new _state,
 	modelEvents : {
@@ -35,20 +37,20 @@ module.exports = App.Marionette.LayoutView.extend({
 		this.addPageObjects.show(new addPageObjects);
 		this.pageNotes.show(new pageNotes);
 		this.pageType.show(new pageType);
+		this.actionWidget.show(new actionWidget);
 		
-		this.$el.mousewheel( this._scrolldAction);
 	},
-	onAttach :function(){
-		var that = this;
-//TODO: load jQuery.event.drag proprely..
-		jQuery(document).ready(function(){
-			jQuery(that.el)
-			.drop("end",function(ev,dd){
-				var src = App.files.getSrcId(dd.drag.dataset.id);
-				if(src){
-					App.fabricToolsChannel.trigger("image:add" , src);
-				};
-			});
+	onRender :function(){
+		//~ this._hadleDragAndDrop();
+	},
+	_hadleDragAndDrop :function(){
+		this.$el.mousewheel( this._scrolldAction);
+		//~ //TODO: load jQuery.event.drag proprely..
+		App.$(that.el).drop("end",function(ev,dd){
+			var src = App.files.getSrcId(dd.drag.dataset.id);
+			if(src){
+				App.fabricToolsChannel.trigger("image:add" , src);
+			};
 		});
 	},
 	_scrolldAction : function(ev){

@@ -6,14 +6,14 @@ view = {
 		"change select" : "_switchChapter"
 	},
 	initialize	: function(){
-		this.listenTo(App.bookChannel,{
-			"chapters"		: this._chpaters,
+		this.listenTo(App.Book.chapters,{
+			"add"		: this._chpaters,
 		}, this);
 		this.model.on("add", this.render);
 	},
 	_chpaters	: function(){
-		if(App.chapters){
-			this.model.set("chapters", App.chapters.map(function(item){return {
+		if(App.Book.chapters){
+			this.model.set("chapters", App.Book.chapters.map(function(item){return {
 				name : item.get("name"),
 				id   : item.id
 			}}));
@@ -21,7 +21,7 @@ view = {
 		this.render();
 	},
 	switchChapter : function(chapterId){
-		var chapter = App.chapters.get(chapterId);
+		var chapter = App.Book.chapters.get(chapterId);
 		App.pages.set(chapter.compositions.models);
 		App.chapter = chapter;
 	},

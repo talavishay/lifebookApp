@@ -94,4 +94,4 @@ var pageObjectStudent = {
 		"field_student_text"	: "",
 	}
 };
-module.exports = Backbone.Model.extend(pageObjectStudent);
+module.exports = App.Backbone.Model.extend(pageObjectStudent);
