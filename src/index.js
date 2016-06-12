@@ -1,124 +1,129 @@
-'use strict';
-window.App = {
-		log				:function(event){
-		if(  !/getActiveObject/.test(event) &&  !/zoom:(in|out)/.test(event) && !/svg:dirs/.test(event) && !/worker:img:mask/.test(event) ){
-		//~ if(/caman/.test(event) ){
-				var span = App.$('<span class="logText"/>').html(event);
-				var msg = App.$('<div/>').append(span),
-					log = App.$("#log");
-				//~ if(!log.hasClass("active")){
-					//~ log.html(msg);
-					log.prepend(msg);
-					_.delay(function(){
-						//self destructing
-						msg.hide().remove();
-						//~ log.removeClass("active");
-					}, 4500);
-		}
-	},
+window._	= require('underscore');
+window.jQuery	= require('jquery');
+window.Backbone	= require('backbone');
+window.PouchDB  = require('pouchdb');
+//~ window.PouchDB.plugin(require('pouchdb-find'));
+
+App = {
+  _ : window._,
+  jQuery  : window.jQuery,
+  $       : window.jQuery,
+  Backbone: window.Backbone,	
+  PouchDB : window.PouchDB,	
 };
+require('./_tools/boot/progress.js');
+
+App = App._.extend({
 /***********************************************************************
- * 	CORE COMPONETNS
+	//TODO: this need to go into a "setup" phase ..?	
+	//TODO: impllement "setup" phase .. & ?? phases if your allready there +tea
+	//~ jimp				: require('./components/jimp'),
+	//~ await 				: require('await'),
+	//~ dataURItoBlob 		: require('./misc/dataURItoBlob.js'),
+	//~ dragDrop			: require('drag-drop'),
 ***********************************************************************/
-App.Backbone = window.Backbone			= require('backbone');
-//TODO: move to specific pouch models..
-App.Backbone.Model.prototype.idAttribute = '_id';
-App.$= window.Backbone.$= window.jQuery = require('jquery');
-App._ = window._ 						= require('underscore');
-App.Marionette 							= require('backbone.marionette');
-window.PouchDB 							= require('pouchdb');
-App.Backbone.LocalStorage				= require('backbone.localstorage');
+	routePattern		: require('route-pattern'),
+	blobUtil			: require('blob-util'),
+	//TODO: replace objectHash.. got to be some hash in pouch ..
+	objectHash			: require('object-hash'),
+	BackbonePouch		: require('backbone-pouch'),
+	// editables
+	backgrid 		 	: require('backgrid'),
+	fabric 				: require('./components/fabric/fabric.custom.js'),
+	screenfull			: require('screenfull'),
+
+}, App);
+
+App.Backbone = App._.extend({
+	/*	##Backbone Plugins 
+	//~ Backbone.upload : require('backbone-model-file-upload'),
+	//~ Backbone.Hoard		: require('backbone.hoard')
+	*******************************************************************/
+	Radio				  : require('backbone.radio'),
+	LocalStorage  : require('backbone.localstorage'),
+	syphon 				: require('backbone.syphon'),
+}, Backbone);
+
+ 
+App = App._.extend({
+	fabricToolsChannel	: App.Backbone.Radio.channel('fabric'),
+	layoutChannel		: App.Backbone.Radio.channel('layout'),
+	toolsChannel		: App.Backbone.Radio.channel('tools'),
+	bookChannel			: App.Backbone.Radio.channel('book'),
+  fabricFilesChannel			: App.Backbone.Radio.channel('files'),
+}, App);
+
+App.toolsChannel._tools = require('./_tools/index.js');
+App.bookChannel._tools = require('./components/models/book') ;
 
 // jquery dependnt plugins
-require('jcrop');
-require('jquery-mousewheel')(window.jQuery);
-require('spectrum-colorpicker'),
-// jquery dependnt plugins ## END
-/***********************************************************************
- * backbone Radio setup / App message bus
-***********************************************************************/
-App.Backbone.Radio 		= require('backbone.radio');
-App.fabricFilesChannel	= App.Backbone.Radio.channel('fabricFiles');
-App.fabricToolsChannel	= App.Backbone.Radio.channel('fabricTools');
-App.layoutChannel		= App.Backbone.Radio.channel('layout');
-App.bookChannel		= App.Backbone.Radio.channel('book');
-/***********************************************************************
- *	Backbone Plugins
-***********************************************************************/
-App.Backbone.syphon 	= require('backbone.syphon');
-//~ App.Backbone.upload = require('backbone-model-file-upload');
-App.Backbone.Hoard		= require('backbone.hoard')
-App.BackbonePouch		= require('backbone-pouch');
+//~ require('jcrop');
+App.Marionette 	= require('backbone.marionette');
+//TODO: load maroionette depends on window.backbone/jquery/????
+//~ PouchDB.debug.enable('*');
 
 /***********************************************************************
- * external dependencies 
-***********************************************************************/
-App.routePattern		= require('route-pattern');
-//~ App.await 				= require('await');
-App.dataURItoBlob 		= require('./misc/dataURItoBlob.js');
-App.fabric 				= require('./components/fabric/fabric.custom.js');
-App.PouchDB				= require('pouchdb');//~ App.PouchDB.debug.enable('*');
-App.blobUtil			= require('blob-util');
-App.objectHash			= require('object-hash');
-App.screenfull			= require('screenfull');
-App.dragDrop			= require('drag-drop');
-
-//TODO: require('./components/jimp');
-App.nprogress 			= require('nprogress');
-//TODO: this need to go into a "setup" phase ..
-App.nprogress.configure({ showSpinner: false });
-App.nprogress._onprogress = function(e)  {
-	e.lengthComputable ?
-		App.nprogress.set((Math.floor((e.loaded/e.total) * 100)) / 100):
-		App.nprogress.inc();
-};
-var layout = require('./components/layout');
-App.layout = new layout;//~ view.el : "body" ..
-/***********************************************************************
- * internal dependencies / app modules..
+ * internal dependencies / app modules.. mvc..
  * 
+//TODO:  manage the load depnedncies 
+//TODO: impllement "setup" phase .. & phases if your allready there +tea
 ***********************************************************************/
-//TODO:  manage the load depnedncies
-App.D8models			= require('./components/models/D8models');
-//~ App.D8models			= require('./components/models/D8models')(App);
-App.models 				=  {};
-App.models.files		= require('./components/models/file')(App);
-App.models.chapter		= require('./components/models/book/chapters/chapter.js');
-App.models.page 		= require('./components/models/book/pages/page.js');
-App.models.composition 	= require('./components/models/book/pages/comp.js');
-App.collections 		= require('./components/collections')(App);
-App.collections.chapters= require('./components/models/book/chapters/index.js');
-App.collections.pages	= require('./components/models/book/pages/index.js');
-App.collections.pageObjects= require('./components/models/book/chapters/pageObjects/index.js');
-//~ App.canvasImages		= new App.collections.canvasImages();
-App.files		= new App.collections.files;
-App.chapters	= new App.collections.chapters;
+//~ VIEWS
+App.Marionette._views = {
+	layout		: require('./components/layout'),
+};
+App.views = {
+	//~ view.el : "body" ..
+	layout	: new App.Marionette._views.layout
+};
+//~ MODELS	& collections
+App.models 		=  {
+	D8models	: require(
+		'./components/models/D8models'),
+	files			: require(
+		'./components/models/file'),
+	chapter		: require(
+		'./components/models/book/chapters/chapter.js'),
+	page 			: require(
+		'./components/models/book/pages/page.js'),
+	composition 	: require(
+		'./components/models/book/pages/comp.js'),
+};
+App.collections	= require('./components/collections') || {};
+App.collections = App._.extend({
+	chapters	: require(
+		'./components/models/book/chapters/index.js'),
+	pages		: require(
+		'./components/models/book/pages/index.js'),
+	pageObjects	: require(
+	'./components/models/book/chapters/pageObjects/index.js'),
+}, App.collections);
+
+App.files			= new App.collections.files;
+App.files.fetch();
+App.Book			= App.bookChannel._tools|| {};
+App.Book.chapters	= new App.collections.chapters;
 
 // canvas image url resolver
-// make sure a local objectUrl as valid for each image in the canvas
 App.crop			= require('./components/croper')();
+// pre canvas save image validation ( persistance ?)
 App.resolver		= require('./components/resolver')(App);
-App.caman			= require('./components/caman').initialize();
-//TODO: ..caman script is loaded in index.html 
-//TODO: cleanup namespace _caman / caman 
-//~ App._caman				= App.caman.initialize();
-require('./components/models/book');
-App.chapterResources = require('./components/models/book/chapters/chapterResources.js');
+//TODO: browserify caman ... script is loaded in index.html ..
+//~ App.caman = require('./components/caman').initialize();App.caman.initialize();
+
+
+
 require('./components/user');
 
 /***********************************************************************
- * GLOBAL namespace anchor
 ***********************************************************************/
-var app 				= require('./app')(App);
+require('jquery-mousewheel');
+require('spectrum-colorpicker');
+
+var app = require('./app');
+App.$ = App.jQuery;
 app.start();
-App.Backbone.history.start({root: document.location.pathname});
+App.Backbone.history.start({
+	root: document.location.pathname
+});
 App.fabricToolsChannel.trigger("dialog:chapterBrowser");
-//TODO:  clean up ...
-//~ (function() {
-	//~ var src = ('https:' === document.location.protocol ? 'https' : 'http') +
-		//~ '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-	//~
-	//~ $.getScript(src, function(data) {
-	//~ console.log(data);
-	//~ });
-//~ })();

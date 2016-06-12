@@ -1,45 +1,20 @@
-'use strict';
-module.exports = function(App){
-var _App = {
+module.exports = App._.extend(App, new App.Marionette.Application({
 	onBeforeStart			: function() {
-		App.nprogress.start();
-		//TODO: move get token to edit mode..
-		jQuery.get('/rest/session/token').done(function f(csrfToken){
-			// Drupal8 rest POST/PATCHE/DELETE requirement
-			App.csrfToken = 	csrfToken;
-		});
-		App.$(document).ajaxError(function myErrorHandler(event, xhr, ajaxOptions, thrownError) {
-			if(xhr.status === 403 && 
-			isNaN(parseInt(App.user.get("uid")))  ){
-				if(window.confirm("Not logged In..\n press OK to redirect to login page")){
-					window.location.href = '/user/login';
-				};				
-			}
-		});
-		App.$(document).bind("ajaxSend", function(){
-			App.nprogress.start();
-		}).bind("ajaxComplete", function(){
-			App.nprogress.done();
-		});
-		this.layout.render();
-		App.user.fetch({
-			success : function(user){
-				App.bookChannel.trigger("user:chapters", user);
-			}
-		});
-		
-		App._.bindAll(this, '_keyboardAction');
-		var options 	=  options || {"debug":'fabricTools'}; 
-		if(options.debug) this._initBackboneRadioLog(options);
-	},
-	onStart 				: function(options){
+
+		require('./_tools/boot/user.js');
+		require('./_tools/boot/debug/index.js');
 		require('./components/pages');
 		require('./components/templates');
-		this.files.fetch();
-		this._setupLayoutRegions();
-		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
+		
+		App._.bindAll(this, '_keyboardAction');
 		App.$(document).on("keydown", this._keyboardAction);
-		var _Workspace = Backbone.Router.extend({
+	},
+	onStart 				: function(options){
+		this.views.layout.render();
+		this._setupLayoutRegions();
+		
+		App.fabricToolsChannel.trigger("dialog:chapterBrowser");
+		var _Workspace = App.Backbone.Router.extend({
 			routes: {
 				"chapter/:chapter"	: "gotoChapter",
 				//~ "*path"				:	"_default",
@@ -50,6 +25,7 @@ var _App = {
 			}
 		});
 		this.router = new _Workspace;
+		App.chapterResources = require('./components/models/book/chapters/chapterResources.js');
 	},
 	_setupLayoutRegions		: function(options){
 		App.layoutChannel.trigger('set:content', 		require('./components/fabric'));
@@ -59,15 +35,6 @@ var _App = {
 		App.layoutChannel.trigger('set:bookPreview', 	require('./components/bookPreview'));
 		App.layoutChannel.trigger('set:dialogs', 		require('./components/dialogs'));
 		
-	},
-	_initBackboneRadioLog	: function(options){
-		if(options.debug){
-			App.Backbone.Radio.log = function( channelName, eventName ,args){
-				eventName = typeof args === "undefined" ? eventName : args+' : '+eventName;
-				App.log(eventName);
-			};
-			App.Backbone.Radio.tuneIn(options.debug);
-		}
 	},
 	trig					: function(command, data){
 			this.fabricToolsChannel.trigger(command, data);
@@ -159,7 +126,20 @@ var _App = {
 			}
 		};
 	},
+	log				:function(event){
+		if( !/getActiveObject/.test(event)	&&
+			!/zoom:(in|out)/.test(event)	&&
+			!/svg:dirs/.test(event) 		&&
+			!/worker:img:mask/.test(event)		){
+	//~ if(/caman/.test(event) ){
+			var span = App.$('<span class="logText"/>').html(event);
+			//~ var msg = App.$('<div/>').append(span),
+				App.$("#log").prepend(span.wrapAll('<div/>'));
+				_.delay(function(){	//self destructing msg..
+					msg.hide().remove();
+				}, 4500);
+		}
+	}
+}));
 
-};
-return  App._.extend(new App.Marionette.Application(_App), App);
-};
+

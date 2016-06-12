@@ -11,5 +11,5 @@ var chapterResources = {
 		App.bookChannel.trigger("init:chapter", data);
 	}
 };
-module.exports = Backbone.Model.extend(chapterResources);
+module.exports = App.Backbone.Model.extend(chapterResources);
 

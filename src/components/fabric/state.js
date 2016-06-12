@@ -1,4 +1,4 @@
-module.exports = Backbone.Model.extend({
+module.exports = App.Backbone.Model.extend({
 	localStorage: new App.Backbone.LocalStorage("viewport"),
 	initialize:function(){
 		//~ this.fetch();

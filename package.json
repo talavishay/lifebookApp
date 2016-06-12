@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "description": "",
   "author": {
-    "name": "",
+    "name": "talavishay",
     "email": "talavishay@gmail.com"
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "watchify src/index.js -vo dist/index.js"
+    "js": "watchify src/index.js -vo dist/index.js",
+    "jsd": "watchify src/index.js -vo dist/index.js -d",
+    "css": "postcss --u postcss-import -o dist/index.css src/index.css"
   },
   "browserify": {
     "transform": [
@@ -33,7 +34,6 @@
   },
   "devDependencies": {
     "jquery": "^2.1.4",
-    "node-underscorify": "0.0.14"
   },
   "dependencies": {
     "arraybuffer-to-buffer": "0.0.4",
@@ -67,7 +67,6 @@
     "route-pattern": "0.0.6",
     "screenfull": "^3.0.0",
     "spectrum-colorpicker": "^1.7.1",
-    "underscore": "^1.8.3",
     "xmldom": "^0.1.19"
   }
 }

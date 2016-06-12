@@ -33,15 +33,31 @@ module.exports =  App.Marionette.LayoutView.extend({
 	},
 	initialize 	:	function(options){
 
+		this.listenTo(App.toolsChannel, {
+			"dialog:grid" : function(view){
+				this.toolContent.show(view)	
+				this.$el.find("#title").text("edit");
+			}
+		}, this);
 		this.listenTo(App.fabricToolsChannel, {
-			"all"			:(eventname)=>{
+			"all"			:(eventname, view)=>{
 				var _split = eventname.split(':'),
 					dialog = (_split.length === 2 && _split[0]  === "dialog") ? true : false ,
 					dialogName = _split[1];
+				if(dialogName === "grid"){
+					this.toolContent.show(view);
+					return;
+				};
 				if( dialog ) {
 					this.$el.find("#title").text(dialogName);
 					this.toolContent.show(new dialogs[dialogName] );
 				}
+			},
+      
+			"dialog:show:view"			:(view)=>{
+				if(view){
+   					 this.toolContent.show(view );
+				};
 			},
 			"dialog:show"			:()=>{
 				this._show()},
